@@ -337,7 +337,7 @@ caminoNodo,mensajeError):
             mensaje = ','.join(linea)
             escribirPipe(mensaje,mensajeError,
             caminoFifoAgente,caminoFifoNodo)
-            time.sleep(constantes.TIEMPO_ESPERA)
+            #time.sleep(constantes.TIEMPO_ESPERA)
 
 
 
@@ -363,17 +363,17 @@ def comunicacionInfoVerde(caminoFifoAgente,caminoFifoNodo,
 caminoNodoVerde):
     verAviso=leerPipe("No se recibió aviso para envio de info ver",
     caminoFifoAgente,caminoFifoNodo)
-    time.sleep(constantes.TIEMPO_ESPERA)
+    #time.sleep(constantes.TIEMPO_ESPERA)
     revisarCodigos(verAviso,constantes.CODIGO_AVISO_ENV_VER ,
     constantes.DIFF_AVISO_ENV_VER)
-    time.sleep(constantes.TIEMPO_ESPERA)
+    #time.sleep(constantes.TIEMPO_ESPERA)
     enviarInfoArchivo(caminoFifoAgente,caminoFifoNodo,
     caminoNodoVerde,"No se envió info ver")
-    time.sleep(constantes.TIEMPO_ESPERA)
+    #time.sleep(constantes.TIEMPO_ESPERA)
     escribirPipe(constantes.CODIGO_AVISO_REC_VER,
     "No se envió aviso para recibo de info ver",
     caminoFifoAgente,caminoFifoNodo)
-    time.sleep(constantes.TIEMPO_ESPERA)
+    #time.sleep(constantes.TIEMPO_ESPERA)
 
 
 
@@ -399,7 +399,7 @@ caminoVecinos):
 
     vecinosAviso=leerPipe("No se envio aviso para envio de vecinos",
     caminoFifoAgente,caminoFifoNodo)
-    time.sleep(constantes.TIEMPO_ESPERA)
+    #time.sleep(constantes.TIEMPO_ESPERA)
     revisarCodigos(vecinosAviso,constantes.CODIGO_AVISO_ENV_VEC ,
     constantes.DIFF_AVISO_ENV_VEC)
     enviarInfoArchivo(caminoFifoAgente,caminoFifoNodo,
@@ -407,7 +407,7 @@ caminoVecinos):
     escribirPipe(constantes.CODIGO_AVISO_REC_VEC,
     "No se envio aviso para recibo de vecinos",
     caminoFifoAgente,caminoFifoNodo)
-    time.sleep(constantes.TIEMPO_ESPERA)
+    #time.sleep(constantes.TIEMPO_ESPERA)
 
 
 """
@@ -430,16 +430,16 @@ def comunicacionPid(caminoFifoAgente,caminoFifoNodo):
 
     prePid = leerPipe("No se recibió aviso envio de pid",
     caminoFifoAgente,caminoFifoNodo)
-    time.sleep(constantes.TIEMPO_ESPERA)
+    #time.sleep(constantes.TIEMPO_ESPERA)
     revisarCodigos(prePid,constantes.PREENVIO_PID,
     constantes.DIFF_PREENVIO_PID)
     pid = leerPipe("No se recibió el pid",
     caminoFifoAgente,caminoFifoNodo)
-    time.sleep(constantes.TIEMPO_ESPERA)
+    #time.sleep(constantes.TIEMPO_ESPERA)
     escribirPipe(constantes.CODIGO_FINALIZACION_PID,
     "No se envió correctamente el pid",
     caminoFifoAgente,caminoFifoNodo)
-    time.sleep(constantes.TIEMPO_ESPERA)
+    #time.sleep(constantes.TIEMPO_ESPERA)
 
 
     return pid
