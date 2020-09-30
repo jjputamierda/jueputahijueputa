@@ -212,7 +212,7 @@ std::vector < std::string > comunicarConNodoNaranja(int pid,
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         throw std::runtime_error(ERR_PIPE_ABRIR_L);
     }
-    int fde = open(caminoFifoAgente, O_WRONLY);
+    fde = open(caminoFifoAgente, O_WRONLY);
     if(fde == -1){
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         quitarPipe(caminoFifoAgente,ERR_PIPE_BORRAR_E);
