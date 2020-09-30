@@ -49,7 +49,7 @@ int main(int argc,char *argv[]){
     //char* rutaFifoNodoAzul = argv[6];
 
     std::thread agenteNaranja(trabajoAgenteNaranja,rutaFifoAgenteNaranja,
-    rutaFifoNodoNaranja,rutaNodoVerde,rutaVecinos,lock1,lock2);
+    rutaFifoNodoNaranja,rutaNodoVerde,rutaVecinos);
 
     agenteNaranja.join();
     for(int i = 0; i < datosNodos.size();i++){
