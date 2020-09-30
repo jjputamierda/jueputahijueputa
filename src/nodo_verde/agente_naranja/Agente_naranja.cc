@@ -407,7 +407,7 @@ void escribirPipeTam(std::string msj,std::string e,
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         throw std::runtime_error(e);
     }
-    std::cout<<tamanoMen.data()<<std::endl;
+    //std::cout<<tamanoMen.data()<<std::endl;
     std::cout<<"agente e"<<std::endl;
 }
 /**
