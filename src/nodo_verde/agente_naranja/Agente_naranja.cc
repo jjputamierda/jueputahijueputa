@@ -33,6 +33,8 @@ char *caminoFifoNodo,char* caminoNodoVerde,char* caminoVecinos){
         quitarPipe(caminoFifoAgente,ERR_PIPE_BORRAR_E);
         throw std::runtime_error(ERR_PIPE_CREAR_L);
     }
+    std::ofstream ("../../lock1.lck");
+    std::ofstream ("../../lock2.lck");
     int pid = fork();//Se crea el nodo naranja
     if(pid == 0){
         execlp(INTERPRETADOR,INTERPRETADOR,
