@@ -408,7 +408,7 @@ void escribirPipeTam(std::string msj,std::string e,
         throw std::runtime_error(e);
     }
     //std::cout<<tamanoMen.data()<<std::endl;
-    std::cout<<"agente e"<<std::endl;
+    //std::cout<<"agente e"<<std::endl;
 }
 /**
 \brief Mandar por el pipe de escritura el mensaje que se va a enviar

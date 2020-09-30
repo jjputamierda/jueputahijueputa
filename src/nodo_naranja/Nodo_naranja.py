@@ -146,7 +146,8 @@ def leerPipeTam(mensajeError,caminoFifoAgente,caminoFifoNodo):
 
     try:
         tamano = str(fdl.read(constantes.STD_SIZE))
-        print(tamano)
+
+        #print(tamano)
         tamanoInt = int(tamano)
         #print(tamanoInt)
         #print("nodo l")
