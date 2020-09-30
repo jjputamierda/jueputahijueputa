@@ -453,7 +453,7 @@ if __name__ == "__main__":
         print(constantes.ERR_PIPE_ABRIR_E)
 
     try:
-        fdl = open(caminoFifoNodo,
+        fdl = open(caminoFifoAgente,
         constantes.PERMISO_LEER)
 
     except OSError:
