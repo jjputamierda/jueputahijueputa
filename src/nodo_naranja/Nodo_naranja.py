@@ -393,7 +393,7 @@ caminoVecinos):
     enviarInfoArchivo(caminoFifoAgente,caminoFifoNodo,
     caminoVecinos,"No se envió info vecinos")
     escribirPipe(constantes.CODIGO_AVISO_REC_VEC,
-    constantes."No se envio aviso para recibo de vecinos",
+    "No se envio aviso para recibo de vecinos",
     caminoFifoAgente,caminoFifoNodo)
     time.sleep(constantes.TIEMPO_ESPERA)
 
