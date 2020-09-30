@@ -149,15 +149,15 @@ def leerPipeTam(mensajeError,caminoFifoAgente,caminoFifoNodo):
 
         #print(tamano)
         tamanoInt = int(tamano)
-        #print(tamanoInt)
-        #print("nodo l")
+        print(tamanoInt)
+        print("nodo l")
     except OSError:
         cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
-        caminoPipe,constantes.ERR_PIPE_BORRAR_L)
+        caminoFifoAgente,constantes.ERR_PIPE_BORRAR_L)
         borrarPipe(caminoFifoAgente,
         constantes.ERR_PIPE_BORRAR_L)
         cerrarPipe(fde,constantes.ERR_PIPE_CERRAR_E,
-        caminoPipe,constantes.ERR_PIPE_BORRAR_E)
+        caminoFifoNodo,constantes.ERR_PIPE_BORRAR_E)
         borrarPipe(caminoFifoNodo,
         constantes.ERR_PIPE_BORRAR_E)
         print(mensajeError)
@@ -192,11 +192,11 @@ def leerPipeMen(mensajeError,caminoFifoAgente,caminoFifoNodo,tamano):
 
     except OSError:
         cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
-        caminoPipe,constantes.ERR_PIPE_BORRAR_L)
+        caminoFifoAgente,constantes.ERR_PIPE_BORRAR_L)
         borrarPipe(caminoFifoAgente,
         constantes.ERR_PIPE_BORRAR_L)
         cerrarPipe(fde,constantes.ERR_PIPE_CERRAR_E,
-        caminoPipe,constantes.ERR_PIPE_BORRAR_E)
+        caminoFifoNodo,constantes.ERR_PIPE_BORRAR_E)
         borrarPipe(caminoFifoNodo,
         constantes.ERR_PIPE_BORRAR_E)
         print(mensajeError)
@@ -239,11 +239,11 @@ def escribirPipeTam(mensaje,mensajeError,
         fde.flush()
     except OSError:
         cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
-        caminoPipe,constantes.ERR_PIPE_BORRAR_L)
+        caminoFifoAgente,constantes.ERR_PIPE_BORRAR_L)
         borrarPipe(caminoFifoAgente,
         constantes.ERR_PIPE_BORRAR_L)
         cerrarPipe(fde,constantes.ERR_PIPE_CERRAR_E,
-        caminoPipe,constantes.ERR_PIPE_BORRAR_E)
+        caminoFifoNodo,constantes.ERR_PIPE_BORRAR_E)
         borrarPipe(caminoFifoNodo,
         constantes.ERR_PIPE_BORRAR_E)
         print(mensajeError)
@@ -271,15 +271,19 @@ def escribirPipeMen(mensaje,mensajeError,
      caminoFifoAgente,caminoFifoNodo):
 
     try:
-        time.sleep(constantes.TIEMPO_ESPERA)
+        #time.sleep(constantes.TIEMPO_ESPERA)
         fde.write(mensaje.encode("ASCII","ignore"))
         print(mensaje)
         print("nodo e")
         fde.flush()
     except OSError:
-        cerrarPipe(fifo,constantes.ERR_PIPE_CERRAR_E,
-        caminoPipe,constantes.ERR_PIPE_BORRAR_E)
-        borrarPipe(caminoPipe,
+        cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
+        caminoFifoAgente,constantes.ERR_PIPE_BORRAR_L)
+        borrarPipe(caminoFifoAgente,
+        constantes.ERR_PIPE_BORRAR_L)
+        cerrarPipe(fde,constantes.ERR_PIPE_CERRAR_E,
+        caminoFifoNodo,constantes.ERR_PIPE_BORRAR_E)
+        borrarPipe(caminoFifoNodo,
         constantes.ERR_PIPE_BORRAR_E)
         print(mensajeError)
 
@@ -468,7 +472,7 @@ if __name__ == "__main__":
     caminoNodoVerde)
     comunicacionVecinos(caminoFifoAgente,caminoFifoNodo,
     caminoVecinos)
-    cerrarPipe(fde,constantes.ERR_PIPE_CERRAR_E,
-    caminoPipe,constantes.ERR_PIPE_BORRAR_E)
     cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
-    caminoPipe,constantes.ERR_PIPE_BORRAR_L)
+    caminoFifoAgente,constantes.ERR_PIPE_BORRAR_L)
+    cerrarPipe(fde,constantes.ERR_PIPE_CERRAR_E,
+    caminoFifoNodo,constantes.ERR_PIPE_BORRAR_E)

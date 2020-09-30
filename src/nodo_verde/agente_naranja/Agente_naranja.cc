@@ -389,8 +389,7 @@ void escribirPipeTam(std::string msj,std::string e,
 
 
     std::string tamanoMen = std::to_string(strlen(msj.data()));
-    std::cout<<tamanoMen.data()<<std::endl;
-    std::cout<<"hii"<<std::endl;
+
     if(strlen(msj.data())<MIN_BYTES_VER){//Debe ser de 2 caracteres
         tamanoMen = COMP_2_BYTES+tamanoMen;//Si no lo es se le agrega
                                        //un caracter extra
@@ -407,8 +406,8 @@ void escribirPipeTam(std::string msj,std::string e,
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         throw std::runtime_error(e);
     }
-    //std::cout<<tamanoMen.data()<<std::endl;
-    //std::cout<<"agente e"<<std::endl;
+    std::cout<<tamanoMen.data()<<std::endl;
+    std::cout<<"agente e"<<std::endl;
 }
 /**
 \brief Mandar por el pipe de escritura el mensaje que se va a enviar
