@@ -208,13 +208,13 @@ std::vector < std::string > comunicarConNodoNaranja(int pid,
     fdl = open(caminoFifoNodo, O_RDONLY);
     if(fdl == -1){
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
-        throw std::runtime_error(e);
+        throw std::runtime_error(ERR_PIPE_ABRIR_L);
     }
     int fde = open(caminoFifoAgente, O_WRONLY);
     if(fde == -1){
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         quitarPipe(caminoFifoAgente,ERR_PIPE_BORRAR_E);
-        throw std::runtime_error(e);
+        throw std::runtime_error(ERR_PIPE_ABRIR_E);
     }
     comunicacionPid(caminoFifoAgente,caminoFifoNodo,
     pid);
@@ -227,7 +227,7 @@ std::vector < std::string > comunicarConNodoNaranja(int pid,
     cerrarPipe(fdl,ERR_PIPE_CERRAR_L,
     caminoFifoNodo,ERR_PIPE_BORRAR_L);
     cerrarPipe(fde,ERR_PIPE_CERRAR_E,
-    caminoFifoNodo,ERR_PIPE_BORRAR_E);
+    caminoFifoAgente,ERR_PIPE_BORRAR_E);
     return infoVerde;
 }
 
@@ -397,10 +397,10 @@ void escribirPipeTam(std::string msj,std::string e,
 
     if(write(fde, tamanoMen.data(),size) == -1){
         cerrarPipe(fde,ERR_PIPE_CERRAR_E,
-        caminoFifo,ERR_PIPE_BORRAR_E);
+        caminoFifoAgente,ERR_PIPE_BORRAR_E);
         quitarPipe(caminoFifoAgente,ERR_PIPE_BORRAR_E);
         cerrarPipe(fdl,ERR_PIPE_CERRAR_L,
-        caminoFifo,ERR_PIPE_BORRAR_L);
+        caminoFifoNodo,ERR_PIPE_BORRAR_L);
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         throw std::runtime_error(e);
     }
@@ -424,14 +424,14 @@ la escritura por el pipe de escritura fué errónea
 \date 14-9-20
 */
 void escribirPipeMen(std::string msj,std::string e,
-    char *caminoFifoAgente, ,char *caminoFifoNodo){
+    char *caminoFifoAgente ,char *caminoFifoNodo){
     std::string tamanoMen = std::to_string(strlen(msj.data()));
     if(write(fde, msj.data(),strlen(msj.data())) == -1){
         cerrarPipe(fde,ERR_PIPE_CERRAR_E,
-        caminoFifo,ERR_PIPE_BORRAR_E);
+        caminoFifoAgente,ERR_PIPE_BORRAR_E);
         quitarPipe(caminoFifoAgente,ERR_PIPE_BORRAR_E);
         cerrarPipe(fdl,ERR_PIPE_CERRAR_L,
-        caminoFifo,ERR_PIPE_BORRAR_L);
+        caminoFifoNodo,ERR_PIPE_BORRAR_L);
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         throw std::runtime_error(e);
     }
@@ -466,10 +466,10 @@ char *caminoFifoAgente,char *caminoFifoNodo){
 
     if(read(fdl, (void*)arr.data(), STD_SIZE) == -1){
         cerrarPipe(fde,ERR_PIPE_CERRAR_E,
-        caminoFifo,ERR_PIPE_BORRAR_E);
+        caminoFifoAgente,ERR_PIPE_BORRAR_E);
         quitarPipe(caminoFifoAgente,ERR_PIPE_BORRAR_E);
         cerrarPipe(fdl,ERR_PIPE_CERRAR_L,
-        caminoFifo,ERR_PIPE_BORRAR_L);
+        caminoFifoNodo,ERR_PIPE_BORRAR_L);
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         throw std::runtime_error(e);
     }
@@ -507,13 +507,14 @@ size_t tamanoMenReal){
 
   if(read(fdl, (void*)(arr.data()),tamanoMenReal) == -1){
       cerrarPipe(fde,ERR_PIPE_CERRAR_E,
-      caminoFifo,ERR_PIPE_BORRAR_E);
+      caminoFifoAgente,ERR_PIPE_BORRAR_E);
       quitarPipe(caminoFifoAgente,ERR_PIPE_BORRAR_E);
       cerrarPipe(fdl,ERR_PIPE_CERRAR_L,
-      caminoFifo,ERR_PIPE_BORRAR_L);
+      caminoFifoNodo,ERR_PIPE_BORRAR_L);
       quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
       throw std::runtime_error(e);
     }
+  std::string msjNuevo = std::string(arr.data());
   return msjNuevo;
 }
 

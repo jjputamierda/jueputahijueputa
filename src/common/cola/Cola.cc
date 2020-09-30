@@ -7,21 +7,16 @@
 template <typename T>
 
 /**
-    @brief Método encargado de sacar un elemento de la cola y
-    retornarlo.
-    @details Se aplica un lock para que solo un hilo pueda entrar en la
-    cola y evitar condiciones de carrera.
-    Si la cola está vacía, se esperará de forma pasiva (wait) a que un
-    elemento llegue a esta.
-    Cuando la cola posea al menos un elemento, este se guardará en una
-    variable auto  y seguidamente se elimina de la cola (pop).
+    @brief Método encargado de sacar un elemento de la cola y retornarlo.
+    @details Se aplica un lock para que solo un hilo pueda entrar en la cola y evitar condiciones de carrera.
+    Si la cola está vacía, se esperará de forma pasiva (wait) a que un elemento llegue a esta.
+    Cuando la cola posea al menos un elemento, este se guardará en una variable auto  y seguidamente se elimina de la cola (pop).
     La cola entonces se desbloquea y se retorna la variable que creada.
     @param[in] N/A
     @param[out] N/A
     @pre No hay ningún prerrequisito, aparte de que la cola exista
     @remark Ninguna observación destacable.
-    @return El método retorna una variable de tipo auto, la cual se
-    pretente que pueda ser cualquier tipo de variable
+    @return El método retorna una variable de tipo auto, la cual se pretente que pueda ser cualquier tipo de variable
     (int, string, struct, ..) para así darle versatilidad a la cola.
     @exception Este método no puede lanzar ninguna clase de excepción.
     @author Isaac Herrera B43332 (Pandemic Plan Remastered)
@@ -43,20 +38,14 @@ T Cola<T>::pop(){
 template <typename T>
 
 /**
-    @brief Método encargado de sacar y guardar un elemento de la cola
-    en una variable.
-    @details Funcionamiento prácticamente idéntico al del método
-    anterior, con la diferencia de que se pasa
+    @brief Método encargado de sacar y guardar un elemento de la cola en una variable.
+    @details Funcionamiento prácticamente idéntico al del método anterior, con la diferencia de que se pasa
     por parámetro la variable donde se desea realizar el pop.
     @param[in] N/A
-    @param[out] Se recibe la dirección de memoria donde se encuentra la
-    variable "mensaje".
-    El método basicámente guardará en dicha dirección el último
-    elemento de la cola (front).
-    @pre En este caso, una condición importante es que se envíe un
-    parámetro correcto, en el cual el dato
-    que se vaya a sacar de la cola pueda ser almacenado en dicha
-    parámetro.
+    @param[out] Se recibe la dirección de memoria donde se encuentra la variable "mensaje".
+    El método basicámente guardará en dicha dirección el último elemento de la cola (front).
+    @pre En este caso, una condición importante es que se envíe un parámetro correcto, en el cual el dato
+    que se vaya a sacar de la cola pueda ser almacenado en dicha parámetro.
     @remark Ninguna observación destacable.
     @return Este método no retorna ningún valor (void).
     @exception Este método no puede lanzar ninguna clase de excepción.
@@ -79,17 +68,13 @@ template <typename T>
 
 /**
     @brief Método encargado de ingresar un elemento a la cola.
-    @details Se recibe una variable "mensaje" que puede contener
-    cualquier tipo de dato. Se ejecuta un mutex antes
-    de que el dato sea almacenado en la cola, para evitar así
-    condiciones de carrera. Se realiza un push a la cola
+    @details Se recibe una variable "mensaje" que puede contener cualquier tipo de dato. Se ejecuta un mutex antes
+    de que el dato sea almacenado en la cola, para evitar así condiciones de carrera. Se realiza un push a la cola
     y esta es desbloqueada inmediatamente después. 
     @param[in] N/A
-    @param[out] Se recibe la dirección de memoria donde se encuentra la
-    variable mensaje que se desea almacenar
+    @param[out] Se recibe la dirección de memoria donde se encuentra la variable mensaje que se desea almacenar
     en la cola. La cola no modifica dicha dirección.
-    @pre Se espera que es parámetro "mensaje" exista y posea un dato,
-    para que este se almacene en la cola.
+    @pre Se espera que es parámetro "mensaje" exista y posea un dato, para que este se almacene en la cola.
     @remark Ninguna observación destacable.
     @return Este método no retorna ningún valor (void).
     @exception 
@@ -104,11 +89,10 @@ void Cola<T>::push(const T& mensaje){
     this->condicion.notify_one();
 }
 
-/*Estas son plantillas que se deben definir para que la cola, a nivel
-de compilación, pueda "prepararse" para almacenar estos tipos de datos,
-ya que esta es emplantillada. Si se define con anticipación una
-estructura, esta también puede ser usada como plantilla para la cola,
-como es el caso de las estructuras "caja" y "mensaje".
+/*Estas son plantillas que se deben definir para que la cola, a nivel de compilación,
+pueda "prepararse" para almacenar estos tipos de datos, ya que esta es emplantillada.
+Si se define con anticipación una estructura, esta también puede ser usada como plantilla
+para la cola, como es el caso de las estructuras "caja" y "mensaje".
 */
 
 template class Cola<int>;

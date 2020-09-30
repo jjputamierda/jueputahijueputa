@@ -1,6 +1,6 @@
 //Modificado de: https://gist.github.com/ictlyh/f8473ad0cb1008c6b32c41f3dea98ef5#file-producer-consumer-L25
 //Autor Original: Yuanhao Luo "ictlyh"
-//Fecha de última modificación: 29/9/20
+//Fecha de última modificación: 9/9/20
 
 #ifndef COLA_H
 #define COLA_H
@@ -10,7 +10,7 @@
 #include <mutex>
 #include <condition_variable>
 
-#define SIZE 200
+#define LONGITUD 200
 
 struct mensaje{
     unsigned long ipFuente;
@@ -19,19 +19,21 @@ struct mensaje{
     short int puertoDestino;
     short int idFuente;
     short int idDestino;
-    char buffer[SIZE] = {0};
-    mensaje(std::string str = "",short int idDestino = -1,
-            short int idFuente = -1){
+    char buffer[LONGITUD] = {0};
+    mensaje(std::string str = "",short int idDestino = -1,short int idFuente = -1){
         this->idFuente = idFuente;
         this->idDestino = idDestino;
-        str.copy(buffer, SIZE);
+        str.copy(buffer, LONGITUD);
     }
 };
 
-struct datosNodo{
-    short ID;
+
+
+struct datosNodo
+{
+    int ID;
     std::string IP;
-    short puerto;
+    int puerto;
 };
 
 template <typename T>

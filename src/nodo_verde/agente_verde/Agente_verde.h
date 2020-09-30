@@ -18,7 +18,6 @@
 
 void recibirV(std::vector<datosNodo>,Cola<struct mensaje>*);
 void enviarV( int ,std::vector<datosNodo>,Cola<struct mensaje>*);
-void hiloVerde( long unsigned int,std::vector<std::string>,
-Cola<struct mensaje>*);
+void hiloVerde( long unsigned int,std::vector<std::string>,Cola<struct mensaje>*);
 
 #endif

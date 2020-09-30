@@ -4,6 +4,7 @@
 std::mutex mtx;
 bool conexion;
 
+
 /**
  *	@brief Subrutina del hilo agente azul
  *	@details Esta subrutina crea los pipes para la comunicación entre
@@ -27,12 +28,10 @@ bool conexion;
  *	@author Johel Phillips Ugalde B75821
  *	@date 15-09-20
  */
-void hiloAzul(std::vector<int>* nodosIDs, Cola<struct mensaje>* colas,
+void hiloAzul(std::vector<int>*nodosIDs,Cola<struct mensaje>*colas,
 		char* fifoAgenteServidor, char* fifoServidorAgente){
 
 	pid_t pid;
-	int longitud;
-	std::string ids;
 	conexion = true;
 
 	if(mkfifo(fifoAgenteServidor, 0666) == -1) 
@@ -41,22 +40,15 @@ void hiloAzul(std::vector<int>* nodosIDs, Cola<struct mensaje>* colas,
 	if(mkfifo(fifoServidorAgente, 0666) == -1) 
 		mostrarError("No se pudo crear el fifo Servidor -> Agente");
 
-	longitud = (*nodosIDs).size();
-	for(int i = 0; i < longitud; ++i){
-		ids.append(std::to_string((*nodosIDs)[i]));
-		ids.append(",");
-	}
-
 	pid = fork();
 	if(!pid){
 		if(execlp("python3", "python3", "src/nodo_azul/./Servidor.py",
-				fifoAgenteServidor, fifoServidorAgente, ids.c_str(),
-				(char*)0)== -1)
+				fifoAgenteServidor, fifoServidorAgente, (char*)0)== -1)
 			mostrarError("No se pudo ejecutar Servidor.py");
 	}
 
-	std::thread emisor(enviar, colas, fifoAgenteServidor);
-	std::thread receptor(recibir, colas, nodosIDs, fifoServidorAgente);
+	std::thread emisor (enviar, colas, fifoAgenteServidor);
+	std::thread receptor (recibir, colas, nodosIDs, fifoServidorAgente);
 
 	receptor.join();
 	emisor.join();
@@ -88,23 +80,24 @@ void enviar(Cola<struct mensaje>* colas, char* fifoAgenteServidor){
 	std::string buffer;
 
 	while(!salir){
-		mensaje = (*colas).pop();
+		mensaje = colas[0].pop();
 		mtx.lock();
 		if(conexion == false){
 			salir = true;
 		}
 		mtx.unlock();
 		buffer.clear();
-		buffer.append(std::to_string(mensaje.idFuente));
+		buffer.append(std::to_string(mensaje.origen));
 		buffer.append("::");
 		buffer.append(mensaje.buffer);
-		if(buffer.size() > LONGITUD){
-			buffer = buffer.substr(0, LONGITUD);
+		if(buffer.size() > 207){
+			buffer = buffer.substr(0,207);
 		}
-		write(fd, buffer.c_str(), LONGITUD);
+		write(fd, buffer.c_str(), 207);
 	}
 	close(fd);
 }
+
 
 /**
  *	@brief Subrutina del hilo receptor
@@ -134,20 +127,20 @@ void recibir(Cola<struct mensaje>* salida, std::vector<int>* nodosIDs,
 	int posicion, destino;
 	bool salir = false;
 	std::string msg;
-	char buffer[LONGITUD];
+	char buffer[207];
 
 	while(!salir){
 		msg.clear();
-		read(fd, buffer, LONGITUD);
+		read(fd, buffer, 207);
 		msg.append(buffer);
 		if(msg.find("-1::Salir") == std::string::npos){
 			posicion = msg.find("::");
 			destino = std::stoi(msg.substr(0,posicion));
 			for(int i = 0; i < longitud; ++i){
-				if(destino == (*nodosIDs)[i]){
+				if(destino == nodosIDs[0][i]){
 					mtx.lock();
 					salida[i].push(mensaje(msg.substr(posicion+2),
-						destino, (*nodosIDs)[0]));
+						destino));
 					mtx.unlock();
 				}
 			}
@@ -156,7 +149,7 @@ void recibir(Cola<struct mensaje>* salida, std::vector<int>* nodosIDs,
 			conexion = false;
 			mtx.unlock();
 			salir = true;
-			for(int i = 0; i < longitud; ++i){
+			for(unsigned long i=0; i<nodosIDs->size(); i++){
 				salida[i].push(mensaje("Salir", -1));
 			}
 		}

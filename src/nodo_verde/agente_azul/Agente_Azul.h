@@ -11,7 +11,8 @@
 	#include <fstream>
 	#include "../../common/cola/Cola.h"
 
-	#define LONGITUD 207
+	#define LONGITUD 200
+	#define EXTRA 205
 
 	//Variables globales
 	//bool conexion;
