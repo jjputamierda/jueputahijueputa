@@ -43,10 +43,6 @@ int main(int argc,char *argv[]){
     char* rutaFifoNodoNaranja = argv[2];
     char* rutaNodoVerde = argv[3];
     char* rutaVecinos = argv[4];
-    char* lock1 = argv[5];
-    char* lock2 = argv[6];
-    //char* rutaFifoAgenteAzul = argv[5];
-    //char* rutaFifoNodoAzul = argv[6];
 
     std::thread agenteNaranja(trabajoAgenteNaranja,rutaFifoAgenteNaranja,
     rutaFifoNodoNaranja,rutaNodoVerde,rutaVecinos);

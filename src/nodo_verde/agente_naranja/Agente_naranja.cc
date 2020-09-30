@@ -19,7 +19,7 @@ y sus vercinos
 \return No retorna ningún valor
 \exception No aplica
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 int fdl;
 int fde;
@@ -74,7 +74,7 @@ de error
 \exception Cuando no se elimina el pipe correctamente
 se tira mensaje de de error
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 void quitarPipe(char * camino,std::string e){
     if(unlink(camino) == -1){
@@ -98,7 +98,7 @@ por los pipes fuera errónea
 por el agente naranja
 \exception Cuando la lectura por el pipe de lectura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 std::vector<std::string> recibirInfoArchivo(
 std::string codigo,std::string e,
@@ -113,7 +113,7 @@ char *caminoFifoNodo,std::vector < std::string > infoVerde){
             codigo.data()) != 0){
             infoVerde.push_back(mensaje);
         }
-        //usleep(TIEMPO_ESPERA);//mecanismo de sincronización
+
     }
 
     return infoVerde;
@@ -134,7 +134,7 @@ para que pueda ser manipulado por el agente naranja
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 std::vector < std::string > comunicacionVecinos(
   char *caminoFifoAgente,char *caminoFifoNodo,
@@ -144,7 +144,7 @@ std::vector < std::string > comunicacionVecinos(
     escribirPipe(CODIGO_AVISO_ENV_VEC,
     "No se envio aviso para envio de vecinos",
     caminoFifoAgente,caminoFifoNodo);
-    //usleep(TIEMPO_ESPERA);//mecanismo de sincronización
+
 
     infoVerde = recibirInfoArchivo(CODIGO_AVISO_REC_VEC,
     "No se envio aviso para recibo de vecinos",
@@ -170,7 +170,7 @@ para que pueda ser manipulado por el agente naranja
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 std::vector < std::string > comunicacionInfoVerde(
   char *caminoFifoAgente,char *caminoFifoNodo,
@@ -178,7 +178,7 @@ std::vector < std::string > comunicacionInfoVerde(
     escribirPipe(CODIGO_AVISO_ENV_VER,
     "No se envio aviso para envio de info ver",
     caminoFifoAgente,caminoFifoNodo);
-    //usleep(TIEMPO_ESPERA);
+
 
     infoVerde = recibirInfoArchivo(CODIGO_AVISO_REC_VER,
     "No se envio aviso para recibo de info ver",
@@ -203,7 +203,7 @@ para que pueda ser manipulado por el agente naranja
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 std::vector < std::string > comunicarConNodoNaranja(int pid,
     char *caminoFifoAgente,char *caminoFifoNodo){
@@ -247,7 +247,7 @@ finalización de este sector
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 void comunicacionPid(char *caminoFifoAgente,
 char *caminoFifoNodo,int pid){
@@ -255,14 +255,13 @@ char *caminoFifoNodo,int pid){
     "No se envió el aviso del pid",
     caminoFifoAgente,caminoFifoNodo);
     std::string stringPid = std::to_string(pid);
-    //usleep(TIEMPO_ESPERA);
-    //stringPid.resize (MAX_BUF);
+
     escribirPipe(stringPid,"No se envió del pid",
     caminoFifoAgente,caminoFifoNodo);
-    //usleep(TIEMPO_ESPERA);
+
     std::string codFinalizacion = leerPipe("confirmación de pid inválida",
     caminoFifoAgente,caminoFifoNodo);
-    //usleep(TIEMPO_ESPERA);
+
     revisarCodigos(codFinalizacion,
     CODIGO_FINALIZACION_PID ,"No se envió correctamente el pid");
 
@@ -285,7 +284,7 @@ el fd esté abierto
 \return No retorna
 \exception Cuando no se pudo borrar el pipe
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 void cerrarPipe(int fd,std::string e,char *caminoFifo,
 std::string eBorrar)
@@ -312,7 +311,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 void escribirPipe(std::string msj,std::string e,
   char * caminoFifoAgente,char * caminoFifoNodo){
@@ -346,7 +345,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fué errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
  std::string leerPipe(std::string e,
   char *caminoFifoAgente,char *caminoFifoNodo){
@@ -383,7 +382,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 void escribirPipeTam(std::string msj,std::string e,
     char *caminoFifoAgente,char *caminoFifoNodo){
@@ -407,8 +406,7 @@ void escribirPipeTam(std::string msj,std::string e,
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         throw std::runtime_error(e);
     }
-    //std::cout<<tamanoMen.data()<<std::endl;
-    //std::cout<<"agente e"<<std::endl;
+
 }
 /**
 \brief Mandar por el pipe de escritura el mensaje que se va a enviar
@@ -425,7 +423,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fué errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 void escribirPipeMen(std::string msj,std::string e,
     char *caminoFifoAgente ,char *caminoFifoNodo){
@@ -439,8 +437,7 @@ void escribirPipeMen(std::string msj,std::string e,
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         throw std::runtime_error(e);
     }
-    //std::cout<<msj.data()<<std::endl;
-    //std::cout<<"agente e"<<std::endl;
+
 
 }
 /**
@@ -460,7 +457,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 size_t leerPipeTam(std::string e,
 char *caminoFifoAgente,char *caminoFifoNodo){
@@ -480,8 +477,7 @@ char *caminoFifoAgente,char *caminoFifoNodo){
     }
     int tempSize = atoi(arr.data());
     size_t tamanoMenReal = (size_t)tempSize;
-    //std::cout<<tamanoMenReal<<std::endl;
-    //std::cout<<"agente l"<<std::endl;
+
   return tamanoMenReal;
 }
 
@@ -502,7 +498,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 std::string leerPipeMen(std::string e,
 char *caminoFifoAgente,char *caminoFifoNodo,
@@ -522,8 +518,7 @@ size_t tamanoMenReal){
       throw std::runtime_error(e);
     }
   std::string msjNuevo = std::string(arr.data());
-  //std::cout<<msjNuevo.data()<<std::endl;
-  //std::cout<<"agente l"<<std::endl;
+
   return msjNuevo;
 }
 
@@ -540,7 +535,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 */
 
 void revisarCodigos(std::string codEnv, std::string codCor,

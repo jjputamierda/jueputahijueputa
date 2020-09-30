@@ -23,7 +23,7 @@ de error
 \exception Cuando no se elimina el pipe correctamente
 se tira mensaje de de error
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def borrarPipe(caminoPipe,mensajeError):
     try:
@@ -47,7 +47,7 @@ el fd esté abierto
 \return No retorna
 \exception Cuando no se pudo borrar el pipe
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def cerrarPipe(fifo,mensajeError,caminoFifo,
 mensajeErrorBorrar):
@@ -74,7 +74,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def escribirPipe(mensaje,mensajeError,
 caminoFifoAgente,caminoFifoNodo):
@@ -106,7 +106,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def leerPipe(mensajeError,
 caminoFifoAgente,caminoFifoNodo):
@@ -140,17 +140,15 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def leerPipeTam(mensajeError,caminoFifoAgente,caminoFifoNodo):
 
     try:
         tamano = str(fdl.read(constantes.STD_SIZE))
 
-        #print(tamano)
         tamanoInt = int(tamano)
-        #print(tamanoInt)
-        #print("nodo l")
+
     except OSError:
         cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
         caminoFifoAgente,constantes.ERR_PIPE_BORRAR_L)
@@ -181,14 +179,13 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def leerPipeMen(mensajeError,caminoFifoAgente,caminoFifoNodo,tamano):
 
     try:
         mensaje= str(fdl.read(tamano))
-        #print(mensaje)
-        #print("nodo l")
+
 
     except OSError:
         cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
@@ -219,7 +216,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def escribirPipeTam(mensaje,mensajeError,
      caminoFifoAgente,caminoFifoNodo):
@@ -234,8 +231,7 @@ def escribirPipeTam(mensaje,mensajeError,
             nuevoMensaje = constantes.COMP_2_BYTES + nuevoMensaje
 
         fde.write(nuevoMensaje.encode("ASCII","ignore"))
-        #print(nuevoMensaje)
-        #print("nodo e")
+
         fde.flush()
     except OSError:
         cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
@@ -265,16 +261,15 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def escribirPipeMen(mensaje,mensajeError,
      caminoFifoAgente,caminoFifoNodo):
 
     try:
-        #time.sleep(constantes.TIEMPO_ESPERA)
+
         fde.write(mensaje.encode("ASCII","ignore"))
-        #print(mensaje)
-        #print("nodo e")
+
         fde.flush()
     except OSError:
         cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
@@ -301,7 +296,7 @@ el fd esté abierto
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def revisarCodigos(
 codEnv,codCor,mensajeError):
@@ -326,7 +321,7 @@ por los pipes fuera errónea
 por el agente naranja
 \exception Cuando la lectura por el pipe de lectura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def enviarInfoArchivo(caminoFifoAgente,caminoFifoNodo,
 caminoNodo,mensajeError):
@@ -337,7 +332,7 @@ caminoNodo,mensajeError):
             mensaje = ','.join(linea)
             escribirPipe(mensaje,mensajeError,
             caminoFifoAgente,caminoFifoNodo)
-            #time.sleep(constantes.TIEMPO_ESPERA)
+
 
 
 
@@ -357,23 +352,23 @@ nodo verde
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def comunicacionInfoVerde(caminoFifoAgente,caminoFifoNodo,
 caminoNodoVerde):
     verAviso=leerPipe("No se recibió aviso para envio de info ver",
     caminoFifoAgente,caminoFifoNodo)
-    #time.sleep(constantes.TIEMPO_ESPERA)
+
     revisarCodigos(verAviso,constantes.CODIGO_AVISO_ENV_VER ,
     constantes.DIFF_AVISO_ENV_VER)
-    #time.sleep(constantes.TIEMPO_ESPERA)
+
     enviarInfoArchivo(caminoFifoAgente,caminoFifoNodo,
     caminoNodoVerde,"No se envió info ver")
-    #time.sleep(constantes.TIEMPO_ESPERA)
+
     escribirPipe(constantes.CODIGO_AVISO_REC_VER,
     "No se envió aviso para recibo de info ver",
     caminoFifoAgente,caminoFifoNodo)
-    #time.sleep(constantes.TIEMPO_ESPERA)
+
 
 
 
@@ -391,7 +386,7 @@ información de los vecinos
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def comunicacionVecinos(caminoFifoAgente,caminoFifoNodo,
 caminoVecinos):
@@ -399,7 +394,7 @@ caminoVecinos):
 
     vecinosAviso=leerPipe("No se envio aviso para envio de vecinos",
     caminoFifoAgente,caminoFifoNodo)
-    #time.sleep(constantes.TIEMPO_ESPERA)
+
     revisarCodigos(vecinosAviso,constantes.CODIGO_AVISO_ENV_VEC ,
     constantes.DIFF_AVISO_ENV_VEC)
     enviarInfoArchivo(caminoFifoAgente,caminoFifoNodo,
@@ -407,7 +402,7 @@ caminoVecinos):
     escribirPipe(constantes.CODIGO_AVISO_REC_VEC,
     "No se envio aviso para recibo de vecinos",
     caminoFifoAgente,caminoFifoNodo)
-    #time.sleep(constantes.TIEMPO_ESPERA)
+
 
 
 """
@@ -423,23 +418,23 @@ finalización de este sector
 \exception Cuando la lectura por el pipe de lectura fue errónea o
 la escritura por el pipe de escritura fue errónea
 \author Juan José Herrera
-\date 14-9-20
+\date 30-9-20
 """
 def comunicacionPid(caminoFifoAgente,caminoFifoNodo):
 
 
     prePid = leerPipe("No se recibió aviso envio de pid",
     caminoFifoAgente,caminoFifoNodo)
-    #time.sleep(constantes.TIEMPO_ESPERA)
+
     revisarCodigos(prePid,constantes.PREENVIO_PID,
     constantes.DIFF_PREENVIO_PID)
     pid = leerPipe("No se recibió el pid",
     caminoFifoAgente,caminoFifoNodo)
-    #time.sleep(constantes.TIEMPO_ESPERA)
+
     escribirPipe(constantes.CODIGO_FINALIZACION_PID,
     "No se envió correctamente el pid",
     caminoFifoAgente,caminoFifoNodo)
-    #time.sleep(constantes.TIEMPO_ESPERA)
+
 
 
     return pid

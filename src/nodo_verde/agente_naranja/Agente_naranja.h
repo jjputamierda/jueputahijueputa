@@ -16,7 +16,6 @@
 //constantes numéricas
 #define STD_SIZE 2
 #define MAX_BUF 1024
-#define TIEMPO_ESPERA 10000
 #define PERMISOS_FIFO 0666
 #define CANT_MIN_ARCH 7
 #define CONF_SIZE 3
