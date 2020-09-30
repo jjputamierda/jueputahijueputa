@@ -263,10 +263,9 @@ la escritura por el pipe de escritura fue errónea
 """
 def escribirPipeMen(mensaje,mensajeError,
      caminoFifoAgente,caminoFifoNodo):
-    try:
 
     try:
-        time.sleep(constantes.TIEMPO_ESPERA)
+        #time.sleep(constantes.TIEMPO_ESPERA)
         fde.write(mensaje.encode("ASCII","ignore"))
 
     except OSError:
