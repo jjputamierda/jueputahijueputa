@@ -21,6 +21,8 @@ y sus vercinos
 \author Juan José Herrera
 \date 14-9-20
 */
+int fdl;
+int fde;
 
 void trabajoAgenteNaranja(char*caminoFifoAgente,
 char *caminoFifoNodo,char* caminoNodoVerde,char* caminoVecinos){

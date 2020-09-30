@@ -44,8 +44,7 @@
 #define ERR_PIPE_CERRAR_L "No se cerró pipe de lectura"
 #define ERR_PIPE_CERRAR_E "No se cerró pipe de escritura"
 
-int fdl;
-int fde;
+
 //se definen las funciones a utilizar
 void trabajoAgenteNaranja(char*caminoFifoAgente,
 char *caminoFifoNodo,char* caminoNodoVerde,char* caminoVecinos);
