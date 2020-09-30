@@ -407,8 +407,8 @@ void escribirPipeTam(std::string msj,std::string e,
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         throw std::runtime_error(e);
     }
-    std::cout<<tamanoMen.data()<<std::endl;
-    std::cout<<"agente e"<<std::endl;
+    //std::cout<<tamanoMen.data()<<std::endl;
+    //std::cout<<"agente e"<<std::endl;
 }
 /**
 \brief Mandar por el pipe de escritura el mensaje que se va a enviar
@@ -439,8 +439,8 @@ void escribirPipeMen(std::string msj,std::string e,
         quitarPipe(caminoFifoNodo,ERR_PIPE_BORRAR_L);
         throw std::runtime_error(e);
     }
-    std::cout<<msj.data()<<std::endl;
-    std::cout<<"agente e"<<std::endl;
+    //std::cout<<msj.data()<<std::endl;
+    //std::cout<<"agente e"<<std::endl;
 
 }
 /**
@@ -480,8 +480,8 @@ char *caminoFifoAgente,char *caminoFifoNodo){
     }
     int tempSize = atoi(arr.data());
     size_t tamanoMenReal = (size_t)tempSize;
-    std::cout<<tamanoMenReal<<std::endl;
-    std::cout<<"agente l"<<std::endl;
+    //std::cout<<tamanoMenReal<<std::endl;
+    //std::cout<<"agente l"<<std::endl;
   return tamanoMenReal;
 }
 
@@ -522,8 +522,8 @@ size_t tamanoMenReal){
       throw std::runtime_error(e);
     }
   std::string msjNuevo = std::string(arr.data());
-  std::cout<<msjNuevo.data()<<std::endl;
-  std::cout<<"agente l"<<std::endl;
+  //std::cout<<msjNuevo.data()<<std::endl;
+  //std::cout<<"agente l"<<std::endl;
   return msjNuevo;
 }
 
