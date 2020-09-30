@@ -391,7 +391,7 @@ void escribirPipeTam(std::string msj,std::string e,
     std::string tamanoMen = std::to_string(strlen(msj.data()));
 
     if(strlen(msj.data())<MIN_BYTES_VER){//Debe ser de 2 caracteres
-        tamanoMen.data() = COMP_2_BYTES+tamanoMen;//Si no lo es se le agrega
+        tamanoMen.data() = COMP_2_BYTES+tamanoMen.data();//Si no lo es se le agrega
                                        //un caracter extra
     }
 
