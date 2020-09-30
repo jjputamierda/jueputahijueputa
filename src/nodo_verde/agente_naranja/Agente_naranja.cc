@@ -33,8 +33,7 @@ char *caminoFifoNodo,char* caminoNodoVerde,char* caminoVecinos){
         quitarPipe(caminoFifoAgente,ERR_PIPE_BORRAR_E);
         throw std::runtime_error(ERR_PIPE_CREAR_L);
     }
-    std::ofstream ("../../lock1.lck");
-    std::ofstream ("../../lock2.lck");
+
     int pid = fork();//Se crea el nodo naranja
     if(pid == 0){
         execlp(INTERPRETADOR,INTERPRETADOR,
@@ -114,7 +113,7 @@ char *caminoFifoNodo,std::vector < std::string > infoVerde){
             codigo.data()) != 0){
             infoVerde.push_back(mensaje);
         }
-        usleep(TIEMPO_ESPERA);//mecanismo de sincronización
+        //usleep(TIEMPO_ESPERA);//mecanismo de sincronización
     }
 
     return infoVerde;
@@ -145,7 +144,7 @@ std::vector < std::string > comunicacionVecinos(
     escribirPipe(CODIGO_AVISO_ENV_VEC,
     "No se envio aviso para envio de vecinos",
     caminoFifoAgente,caminoFifoNodo);
-    usleep(TIEMPO_ESPERA);//mecanismo de sincronización
+    //usleep(TIEMPO_ESPERA);//mecanismo de sincronización
 
     infoVerde = recibirInfoArchivo(CODIGO_AVISO_REC_VEC,
     "No se envio aviso para recibo de vecinos",
@@ -179,7 +178,7 @@ std::vector < std::string > comunicacionInfoVerde(
     escribirPipe(CODIGO_AVISO_ENV_VER,
     "No se envio aviso para envio de info ver",
     caminoFifoAgente,caminoFifoNodo);
-    usleep(TIEMPO_ESPERA);
+    //usleep(TIEMPO_ESPERA);
 
     infoVerde = recibirInfoArchivo(CODIGO_AVISO_REC_VER,
     "No se envio aviso para recibo de info ver",
@@ -256,14 +255,14 @@ char *caminoFifoNodo,int pid){
     "No se envió el aviso del pid",
     caminoFifoAgente,caminoFifoNodo);
     std::string stringPid = std::to_string(pid);
-    usleep(TIEMPO_ESPERA);
+    //usleep(TIEMPO_ESPERA);
     //stringPid.resize (MAX_BUF);
     escribirPipe(stringPid,"No se envió del pid",
     caminoFifoAgente,caminoFifoNodo);
-    usleep(TIEMPO_ESPERA);
+    //usleep(TIEMPO_ESPERA);
     std::string codFinalizacion = leerPipe("confirmación de pid inválida",
     caminoFifoAgente,caminoFifoNodo);
-    usleep(TIEMPO_ESPERA);
+    //usleep(TIEMPO_ESPERA);
     revisarCodigos(codFinalizacion,
     CODIGO_FINALIZACION_PID ,"No se envió correctamente el pid");
 
