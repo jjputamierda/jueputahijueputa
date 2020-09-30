@@ -147,7 +147,8 @@ def leerPipeTam(mensajeError,caminoFifoAgente,caminoFifoNodo):
     try:
         tamano = str(fdl.read(constantes.STD_SIZE))
         tamanoInt = int(tamano)
-
+        print(tamanoInt)
+        print("nodo l")
     except OSError:
         cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
         caminoPipe,constantes.ERR_PIPE_BORRAR_L)
@@ -184,7 +185,8 @@ def leerPipeMen(mensajeError,caminoFifoAgente,caminoFifoNodo,tamano):
 
     try:
         mensaje= str(fdl.read(tamano))
-
+        print(mensaje)
+        print("nodo l")
 
     except OSError:
         cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
@@ -230,7 +232,9 @@ def escribirPipeTam(mensaje,mensajeError,
             nuevoMensaje = constantes.COMP_2_BYTES + nuevoMensaje
 
         fde.write(nuevoMensaje.encode("ASCII","ignore"))
-
+        print(nuevoMensaje)
+        print("nodo e")
+        fde.flush()
     except OSError:
         cerrarPipe(fdl,constantes.ERR_PIPE_CERRAR_L,
         caminoPipe,constantes.ERR_PIPE_BORRAR_L)
@@ -267,7 +271,9 @@ def escribirPipeMen(mensaje,mensajeError,
     try:
         time.sleep(constantes.TIEMPO_ESPERA)
         fde.write(mensaje.encode("ASCII","ignore"))
-
+        print(mensaje)
+        print("nodo e")
+        fde.flush()
     except OSError:
         cerrarPipe(fifo,constantes.ERR_PIPE_CERRAR_E,
         caminoPipe,constantes.ERR_PIPE_BORRAR_E)
