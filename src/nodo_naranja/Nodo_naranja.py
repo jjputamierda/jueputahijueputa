@@ -6,8 +6,8 @@ import time
 import constantes
 from csv import reader
 
-fde
-fdl
+fde = 0
+fdl = 0
 
 """
 \brief Eliminar los pipes seleccionados
