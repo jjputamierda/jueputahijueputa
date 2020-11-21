@@ -30,7 +30,7 @@ def respuestaTCP(serverQueue):
     except queue.Empty:
         pass
 
-    if(mensajeRecibir!= None):
+    if(mensajeRecibir!= None and len(mensajeRecibir) > 5:
 
         for item in mensajeRecibir.split(","):
             paquete.append(int(item))
@@ -420,11 +420,17 @@ def serverTcp(serverQueue,clientQueue):
 
         data = s1.recv(1024)
         data=data.decode("utf-8")
+        print("")
+        print("llego dato a server tcp en python")
+        print(data)
         prueba=data[0:2]
         if(prueba == "90"):
             data=data[3:]
             generarMatriz(data,clientQueue)
         elif (prueba != "90"):
+            print("")
+            print("entre en if de diferente a 90")
+            print(data)
             serverQueue.put(data)
             if(data == "-100,-100,-100,-100,-100"):
                 global vivo
