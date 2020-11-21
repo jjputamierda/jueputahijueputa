@@ -104,10 +104,24 @@ int main(int argc,char *argv[]){
     int posicion,datos;
     for(unsigned long int indice2=0;indice2<datosNodos.size();
     indice2++){
+       
         posicion=datosNodos[indice2].find(",");
+
         datos= std::stoi(datosNodos[indice2].substr(0,posicion));
+                std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<"Esto es antes de datos en nodo verde"<<std::endl;
+                std::cout<<datos<<std::endl;
+                std::cout<<posicion<<std::endl;
+                 std::cout<<datosNodos[indice2]<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+
         nodosIDS.push_back(datos);
     }
+    for(size_t i3=0i3<nodosIDS.size())
 
     std::vector<Cola<struct CapaEnlace>> colasDeMensajes;
     for(size_t i = 0; i < datosNodos.size(); ++i){

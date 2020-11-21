@@ -16,43 +16,30 @@ nodos = []  ###Variables de dijkstra
 matriz = []
 caminos = []
 forwarding = []
-'''
-    @brief Metodo que recibe datos del socket por la cola de datos 
-    @details Este metodo se encarga de recibir datos por medio de la cola de datos que recibieron por el socekt y 
-    fueron enviados por el agente rosado
-    el dato
-    @param[in] N/A
-    @param[out] cola de datos
-    @pre Que la cola de datos fuera creada
-    @remark se modifica la cola de datos
-    @return N/A
-    @exception N/A
-    @author Diego Barquero Quesada B80961/Juan Jose Herrera B8
-    @date 15-09-20
-'''
+
 def respuestaTCP(serverQueue):
     paquete = []
     mensajeRecibir=None
-
+    mandarMensaje=0
     try:
         mensajeRecibir = serverQueue.get(block=True, timeout=20)
-
+        
     except queue.Empty:
+        mandarMensaje=1
         pass
 
-    if(mensajeRecibir!= None):
+    if(mensajeRecibir!= None and len(mensajeRecibir) > 5 and len(mensajeRecibir)!=0):
+        print("esto es recibir mensaje")
+        print("//////////////")
+        print(mensajeRecibir)
+        print("//////////////")
 
         for item in mensajeRecibir.split(","):
-            print("Esto es item en python")
-            print("XXXXXXXXXXXXXXXXXXX")
+            print("Esto es item")
             print(item)
-            print("XXXXXXXXXXXXXXXXXXX")
-            if(item.isnumeric()):
-                paquete.append(int(item))
-            else:
-                print("Entre a else dato no es numerico")
-                paquete.append("-14")
-            
+            paquete.append(int(item))
+
+        print("Termino de hacer split")
     else:
         mensajeRecibir = "-1,-1,-1,-1,-1"
 
@@ -60,19 +47,7 @@ def respuestaTCP(serverQueue):
             paquete.append(int(item))
 
     return paquete
-'''
-    @brief Metodo que pasa datos para que sean enviados por el socket
-    @details Este metodo se encarga de enviar datos por medio de una cola
-    de datos al socket para que sean mandados al agente rosado
-    @param[in] N/A
-    @param[out] cola de datos , paquete con datos
-    @pre Que la cola de datos fuera creada
-    @remark se modifica la cola de datos
-    @return N/A
-    @exception N/A
-    @author Diego Barquero Quesada B80961/Juan Jose Herrera B8
-    @date 15-09-20
-'''
+
 def solicitudTCP(paquete,clientQueue):
 
     if(paquete[0:2]=="70"):
@@ -80,39 +55,13 @@ def solicitudTCP(paquete,clientQueue):
     else:
         mensajeEnviar = str(paquete[0]) + "," + str(paquete[1]) +","+ \
         str(paquete[2]) + "," + str(paquete[3]) + "," + str(paquete[4])
-        print("Esto es mensaje enviar en python")
-        print("EEEEEEEEEEEEEEEEEEEEEEEEE")
-        print(mensajeEnviar)
-        print("EEEEEEEEEEEEEEEEEEEEEEEEE")
         clientQueue.put(mensajeEnviar)
 
         return paquete
-'''
-    @brief Metodo que reinicia el paquete de dtaos
-    @details Este metodo se encarga de limpiar y reiniciar el paquete de datos
-    @param[in] N/A
-    @param[out] N/A
-    @pre N/A
-    @remark N/A
-    @return N/A
-    @exception N/A
-    @author Juan Jose Herrera B8
-    @date 15-09-20
-'''
+
 def reinicioPaquete():
     paquete = [0,0,0,0]
-'''
-    @brief Metodo que genera un socket para recibir datos del agente rosado
-    @details Este metodo se encarga de generar un socket para recibir datos que son enviados desde el agente rosado
-    @param[in] N/A
-    @param[out] dos colas de datos 
-    @pre Que las colas de datos fueran creadas
-    @remark se modifican las colas de datos
-    @return N/A
-    @exception N/A
-    @author Diego Barquero Quesada B80961
-    @date 15-09-20
-'''
+
 def TWHResponderPapa(numeroNodo,clientQueue,serverQueue,
 reintentos,papaAg,miembroAg):
 
@@ -123,10 +72,10 @@ reintentos,papaAg,miembroAg):
     sn = 0
     exito = 0
     potencialHijo = 0
-    while(nuevoReintento < reintentos and  salirWhile == 0):
+    while(nuevoReintento < reintentos and  salirWhile != 1):
 
         paquete = respuestaTCP(serverQueue)
-        if (paquete[0]== 15 ):
+        if (paquete[0]== 1 ):
             sn = paquete [1]
             salirWhile = 1
             exito = 1
@@ -138,14 +87,14 @@ reintentos,papaAg,miembroAg):
         exito = 0
         destino = paquete [4]
         potencialHijo=destino
-        paquete = [16,sn,rn,destino,numeroNodo]
+        paquete = [2,sn,rn,destino,numeroNodo]
         while(nuevoReintento < reintentos and  salirWhile != 1):
             solicitudTCP(paquete,clientQueue)
             paqueteR = respuestaTCP(serverQueue)
-            if (paqueteR[0]== 18 and paqueteR[1] == sn
+            if (paqueteR[0]== 4 and paqueteR[1] == sn
             and paqueteR[2] == rn +1 ):
 
-                paquete = [18,sn+1,rn+1,destino,numeroNodo]
+                paquete = [5,sn+1,rn+1,destino,numeroNodo]
                 solicitudTCP(paquete,clientQueue)
                 salirWhile = 1
                 exito = 1
@@ -153,18 +102,7 @@ reintentos,papaAg,miembroAg):
                 hijosAg.append(potencialHijo)
                 enviarBroadcast(0,potencialHijo,clientQueue)
             nuevoReintento = nuevoReintento + 1
-'''
-    @brief Metodo que genera un socket para recibir datos del agente rosado
-    @details Este metodo se encarga de generar un socket para recibir datos que son enviados desde el agente rosado
-    @param[in] N/A
-    @param[out] dos colas de datos 
-    @pre Que las colas de datos fueran creadas
-    @remark se modifican las colas de datos
-    @return N/A
-    @exception N/A
-    @author Diego Barquero Quesada B80961
-    @date 15-09-20
-'''
+
 def enviarBroadcast(esPapa,miembroArbol,clientQueue):
     if (esPapa==1):
         paquete=[43,43,43,miembroArbol,43]
@@ -172,34 +110,11 @@ def enviarBroadcast(esPapa,miembroArbol,clientQueue):
         paquete=[44,44,44,miembroArbol,44]
 
     solicitudTCP(paquete,clientQueue)
-'''
-    @brief Metodo que genera un paquete que indica que ya se es parte del arbol
-    @details Este metodo se encarga de generar un paquete que indica que ya se es parte del
-    arbol y se pasa el paquete para que sea enviado por el socket al agente rosado
-    @param[in] N/A
-    @param[out] cola de datos 
-    @pre Que la cola de datos fuera creada
-    @remark se modifica la cola de datos
-    @return N/A
-    @exception N/A
-    @author Diego Barquero Quesada B80961/Juan Jose Herrera B8
-    @date 15-09-20
-'''
+
 def enivarConfirmacionArbol(clientQueue):
     paquete=[45,45,45,45,45]
     solicitudTCP(paquete,clientQueue)
-'''
-    @brief Metodo que genera un socket para recibir datos del agente rosado
-    @details Este metodo se encarga de generar un socket para recibir datos que son enviados desde el agente rosado
-    @param[in] N/A
-    @param[out] dos colas de datos 
-    @pre Que las colas de datos fueran creadas
-    @remark se modifican las colas de datos
-    @return N/A
-    @exception N/A
-    @author Diego Barquero Quesada B80961
-    @date 15-09-20
-'''
+
 def TWHNoRespondePapa(numeroNodo,clientQueue,serverQueue,reintentos):
     paquete = reinicioPaquete()
     seed(1)
@@ -209,9 +124,9 @@ def TWHNoRespondePapa(numeroNodo,clientQueue,serverQueue,reintentos):
     sn = 0
     exito = 0
     potencialHijo = 0
-    while(nuevoReintento < reintentos and  salirWhile == 0):
+    while(nuevoReintento < reintentos and  salirWhile != 1):
         paquete = respuestaTCP(serverQueue)
-        if (paquete[0]== 15 and paquete[1] != 1 and paquete[1] != 0
+        if (paquete[0]== 1 and paquete[1] != 1 and paquete[1] != 0
         and paquete[2] != 1 and paquete[2] != 0):
             sn = paquete [1]
             salirWhile = 1
@@ -223,31 +138,20 @@ def TWHNoRespondePapa(numeroNodo,clientQueue,serverQueue,reintentos):
         salirWhile = 0
         exito = 0
         destino = paquete [4]
-        paquete = [17,sn,rn,destino,numeroNodo]
-        while(nuevoReintento < reintentos and  salirWhile == 0):
+        paquete = [3,sn,rn,destino,numeroNodo]
+        while(nuevoReintento < reintentos and  salirWhile != 1):
 
             solicitudTCP(paquete,clientQueue)
             paqueteR = respuestaTCP(serverQueue)
-            if (paqueteR[0]== 18 and paqueteR[1] == sn
+            if (paqueteR[0]== 4 and paqueteR[1] == sn
             and paqueteR[2] == rn +1 ):
-                paquete = [18,sn+1,rn+1,destino,numeroNodo]
+                paquete = [5,sn+1,rn+1,destino,numeroNodo]
                 salirWhile = 1
                 exito = 1
 
             nuevoReintento = nuevoReintento + 1
 
-'''
-    @brief Metodo que genera un socket para recibir datos del agente rosado
-    @details Este metodo se encarga de generar un socket para recibir datos que son enviados desde el agente rosado
-    @param[in] N/A
-    @param[out] dos colas de datos 
-    @pre Que las colas de datos fueran creadas
-    @remark se modifican las colas de datos
-    @return N/A
-    @exception N/A
-    @author Diego Barquero Quesada B80961
-    @date 15-09-20
-'''
+
 def TWHSolicitudPapa(numeroNodo,potencialPapa,clientQueue,
 serverQueue,reintentos):
 
@@ -260,7 +164,7 @@ serverQueue,reintentos):
     viejoPaqueteOp = 0
     papaAg = -1
     miembroAg = 0
-    while(nuevoReintento < reintentos and salirWhile ==0):
+    while(nuevoReintento < reintentos and salirWhile != 1):
         solicitudTCP(paquete,clientQueue)
         paqueteR = respuestaTCP(serverQueue)
         if (paqueteR[0]== 2 and paqueteR[1] == sn + 1):
@@ -274,17 +178,14 @@ serverQueue,reintentos):
                 viejoPaqueteOp = paqueteR[0]
 
         nuevoReintento = nuevoReintento + 1
-
-    #sn = paqueteR[1]
-    #rn = paqueteR[2] + 1
+    sn = paqueteR[1]
+    rn = paqueteR[2] + 1
     if(exito == 1):
-        sn = paqueteR[1]
-        rn = paqueteR[2] + 1
         nuevoReintento = 0
         salirWhile = 0
         exito = 0
         paquete = [4,sn,rn,potencialPapa,numeroNodo]
-        while(nuevoReintento < reintentos and salirWhile == 0):
+        while(nuevoReintento < reintentos and salirWhile != 1):
             solicitudTCP(paquete,clientQueue)
             paqueteR = respuestaTCP(serverQueue)
 
@@ -299,18 +200,7 @@ serverQueue,reintentos):
 
     vectorRespuestaP = [exito,papaAg,miembroAg]
     return vectorRespuestaP
-'''
-    @brief Metodo que genera un socket para recibir datos del agente rosado
-    @details Este metodo se encarga de generar un socket para recibir datos que son enviados desde el agente rosado
-    @param[in] N/A
-    @param[out] dos colas de datos 
-    @pre Que las colas de datos fueran creadas
-    @remark se modifican las colas de datos
-    @return N/A
-    @exception N/A
-    @author Diego Barquero Quesada B80961
-    @date 15-09-20
-'''
+
 
 def reconfiguracionPapa(serverQueue,clientQueue,reintentos):
     nuevoReintento = 0
@@ -319,7 +209,7 @@ def reconfiguracionPapa(serverQueue,clientQueue,reintentos):
     potencialPapa = -1
     vectorRespuestaP = [exito,potencialPapa]
     paqueteL = [-101,-101,-101,-101,-101]
-    while(nuevoReintento < reintentos and salirWhile == 0):
+    while(nuevoReintento < reintentos and salirWhile != 1):
         solicitudTCP(paqueteL,clientQueue)
 
         paquete = respuestaTCP(serverQueue)
@@ -340,20 +230,6 @@ def reconfiguracionPapa(serverQueue,clientQueue,reintentos):
         time.sleep(0.3)
     return vectorRespuestaP
 
-'''
-    @brief Metodo que genera una solicutud para averiguar la cantidad de reintentes para 
-    realizar preguntas a un vecino si es parte del arbol
-    @details Este metodo se encarga de generar una solicitud para averiguar cual es la cantidad de veces que se le 
-    va a pregunatr a un vecino si es parte del arbol
-    @param[in] N/A
-    @param[out] dos cola de datos 
-    @pre Que las colas de datos fueran creadas
-    @remark se modifican las colas de datos
-    @return N/A
-    @exception N/A
-    @author Juan Jose Herrera B8
-    @date 15-09-20
-'''
 def obtenerReintentos(serverQueue,clientQueue):
     reintentos = 7
     nuevoReintento = 0
@@ -361,10 +237,19 @@ def obtenerReintentos(serverQueue,clientQueue):
     exito = 0
     paqueteL = [-101,-101,-101,-101,-101]
 
-    while(nuevoReintento < reintentos and salirWhile == 0):
+    while(nuevoReintento < reintentos and salirWhile != 1):
 
         solicitudTCP(paqueteL,clientQueue)
+        print("Desperte al hilo agente rosado")
+        print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
+        print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww")
         paquete = respuestaTCP(serverQueue)  #[0,0,0,1]
+        print("Respuesta hilo rosado")
+        print(paquete[0])
+        print(paquete[1])
+        print(paquete[2])
+        print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww11")
+        print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww11")
 
         if(paquete[0] ==  0 and paquete[1] == 0 and
             paquete[2] == 0 ):
@@ -373,6 +258,9 @@ def obtenerReintentos(serverQueue,clientQueue):
             salirWhile = 1
             paquete = [1,1,1,1,1]
             solicitudTCP(paquete,clientQueue)
+            print("Respuesta hilo rosado22")
+            print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww22")
+            print("wwwwwwwwwwwwwwwwwwwwwwwwwwwwww22")
             exito = 1
         nuevoReintento = nuevoReintento + 1
 
@@ -406,7 +294,7 @@ def revisarNodosMuertos(numeroNodo,clientQueue,serverQueue,reintentos):
     nuevoReintento = 0
     salirWhile = 0
     exito = 0
-    while(nuevoReintento < reintentos or salirWhile == 0):
+    while(nuevoReintento < reintentos or salirWhile != 1):
         paquete = respuestaTCP(serverQueue)
         if (paquete[0] >  -1 and paquete[1] == -1 and
         paquete[2] == -1 ):
@@ -425,20 +313,7 @@ def revisarNodosMuertos(numeroNodo,clientQueue,serverQueue,reintentos):
 
         nuevoReintento = nuevoReintento + 1
 
-'''
-    @brief Metodo que genera una solicutud para averiguar la cantidad de reintentes para 
-    realizar preguntas a un vecino si es parte del arbol
-    @details Este metodo se encarga de generar una solicitud para averiguar cual es la cantidad de veces que se le 
-    va a pregunatr a un vecino si es parte del arbol
-    @param[in] N/A
-    @param[out] dos cola de datos 
-    @pre Que las colas de datos fueran creadas
-    @remark se modifican las colas de datos
-    @return N/A
-    @exception N/A
-    @author Juan Jose Herrera B8
-    @date 15-09-20
-'''
+
 def responderSolicitudesPapa(numeroNodo,clientQueue,serverQueue,
 reintentos,papaAg,miembroAg):
 
@@ -451,19 +326,7 @@ reintentos,papaAg,miembroAg):
         TWHResponderPapa(numeroNodo,clientQueue,serverQueue,
         reintentos,papaAg,miembroAg)
 
-'''
-    @brief Metodo que genera una matriz con los datos de los nodos
-    
-    @details Este metodo se encarga de generar una con los datos de los nodos
-    @param[in] N/A
-    @param[out] cola de datos y paquete de datos
-    @pre Que la cola de datos fuera creada y que el paquete fuera correcftamente inicializado
-    @remark N/A
-    @return N/A
-    @exception N/A
-    @author Johel Phillipes B8
-    @date 15-09-20
-'''
+
 def generarMatriz(data,clientQueue):
     datos = data.split(sep=',')
     indice = 0
@@ -510,18 +373,7 @@ def generarMatriz(data,clientQueue):
 
     dijkstra(matriz, caminos, forwarding,clientQueue)
 
-'''
-    @brief Metodo que ejecuta el algoritmo de dijstra
-    @details Este metodo se encarga de ejecutar el algoritmo de dijkstra para encontrar la ruta mas corta a los nodos
-    @param[in] N/A
-    @param[out] cola de datos
-    @pre Que la cola de datos fuera creada
-    @remark 
-    @return N/A
-    @exception N/A
-    @author Johel Phillipes B8
-    @date 15-09-20
-'''
+
 def dijkstra(pesos, caminos, forwarding,clientQueue):
     i = 0
     j = 0
@@ -579,46 +431,27 @@ def dijkstra(pesos, caminos, forwarding,clientQueue):
         str(nodos[caminos[i][1]]) + "-" + str(nodos[i+1])
 
     solicitudTCP(paquete,clientQueue)
-'''
-    @brief Metodo que genera un socket para recibir datos del agente rosado
-    @details Este metodo se encarga de generar un socket para recibir datos que son enviados desde el agente rosado
-    @param[in] N/A
-    @param[out] dos colas de datos 
-    @pre Que las colas de datos fueran creadas
-    @remark se modifican las colas de datos
-    @return N/A
-    @exception N/A
-    @author Diego Barquero Quesada B80961
-    @date 15-09-20
-'''
+
 def serverTcp(serverQueue,clientQueue):
     bandera = 1
     while(bandera == 1):
 
         data = s1.recv(1024)
         data=data.decode("utf-8")
+
+
         prueba=data[0:2]
         if(prueba == "90"):
             data=data[3:]
             generarMatriz(data,clientQueue)
         elif (prueba != "90"):
+
             serverQueue.put(data)
             if(data == "-100,-100,-100,-100,-100"):
                 global vivo
                 vivo = 1
 
-'''
-    @brief Metodo que genera un socket para enviar datos al agente rosado
-    @details Este metodo se encarga de generar un socket para enviar datos al agente rosado
-    @param[in] N/A
-    @param[out]  cola de datos 
-    @pre Que la cola de datos fuera creada
-    @remark se modifica la cola de datos
-    @return N/A
-    @exception N/A
-    @author Diego Barquero Quesada B80961
-    @date 15-09-20
-'''
+
 def clientTcp(clientQueue):
 
     global vivo
@@ -626,13 +459,6 @@ def clientTcp(clientQueue):
         data=None
         try:
             data = clientQueue.get(block = True,timeout=30)
-            print("Esto es data en python")
-            print("aaaaaaaaaaaaaaaaaaa")
-            print("aaaaaaaaaaaaaaaaaaa")
-            print(data)
-            print("aaaaaaaaaaaaaaaaaaa")
-            print("aaaaaaaaaaaaaaaaaaa")
-
         except queue.Empty:
             pass
         if data != None:

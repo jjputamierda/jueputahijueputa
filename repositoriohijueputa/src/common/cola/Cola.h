@@ -197,15 +197,15 @@ struct DatosMensaje{
     uint8_t tipo;               // Forwarding 1 || Broadcast 2
 };
 struct CajaNegraRed{
-    struct Forwarding* payloadForwarding = 0;
-    struct Broadcast* payloadBroadcast = 0;
-    struct ArbolGenerador* payloadArbol = 0;
+    struct Forwarding* payloadForwarding;
+    struct Broadcast* payloadBroadcast ;
+    struct ArbolGenerador payloadArbol ;
 };
 // Agente verde -> Despachador verde
 struct CapaRed{
     uint8_t tipo;
     uint16_t longitud;
-    struct CajaNegraRed* payload = 0;
+    struct CajaNegraRed payload ;
 };
 
 

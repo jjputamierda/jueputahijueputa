@@ -192,10 +192,30 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 		struct DatosArbolGenerador datos = colaDespachadorRosado->pop();
 
 		size_t longitud = nodosIDs->size();
-
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<"Esto es antes del for en agende red"<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
             for(size_t i = 0; i < longitud; ++i){
-
+				
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<"Esto es despues del for en agende red"<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
                 if(datos.id_destino_final == (*nodosIDs)[i]){
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<"Esto es despues adentro del if en agende red"<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
 
                     struct ArbolGenerador paqueteAg;
 
@@ -204,14 +224,42 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 					paqueteAg.SN = datos.SN;
 					paqueteAg.RN =  datos.RN;
 
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<"Esto es despues de struc arbol generador  en agende red"<<std::endl;
+					std::cout<<paqueteAg.tipo<<std::endl;
+					std::cout<<paqueteAg.SN<<std::endl;
+					std::cout<<paqueteAg.RN<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
 					struct CapaRed capaRed;
 					capaRed.tipo = ARBOL;
 
-					capaRed.payload->payloadArbol = &(paqueteAg);
+					capaRed.payload.payloadArbol = paqueteAg;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<"Esto es despues de paiload arbol en agende red"<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+
 					capaRed.longitud =  sizeof(paqueteAg);
+					
 					struct CapaEnlace paquete;
 
-
+					for(size_t i2=0;i2<nodosIDs->size();i2++){
+						std::cout<<std::endl;
+						std::cout<<std::endl;
+						std::cout<<std::endl;
+						std::cout<<"Esto es Nodos ids"<<std::endl;
+						std::cout<<(*nodosIDs)[i2]<<std::endl;
+						std::cout<<std::endl;
+						std::cout<<std::endl;
+						std::cout<<std::endl;
+					}
 
 					paquete.tipo = RED;
 					paquete.idDestinoFinal = datos.id_destino_final;
@@ -219,7 +267,16 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 					paquete.longitud = sizeof(capaRed);
 					paquete.payload = &capaRed;
 
-
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<"Esto es despues de struc capa Enlace y anets push en agende red"<<std::endl;
+					std::cout<<paquete.idDestinoFinal<<std::endl;
+					std::cout<<paquete.idFuenteInmediato<<std::endl;
+					std::cout<<paquete.longitud<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
                     
 					
 	
@@ -244,18 +301,18 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 		struct CapaRed capaRed =
 		colaDespachadorVerde->pop();
 		if(capaRed.tipo== FORWARDING){
-			struct  CajaNegraRed payloadRed= *(capaRed.payload);
-			struct Forwarding forwarding= *(payloadRed.payloadForwarding);
+			//struct  CajaNegraRed payloadRed= *(capaRed.payload);
+			//struct Forwarding forwarding= *(payloadRed.payloadForwarding);
 			//colaForwarding->push(forwarding);
 		} 
 		else if (capaRed.tipo== BROADCAST){
-			struct  CajaNegraRed payloadRed= *(capaRed.payload);
-			struct Broadcast broadcast= *(payloadRed.payloadBroadcast);
+			//struct  CajaNegraRed payloadRed= *(capaRed.payload);
+			//struct Broadcast broadcast= *(payloadRed.payloadBroadcast);
 			//colaBroadcast->push(broadcast);
 		}
 		else if (capaRed.tipo== ARBOL){
-			struct  CajaNegraRed payloadRed= *(capaRed.payload);
-			struct ArbolGenerador arbol= *(payloadRed.payloadArbol);
+			struct  CajaNegraRed payloadRed= capaRed.payload;
+			struct ArbolGenerador arbol= payloadRed.payloadArbol;
 			nodoSenderTWH=nodoSender;
 			//nodoSenderTWH = nodoSender;
 			colaRosada->push(arbol);

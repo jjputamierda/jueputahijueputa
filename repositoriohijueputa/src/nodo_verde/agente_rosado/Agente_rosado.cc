@@ -16,6 +16,12 @@ Cola<std::string>* colaTablaForwarding){
     	std::vector<std::string> resultado;
     	recibir = recibirAgenteRosa->pop();
 
+		std::cout<<"Esto es recibir en enviar enlace en agente rosado"<<std::endl;
+		std::cout<<recibir<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+
 		std::string auxTabla=recibir;
   		std::stringstream s_stream(recibir);
   		while(s_stream.good()){
@@ -39,14 +45,35 @@ Cola<std::string>* colaTablaForwarding){
   			}else{
 				int nuevoIntIdDestino(std::stoi(resultado[3]));
     			enviar.id_destino_final= static_cast<uint16_t>(nuevoIntIdDestino);
+				std::cout<<"Esto es enviar id destino fianl en enviar enlace en agente rosado"<<std::endl;
+				std::cout<<enviar.id_destino_final<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
     			
 				enviar.tipo=resultado[0][0];
+				std::cout<<"Esto es tipo en enviar enlace en agente rosado"<<std::endl;
+				std::cout<<enviar.tipo<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+
     			//std::string str = resultado[0];
 				//enviar.tipo=str[0];
 				int nuevoSN(std::stoi(resultado[1]));
 				enviar.SN = static_cast<uint16_t>(nuevoSN);
+				std::cout<<"Esto es SN en enviar enlace en agente rosado"<<std::endl;
+				std::cout<<enviar.SN<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
 				int nuevoRN(std::stoi(resultado[2]));
 				enviar.RN = static_cast<uint16_t>(nuevoRN);
+				std::cout<<"Esto es RN en enviar enlace en agente rosado"<<std::endl;
+				std::cout<<enviar.RN<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
     			colaDespachadorRosado->push(enviar);
   			}
   		}
@@ -62,9 +89,31 @@ Cola<std::string>* envioAgenteRosa){
 		//Seguir trabajnod en esta parte
     	struct ArbolGenerador recibir;
     	recibir = colaRosada->pop();
+		std::cout<<"Esto es recibir en recibir enlace en agente rosado"<<std::endl;
+		std::cout<<recibir.SN<<std::endl;
+		std::cout<<recibir.RN<<std::endl;
+		std::cout<<recibir.tipo<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+
+		std::cout<<"Esto es antes del primer to string"<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+
     	std::string SN=std::to_string(recibir.SN);
 		std::string RN=std::to_string(recibir.RN);
-    	std::string enviar= recibir.tipo +","+ SN+","+ RN+",";
+    	std::string enviar= recibir.tipo +","+ SN+","+ RN;
+
+		std::cout<<"Esto es enviar en recibir enlace en agente rosado1111"<<std::endl;
+			std::cout<<enviar<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+
+		
+
      	if(strcmp(enviar.c_str(),"-100,-100,-100")==0){
       		bandera = 0;
       		vivo =0;
@@ -72,8 +121,29 @@ Cola<std::string>* envioAgenteRosa){
       		envioAgenteRosa->push(enviar);
     	} else {
 	  		if(strcmp((enviar.substr(0,2)).c_str(),"90")!=0){
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<"Esto es enviar en recibir enlace en agente rosado antes del to string"<<std::endl;
+			std::cout<<enviar<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
 		  		enviar=enviar+",-111,"+std::to_string(nodoSenderTWH);
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<"Esto es enviar en recibir enlace en agente rosado despues del to string"<<std::endl;
+			std::cout<<enviar<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
 	  		}
+			std::cout<<"Esto es enviar en recibir enlace en agente rosado2222"<<std::endl;
+			std::cout<<enviar<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
       		envioAgenteRosa->push(enviar);
     	}
   	}
@@ -99,6 +169,8 @@ Cola<std::string>* colaTablaForwarding){
       	(char*)NULL);
       	exit(1);
   	}else if(pid > 0){//Agente_rosado
+	  std::vector<indiceNodo> ids;
+	  /*
     	size_t i,j;
     	std::vector<indiceNodo> ids;
     	indiceNodo nodoId, pivote;
@@ -117,6 +189,7 @@ Cola<std::string>* colaTablaForwarding){
         		}
       		}
     	}
+		*/
 
         Cola<std::string> colaInicializacion;
 
@@ -198,7 +271,7 @@ std::vector<datosNodo>* tablaVecinos){
 
     			size_t indice = 0;
     			int bandera = 1;
-				
+				/*
     			while(indice <ids.size() && bandera == 1){
 
       				int indiceTabla = ids[indice].indice;
@@ -209,15 +282,21 @@ std::vector<datosNodo>* tablaVecinos){
       				}
       				indice++;
     			}
+				*/
 				
 				//papaFalso
-				//papa="0,1,1,1,1";
+				papa="0,1,1,1,1";
     			envioAgenteRosa->push(papa);
     			confirmacion = colaInicializacion->pop();
 
     			if(strcmp(confirmacion.c_str(),"1,1,1,1,1")!=0){
       				std::cout<<"ERROR1"<<std::endl;
     			}
+				std::cout<<"Esto es confirmacion"<<std::endl;
+				std::cout<<"oooooooooooooooooooooooooo"<<std::endl;
+				std::cout<<confirmacion<<std::endl;
+				std::cout<<"oooooooooooooooooooooooooo"<<std::endl;
+
   			}
  		}
 	}
@@ -297,6 +376,12 @@ Cola<std::string>* colaInicializacion,int puerto2){
     	char buffer [1024];
     	bzero(&buffer, 1024);
     	read(newserverSock,buffer, 1024); //n =
+		std::cout<<"Llegue a despues de read en server TCP agente rosado"<<std::endl;
+		std::cout<<buffer<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+		
     	std::string ret(buffer, 1024);
     	mensaje = ret;
     	std::vector<std::string> resultado;
