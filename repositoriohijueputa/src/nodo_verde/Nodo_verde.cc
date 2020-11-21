@@ -119,7 +119,7 @@ int main(int argc,char *argv[]){
 	Cola<struct ArbolGenerador> colaRosada;
 	Cola<struct DatosMensaje> colaDespachadorAzul;
 	Cola<struct DatosArbolGenerador> colaDespachadorRosado;
-	Cola<struct CapaEnlace> colaDespachadorVerde;
+	Cola<struct CapaRed> colaDespachadorVerde;
     Cola<std::string> despachadorMiembros;
     Cola<std::string> colaAlcanzabilidad;
     Cola<std::string> colaTablaForwarding;

@@ -1,6 +1,7 @@
 #include "Agente_rosado.h"
 
-
+//uint16_t nodoSender;
+//uint16_t nodoSenderTWH;
 
 int vivo = 1;
 void enviarEnlace(Cola<struct DatosArbolGenerador >* colaDespachadorRosado,
@@ -158,17 +159,30 @@ std::vector<datosNodo>* tablaVecinos){
   	std::string confirmacion= "-13,-13,-13,-13.-13";
 
   	while(strcmp(confirmacion.c_str(),"1,1,1,1,1")!=0){
+		
 		confirmacion = colaInicializacion->pop();
     	std::string reintentos;
     	reintentos = "0,0,0,0,9";
     	envioAgenteRosa->push(reintentos);
+		std::cout<<"Llegue a despues de push"<<std::endl;
+		std::cout<<reintentos<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
     	confirmacion = colaInicializacion->pop();
+
+		std::cout<<"Llegue a despues de pop"<<std::endl;
+		std::cout<<confirmacion<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
 
     	if(strcmp(confirmacion.c_str(),"1,1,1,1,1")!=0){
       		std::cout<<"ERROR"<<std::endl;
     	}
-  	}
 
+  	}
+	std::cout<<"Llegue a antes del while"<<std::endl;
   	if(stoi(numeroNodo) != 1){
 
   		while (strcmp(confirmacion.c_str(),
@@ -184,6 +198,7 @@ std::vector<datosNodo>* tablaVecinos){
 
     			size_t indice = 0;
     			int bandera = 1;
+				
     			while(indice <ids.size() && bandera == 1){
 
       				int indiceTabla = ids[indice].indice;
@@ -194,7 +209,9 @@ std::vector<datosNodo>* tablaVecinos){
       				}
       				indice++;
     			}
-
+				
+				//papaFalso
+				//papa="0,1,1,1,1";
     			envioAgenteRosa->push(papa);
     			confirmacion = colaInicializacion->pop();
 
@@ -230,6 +247,16 @@ void clienteTCP(Cola<std::string>* envioAgenteRosa,int puerto1){
   	int bandera = 1;
   	while(bandera == 1){
     	std::string msj = envioAgenteRosa->pop();
+		std::cout<<"Llegue a despues de pop en cliente"<<std::endl;
+		std::cout<<msj<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+		
+		std::cout<<msj.c_str()<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
+		std::cout<<std::endl;
 
       	char const * idLocalChar = msj.c_str();
       	send(newserverSock,idLocalChar,strlen(idLocalChar),0);

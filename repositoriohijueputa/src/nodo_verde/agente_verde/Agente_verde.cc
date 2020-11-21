@@ -1,6 +1,8 @@
 #include "Agente_verde.h"
 
 bool terminar = false;
+uint16_t nodoSender;
+//uint16_t nodoSenderTWH;
 
 /**
     @brief Metodo que se encarga de generar un socket para recibir los
@@ -21,13 +23,14 @@ bool terminar = false;
 */
 
 void recibirV(std::vector<datosNodo>* tabla,
-Cola<struct CapaEnlace>* colaDespachadorVerde){
+Cola<struct CapaRed>* colaDespachadorVerde){
 
     int n;
     unsigned int sock, length, fromlen;
     struct sockaddr_in server;
     struct sockaddr_in from;
     struct CapaEnlace paquete;
+    struct CapaRed capaRed;
 
     sock=socket(AF_INET, SOCK_DGRAM, 0);
     length = sizeof(server);
@@ -76,8 +79,9 @@ Cola<struct CapaEnlace>* colaDespachadorVerde){
 
         if(n > 0){
             if(paquete.tipo == RED){
+                
                 nodoSender = paquete.idFuenteInmediato;
-                struct CapaRed capaRed = *(paquete.payload);
+                capaRed = *(paquete.payload);
                 
 
             }
@@ -92,7 +96,7 @@ Cola<struct CapaEnlace>* colaDespachadorVerde){
                     }
                 }
                 
-                colaDespachadorVerde->push(paquete);
+                colaDespachadorVerde->push(capaRed);
                 //Modificar esto para que funciona
                 /*if(paquete.tipo == 1){
                     tabla[0][indice].estado = 1;

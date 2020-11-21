@@ -5,7 +5,8 @@ struct datosForwarding{
 	uint16_t distancia;
 	uint16_t camino;
 };
-
+//uint16_t nodoSender;
+uint16_t nodoSenderTWH;
 std::vector<struct datosForwarding> tablaForwarding;
 
 void capaRed(Cola<struct Mensaje>* colaAzul,
@@ -28,12 +29,12 @@ void capaRed(Cola<struct Mensaje>* colaAzul,
 		colaDespachadorAzul, &colaForwarding, &colaBroadcast, 
 		(*nodosIDs)[0]);
 	*/
-	std::thread hiloRosado(despachadorRosado,
-		nodosIDs, &tablaVecinos,
-		(*nodosIDs)[0]);
+	std::thread hiloRosado(despachadorRosado,colaDespachadorRosado,
+		nodosIDs, tablaVecinos,
+		colasVerdes);
 
 	std::thread hiloVerde(despachadorVerde,
-	 	colaDespachadorVerde, &colaForwarding, &colaBroadcast);
+	 	colaDespachadorVerde, &colaForwarding, &colaBroadcast,colaRosada);
 	/*
 	std::thread hiloForwarding(forwarding, colaAzul, colaRosada,
 		colasVerdes, &colaForwarding, nodosIDs);
@@ -185,7 +186,7 @@ void despachadorAzul(Cola<struct DatosMensaje>* colaDespachadorAzul,
 }
 */
 void despachadorRosado(Cola<struct DatosArbolGenerador>* colaDespachadorRosado,
-std::vector<int>* nodosIDs){
+std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola<struct CapaEnlace>>* colasVerdes){
 
 	while(1){
 		struct DatosArbolGenerador datos = colaDespachadorRosado->pop();
@@ -206,8 +207,8 @@ std::vector<int>* nodosIDs){
 					struct CapaRed capaRed;
 					capaRed.tipo = ARBOL;
 
-					CapaRed.payload.payloadArbol = &(paqueteAg);
-					CapaRed.longitud =  sizeof(paqueteAg);
+					capaRed.payload->payloadArbol = &(paqueteAg);
+					capaRed.longitud =  sizeof(paqueteAg);
 					struct CapaEnlace paquete;
 
 
@@ -237,32 +238,33 @@ std::vector<int>* nodosIDs){
 }
 
 void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
-	Cola<struct Forwarding>* colaForwarding,
-	Cola<struct capaRed>* colaBroadcast,Cola<struct ArbolGenerador>* colaRosada){
+	Cola<struct DatosForwarding>* colaForwarding,
+	Cola<struct Broadcast>* colaBroadcast,Cola<struct ArbolGenerador>* colaRosada){
 	while(1){
 		struct CapaRed capaRed =
 		colaDespachadorVerde->pop();
 		if(capaRed.tipo== FORWARDING){
 			struct  CajaNegraRed payloadRed= *(capaRed.payload);
 			struct Forwarding forwarding= *(payloadRed.payloadForwarding);
-			colaForwarding->push(forwarding);
+			//colaForwarding->push(forwarding);
 		} 
 		else if (capaRed.tipo== BROADCAST){
 			struct  CajaNegraRed payloadRed= *(capaRed.payload);
 			struct Broadcast broadcast= *(payloadRed.payloadBroadcast);
-			colaBroadcast->push(broadcast);
+			//colaBroadcast->push(broadcast);
 		}
 		else if (capaRed.tipo== ARBOL){
 			struct  CajaNegraRed payloadRed= *(capaRed.payload);
 			struct ArbolGenerador arbol= *(payloadRed.payloadArbol);
-			nodoSenderTWH = nodoSender;
+			nodoSenderTWH=nodoSender;
+			//nodoSenderTWH = nodoSender;
 			colaRosada->push(arbol);
 		}  
 	
 		
 	}
 }
-
+/*
 void forwarding(Cola<struct Mensaje>* colaAzul,
 	Cola<struct capaAplicacion>* colaRosada,
 	std::vector<Cola<struct CapaEnlace>>* colasVerdes,
@@ -308,6 +310,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 		}
 	}
 }
+*/
 
 /*void verificarEstructura(Cola<std::string>* despachadorMiembros,
 std::vector<int>* miembrosArbol){

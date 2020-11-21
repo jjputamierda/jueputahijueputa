@@ -11,8 +11,8 @@
 
 #define SIZE 200
 
-uint16_t nodoSender = 0;
-uint16_t nodoSenderTWH = 0;
+extern uint16_t nodoSender;
+extern uint16_t nodoSenderTWH;
 
 struct estructuraAplicacion{
     char buffer[SIZE] = {};
@@ -65,7 +65,7 @@ struct datosNodo{
     short ID;
     std::string IP;
     short puerto;
-    uint8_t estado = 0;
+    uint8_t estado = 1;
     uint8_t tiempoExpiracion = 0;
 };
 
@@ -242,8 +242,6 @@ struct CapaEnlace{
     uint8_t latido = 0;
     struct CapaRed* payload = 0;
 };
-
-
 
 
 

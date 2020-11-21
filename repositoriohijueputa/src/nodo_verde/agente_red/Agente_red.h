@@ -19,16 +19,16 @@
 // Funciones
 
 //Función principal de la capa de red
-void capaRed(Cola<struct Mensaje>* ,
-	Cola<struct ArbolGenerador>* ,
-	std::vector<Cola<struct CapaEnlace>>* ,
-	Cola<struct DatosMensaje>* ,
-	Cola<struct DatosArbolGenerador>* ,
-	Cola<struct CapaRed>* ,
-	std::vector<int>* , Cola<std::string>* ,
-	Cola<std::string>* ,
-	std::vector<datosNodo>* ,char* ,
-	Cola<std::string>* );
+void capaRed(Cola<struct Mensaje>* colaAzul,
+	Cola<struct ArbolGenerador>* colaRosada,
+	std::vector<Cola<struct CapaEnlace>>* colasVerdes,
+	Cola<struct DatosMensaje>* colaDespachadorAzul,
+	Cola<struct DatosArbolGenerador>* colaDespachadorRosado,
+	Cola<struct CapaRed>* colaDespachadorVerde,
+	std::vector<int>* nodosIDs, Cola<std::string>* despachadorMiembros,
+	Cola<std::string>* colaAlcanzabilidad,
+	std::vector<datosNodo>* tablaVecinos,char* IP,
+	Cola<std::string>* colaTablaForwarding );
 
 //despachador agente azul
 void despachadorAzul(Cola<struct DatosMensaje>*,
@@ -36,13 +36,13 @@ void despachadorAzul(Cola<struct DatosMensaje>*,
 
 //despachador agente rosado
 void despachadorRosado(Cola<struct DatosArbolGenerador>* ,
-std::vector<int>*);
+std::vector<int>*,std::vector<datosNodo>* tablaVecinos,std::vector<Cola<struct CapaEnlace>>*);
 
 
 //despachador agente verde
 void despachadorVerde(Cola<struct CapaRed>* ,
-	Cola<struct Forwarding>* ,
-	Cola<struct capaRed>* ,
+	Cola<struct DatosForwarding>* ,
+	Cola<struct Broadcast >* ,
 	Cola<struct ArbolGenerador>* );
 
 

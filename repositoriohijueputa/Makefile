@@ -7,10 +7,10 @@ verde: bin
 	src/common/cola/Cola.cc -pthread -o bin/NodoVerde
 run:
 	bin/./NodoVerde bin/fifoPipeAgenteNaranja bin/fifoPipeNodoNaranja tests/Pandemic_Plan_Remastered.nodo.1.csv \
-	tests/Pandemic_Plan_Remastered.vecinos.1.csv bin/fifoPipeAgenteAzul bin/fifoPipeNodoAzul 8100 7400 7401 127.0.0.1
+	tests/Pandemic_Plan_Remastered.vecinos.1.csv bin/fifoPipeAgenteAzul bin/fifoPipeNodoAzul 8101 7402 7403 127.0.0.1
 server:
 	cd src/nodo_azul/servidor; \
-	python3 httpd.py 8014 127.0.0.1:8100
+	python3 httpd.py 8015 127.0.0.1:8101
 clean:
 	rm bin/fifoPipeAgenteAzul bin/fifoPipeNodoAzul bin/fifoPipeAgenteNaranja bin/fifoPipeNodoNaranja
 ayuda:

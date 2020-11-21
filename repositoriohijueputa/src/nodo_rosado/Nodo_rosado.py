@@ -23,7 +23,10 @@ def respuestaTCP(serverQueue):
 
     try:
         mensajeRecibir = serverQueue.get(block=True, timeout=20)
-
+        print("esto es recibir mensaje")
+        print("//////////////")
+        print(mensajeRecibir)
+        print("//////////////")
     except queue.Empty:
         pass
 
@@ -76,8 +79,7 @@ reintentos,papaAg,miembroAg):
         nuevoReintento = 0
         salirWhile = 0
         exito = 0
-        #destino = paquete [4]
-        destino = 2
+        destino = paquete [4]
         potencialHijo=destino
         paquete = [2,sn,rn,destino,numeroNodo]
         while(nuevoReintento < reintentos and  salirWhile != 1):

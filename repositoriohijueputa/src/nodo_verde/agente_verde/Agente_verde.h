@@ -28,6 +28,6 @@ std::vector<Cola<struct CapaEnlace>>*);
 std::vector<Cola<struct CapaEnlace>>*);*/
 
 void hiloVerde(std::vector<datosNodo>*,
-std::vector<Cola<struct CapaEnlace>>*, Cola<struct CapaEnlace>*);
+std::vector<Cola<struct CapaEnlace>>*, Cola<struct CapaRed>*);
 
 #endif //AGENTE_VERDE_H
