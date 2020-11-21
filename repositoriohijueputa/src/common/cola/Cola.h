@@ -144,7 +144,7 @@ struct CapaRedA{
 struct CapaRedB{
     uint8_t tipo;
     uint16_t longitud;
-    struct Broadcast paylaod;
+    //struct Broadcast paylaod;
 };
 
 struct CapaRedC{

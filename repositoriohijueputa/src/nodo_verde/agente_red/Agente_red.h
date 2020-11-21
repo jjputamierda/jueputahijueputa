@@ -19,12 +19,16 @@
 // Funciones
 
 //Función principal de la capa de red
-void capaRed(Cola<struct Mensaje>*,
-Cola<struct capaAplicacion>*, std::vector<Cola<struct CapaEnlace>>*,
-Cola<struct DatosMensaje>*, Cola<struct capaSuperior>*,
-Cola<struct CapaRed>*, std::vector<int>*,
-Cola<std::string>*,Cola<std::string>* ,std::vector<datosNodo>*,
-char*,Cola<std::string>*);
+void capaRed(Cola<struct Mensaje>* ,
+	Cola<struct ArbolGenerador>* ,
+	std::vector<Cola<struct CapaEnlace>>* ,
+	Cola<struct DatosMensaje>* ,
+	Cola<struct capaSuperior>* ,
+	Cola<struct CapaRed>* ,
+	std::vector<int>* , Cola<std::string>* ,
+	Cola<std::string>* ,
+	std::vector<datosNodo>* ,char* ,
+	Cola<std::string>* );
 
 //despachador agente azul
 void despachadorAzul(Cola<struct DatosMensaje>*,

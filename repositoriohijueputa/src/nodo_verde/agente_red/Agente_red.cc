@@ -146,7 +146,7 @@ Cola<struct capaAplicacion>* colaRosada,char* IP){
 		}
 	}
 }*/
-
+/*
 void despachadorAzul(Cola<struct DatosMensaje>* colaDespachadorAzul,
 		Cola<struct DatosForwarding>* colaForwarding,
 		Cola<struct Broadcast>* colaBroadcast, int idPropio){
@@ -183,7 +183,7 @@ void despachadorAzul(Cola<struct DatosMensaje>* colaDespachadorAzul,
 		}
 	}
 }
-
+*/
 void despachadorRosado(Cola<struct DatosArbolGenerador>* colaDespachadorRosado,
 std::vector<int>* nodosIDs){
 

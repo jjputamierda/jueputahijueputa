@@ -80,8 +80,8 @@ Cola<std::string>* envioAgenteRosa){
 
 
 void trabajoAgenteRosado(std::vector<datosNodo>* tablaVecinos,
-Cola<struct capaAplicacion>* colaRosada,
-Cola<struct capaSuperior>* colaDespachadorRosado,char* puerto1,
+Cola<struct ArbolGenerador>* colaRosada,
+Cola<struct DatosArbolGenerador>* colaDespachadorRosado,char* puerto1,
 char* puerto2,Cola<std::string>* despachadorMiembros,
 Cola<std::string>* colaAlcanzabilidad,
 Cola<std::string>* colaTablaForwarding){

@@ -21,7 +21,7 @@ bool terminar = false;
 */
 
 void recibirV(std::vector<datosNodo>* tabla,
-Cola<struct CapaRed>* colaDespachadorVerde){
+Cola<struct CapaEnlace>* colaDespachadorVerde){
 
     int n;
     unsigned int sock, length, fromlen;
@@ -76,7 +76,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
 
         if(n > 0){
             if(paquete.tipo == RED){
-                nodoSender = idFuenteInmediato;
+                nodoSender = paquete.idFuenteInmediato;
                 struct CapaRed capaRed = *(paquete.payload);
                 
 
