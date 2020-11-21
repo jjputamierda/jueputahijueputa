@@ -101,3 +101,5 @@ template class Cola<struct CapaRed>;
 template class Cola<struct DatosForwarding>;
 template class Cola<struct Broadcast>;
 template class Cola<struct CapaEnlace>;
+template class Cola<struct ArbolGenerador;
+template class Cola<struct DatosArbolGenerador;
