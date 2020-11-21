@@ -30,7 +30,7 @@ def respuestaTCP(serverQueue):
     except queue.Empty:
         pass
 
-    if(mensajeRecibir!= None and len(mensajeRecibir) > 5:
+    if(mensajeRecibir!= None and len(mensajeRecibir) > 5):
 
         for item in mensajeRecibir.split(","):
             paquete.append(int(item))
