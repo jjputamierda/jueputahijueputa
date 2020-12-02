@@ -435,6 +435,9 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 memmove(&(paquete.idFuenteInmediato), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal), sizeof(paquete.idFuenteInmediato));
                 memmove( &(paquete.longitud),buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato), sizeof(paquete.longitud));
                 memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),strlen(paquete.datos));
+                std::cout<<paquete.tipo<<std::endl;
+                std::cout<<paquete.idDestinoFinal<<std::endl;
+                std::cout<<paquete.idFuenteInmediato<<std::endl;
                 std::cout<<"Uwu send antes del sockect"<<std::endl;
                 //std::cout<<buffer<<std::endl;
 				std::cout<<std::endl;
