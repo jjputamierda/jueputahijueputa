@@ -131,11 +131,16 @@ Cola<struct CapaRed>* colaDespachadorVerde){
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<"Hola xddddddddddd"<<std::endl;
-                memmove( &paquete.tipo, buffer,sizeof(paquete.tipo));
-                memmove( &paquete.idDestinoFinal,buffer+sizeof(paquete.tipo) , sizeof(paquete.idDestinoFinal));
-                memmove(&paquete.idFuenteInmediato, buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal), sizeof(paquete.idFuenteInmediato));
-                memmove( &paquete.longitud,buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato), sizeof(paquete.longitud));
-                memmove( &paquete.datos, buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),strlen(paquete.datos));
+                for(int i = 0; i < 444; i ++){
+                    std::cout<<buffer[i];
+                }
+                std::cout<<<<std::endl;
+                memmove( &(paquete.tipo), buffer,sizeof(paquete.tipo));
+                memmove( &(paquete.idDestinoFinal),buffer+sizeof(paquete.tipo) , sizeof(paquete.idDestinoFinal));
+                memmove(&(paquete.idFuenteInmediato), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal), sizeof(paquete.idFuenteInmediato));
+                memmove( &(paquete.longitud),buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato), sizeof(paquete.longitud));
+                memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),strlen(paquete.datos));
+               
                // toCharArray2(buffer, &paquete);
                 //int tipo=atoi(parserBuffer( buffer, 1,0,1));
                 //paquete.tipo=static_cast<uint8_t>(tipo);
@@ -415,11 +420,11 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 sprintf (buffer2, "%s", datos.datos);
 				strcat(buffer, buffer2);
                 */
-                memmove(buffer, &datos.tipo, sizeof(datos.tipo));
-                memmove(buffer+sizeof(datos.tipo), &datos.idDestinoFinal, sizeof(datos.idDestinoFinal));
-                memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal), &datos.idFuenteInmediato, sizeof(datos.idFuenteInmediato));
-                memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato), &datos.longitud, sizeof(datos.longitud));
-                memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato)+sizeof(datos.longitud), &datos.datos, strlen(datos.datos));
+                memmove(buffer, &(datos.tipo), sizeof(datos.tipo));
+                memmove(buffer+sizeof(datos.tipo), &(datos.idDestinoFinal), sizeof(datos.idDestinoFinal));
+                memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal), &(datos.idFuenteInmediato), sizeof(datos.idFuenteInmediato));
+                memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato), &(datos.longitud), sizeof(datos.longitud));
+                memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato)+sizeof(datos.longitud), &(datos.datos), strlen(datos.datos));
                 std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -428,6 +433,10 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
+                for(int i = 0; i < 444; i ++){
+                    std::cout<<buffer[i];
+                }
+                std::cout<<<<std::endl;
                 n = sendto(sock, buffer, strlen(buffer),
                     0, (struct sockaddr*)&server, length);
                 if(n < 0){

@@ -267,7 +267,7 @@ void despachadorAzul(Cola<struct DatosMensaje>* colaDespachadorAzul,
 			forwarding.idFuenteInicial = static_cast<uint16_t>(idPropio);
 			forwarding.idDestino = datos.idDestino;
 			forwarding.longitud = strlen(datos.buffer);//datos.mensaje.size(); // 2 bytes
-			memmove( &forwarding.datos,mensaje.buffer ,strlen(forwarding.datos));
+			memmove( &forwarding.datos,&mensaje.buffer ,strlen(forwarding.datos));
 			//forwarding.payload = mensaje;
 			//fowarding.tipo = 
 			std::cout<<std::endl;
@@ -683,7 +683,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 				std::cout<<"Aqui estoy en fowarding antes de hcerle push para enviar a enlace"<<std::endl;
                 std::cout<<paquete.idDestinoFinal<<std::endl;
                 std::cout<<paquete.idFuenteInmediato<<std::endl;
-				std::cout<<paquete.datos<<std::endl;
+				//std::cout<<paquete.datos<<std::endl;
 				//std::cout<<paquete.payload.payload.payloadForwarding.payload.buffer<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
