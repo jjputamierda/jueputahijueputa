@@ -455,9 +455,9 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 				std::cout<<std::endl;
 
 				memmove( &fowardingRecibir.idFuenteInicial,capaRed.datos ,sizeof(fowardingRecibir.idFuenteInicial));
-     			memmove( &fowardingRecibir.longitud, capaRed.datos+ sizeof(fowardingRecibir.idFuenteInicial),sizeof(fowardinfRecibir.longitud));
+     			memmove( &fowardingRecibir.longitud, capaRed.datos+ sizeof(fowardingRecibir.idFuenteInicial),sizeof(fowardingRecibir.longitud));
 
-    			memmove( &fowardingRecibir.datos, capaRed.datos + sizeof(fowardingRecibir.idFuenteInicial)+sizeof(fowardinfRecibir.longitud) ,strlen(fowardingRecibir.datos));
+    			memmove( &fowardingRecibir.datos, capaRed.datos + sizeof(fowardingRecibir.idFuenteInicial)+sizeof(fowardingRecibir.longitud) ,strlen(fowardingRecibir.datos));
 				//toCharArrayForwarding2(capaRed.datos, &fowardingRecibir);
 				std::cout<<"Buernas antes de push a cola azul en despachador verde"<<std::endl;
 				//std::cout<<fowardingRecibir.payload.buffer<<std::endl;
