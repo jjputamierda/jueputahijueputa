@@ -174,7 +174,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
         //}
 
        // if(n > 0){
-            if(paquete.tipo == '2'){
+            if(paquete.tipo == 0x02){
                 std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;

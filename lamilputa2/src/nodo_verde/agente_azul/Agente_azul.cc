@@ -160,7 +160,7 @@ char* fifoServidorAgente, Cola<struct Mensaje>* colaAzul){
 
 		if(destino == -1 || destino == 0){
 			
-			mensaje.tipo = '2';
+			mensaje.tipo = 0x02;
 			std::cout<<std::endl;
 			std::cout<<std::endl;
 			std::cout<<"Entre a if mensaje tipo en azul"<<std::endl;
@@ -168,7 +168,7 @@ char* fifoServidorAgente, Cola<struct Mensaje>* colaAzul){
 			std::cout<<std::endl;
 			std::cout<<std::endl;
 		} else {
-			mensaje.tipo = '1';
+			mensaje.tipo = 0x01;
 		}
 
 			std::cout<<std::endl;
