@@ -125,7 +125,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
        // rv = select(sock+1, &lectura, NULL, NULL, &tv);
         //Meter esto dentro del n> 0
         //if(rv == 0){
-            n = recvfrom(sock, &buffer, strlen(buffer), 0,
+            n = recvfrom(sock, buffer, strlen(buffer), 0,
                 (struct sockaddr *)&from, &fromlen);
                 std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -447,7 +447,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                     std::cout<<buffer[i];
                 }
                 std::cout<<std::endl;
-                n = sendto(sock, &buffer, strlen(buffer),
+                n = sendto(sock, buffer, strlen(buffer),
                     0, (struct sockaddr*)&server, length);
                 if(n < 0){
                     std::cout << "Error en envío" << std::endl;
