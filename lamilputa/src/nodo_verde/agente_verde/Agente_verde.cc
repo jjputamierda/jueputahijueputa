@@ -79,7 +79,7 @@ void recibirV(std::vector<datosNodo>* tabla,
 Cola<struct CapaRed>* colaDespachadorVerde){
 
     int n;
-    char buffer [1040];
+    char buffer [1047];
      
     unsigned int sock, length, fromlen;
     struct sockaddr_in server;
@@ -125,7 +125,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
        // rv = select(sock+1, &lectura, NULL, NULL, &tv);
         //Meter esto dentro del n> 0
         //if(rv == 0){
-            n = recvfrom(sock, buffer, 1040, 0,
+            n = recvfrom(sock, buffer, 1047, 0,
                 (struct sockaddr *)&from, &fromlen);
                 std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -361,7 +361,7 @@ void enviarV(size_t identificador, std::vector<datosNodo>* tabla,
 std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
 
     int sock, n;
-    char buffer [1040];
+    char buffer [1047];
     //char buffer2 [65542];
     unsigned int length;
     struct sockaddr_in server, from;
