@@ -79,7 +79,7 @@ void recibirV(std::vector<datosNodo>* tabla,
 Cola<struct CapaRed>* colaDespachadorVerde){
 
     int n;
-    char buffer [1024];
+    char buffer [1040];
      
     unsigned int sock, length, fromlen;
     struct sockaddr_in server;
@@ -361,7 +361,7 @@ void enviarV(size_t identificador, std::vector<datosNodo>* tabla,
 std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
 
     int sock, n;
-    char buffer [65542];
+    char buffer [1040];
     //char buffer2 [65542];
     unsigned int length;
     struct sockaddr_in server, from;

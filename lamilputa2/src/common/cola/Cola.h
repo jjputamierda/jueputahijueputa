@@ -251,7 +251,8 @@ struct CapaEnlace{
     uint16_t longitud;
    // uint8_t latido = 0;
    // struct CapaRed payload;
-    char datos [65535];
+    //char datos [65535];
+    char datos [1040];
     
 };
 

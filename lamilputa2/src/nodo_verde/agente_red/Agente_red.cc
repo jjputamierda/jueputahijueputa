@@ -524,7 +524,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 		char buffer[1017];
 		//char buffer3[1017];
 
-		char buffer2[65535];
+		char buffer2[1040];
 		struct DatosForwarding datosForwarding = colaForwarding->pop();
 
 		if(datosForwarding.idDestino == (*nodosIDs)[0]){
