@@ -125,7 +125,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
        // rv = select(sock+1, &lectura, NULL, NULL, &tv);
         //Meter esto dentro del n> 0
         //if(rv == 0){
-            n = recvfrom(sock, buffer, strlen(buffer), 0,
+            n = recvfrom(sock, buffer, 1040, 0,
                 (struct sockaddr *)&from, &fromlen);
                 std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -139,7 +139,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
                 memmove( &(paquete.idDestinoFinal),buffer+sizeof(paquete.tipo) , sizeof(paquete.idDestinoFinal));
                 memmove(&(paquete.idFuenteInmediato), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal), sizeof(paquete.idFuenteInmediato));
                 memmove( &(paquete.longitud),buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato), sizeof(paquete.longitud));
-                memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),strlen(paquete.datos));
+                memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),sizeof(paquete.datos));
                
                // toCharArray2(buffer, &paquete);
                 //int tipo=atoi(parserBuffer( buffer, 1,0,1));
@@ -274,7 +274,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
                 //toCharArrayRed(paquete.datos, &capaRed);
                 memmove( &capaRed.tipo,paquete.datos,sizeof(capaRed.tipo));
                 memmove( &capaRed.longitud,paquete.datos+sizeof(paquete.tipo),sizeof(capaRed.longitud));
-                memmove( &capaRed.datos,paquete.datos+sizeof(paquete.tipo)+sizeof(capaRed.longitud),strlen(capaRed.datos));
+                memmove( &capaRed.datos,paquete.datos+sizeof(paquete.tipo)+sizeof(capaRed.longitud),sizeof(capaRed.datos));
                 std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -425,7 +425,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 memmove(buffer+sizeof(datos.tipo), &(datos.idDestinoFinal), sizeof(datos.idDestinoFinal));
                 memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal), &(datos.idFuenteInmediato), sizeof(datos.idFuenteInmediato));
                 memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato), &(datos.longitud), sizeof(datos.longitud));
-                memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato)+sizeof(datos.longitud), &(datos.datos), strlen(datos.datos));
+                memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato)+sizeof(datos.longitud), &(datos.datos), sizeof(datos.datos));
 
                 std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -434,7 +434,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 memmove( &(paquete.idDestinoFinal),buffer+sizeof(paquete.tipo) , sizeof(paquete.idDestinoFinal));
                 memmove(&(paquete.idFuenteInmediato), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal), sizeof(paquete.idFuenteInmediato));
                 memmove( &(paquete.longitud),buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato), sizeof(paquete.longitud));
-                memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),strlen(paquete.datos));
+                memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),sizeof(paquete.datos));
                 std::cout<<paquete.tipo<<std::endl;
                 std::cout<<paquete.idDestinoFinal<<std::endl;
                 std::cout<<paquete.idFuenteInmediato<<std::endl;
@@ -447,7 +447,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                     std::cout<<buffer[i];
                 }
                 std::cout<<std::endl;
-                n = sendto(sock, buffer, strlen(buffer),
+                n = sendto(sock, buffer, sizeof(buffer),
                     0, (struct sockaddr*)&server, length);
                 if(n < 0){
                     std::cout << "Error en envío" << std::endl;
