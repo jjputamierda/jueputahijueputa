@@ -79,7 +79,7 @@ void recibirV(std::vector<datosNodo>* tabla,
 Cola<struct CapaRed>* colaDespachadorVerde){
 
     int n;
-    char buffer [65542];
+    char buffer [1024];
      
     unsigned int sock, length, fromlen;
     struct sockaddr_in server;
@@ -369,6 +369,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
     std::string p;
     //struct estructuraEnlace mensaje;
     struct CapaEnlace datos;
+    struct CapaEnlace paquete;
 
     sock= socket(AF_INET, SOCK_DGRAM, 0);
     if (sock < 0){
@@ -425,9 +426,15 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal), &(datos.idFuenteInmediato), sizeof(datos.idFuenteInmediato));
                 memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato), &(datos.longitud), sizeof(datos.longitud));
                 memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato)+sizeof(datos.longitud), &(datos.datos), strlen(datos.datos));
+
                 std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
+                memmove( &(paquete.tipo), buffer,sizeof(paquete.tipo));
+                memmove( &(paquete.idDestinoFinal),buffer+sizeof(paquete.tipo) , sizeof(paquete.idDestinoFinal));
+                memmove(&(paquete.idFuenteInmediato), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal), sizeof(paquete.idFuenteInmediato));
+                memmove( &(paquete.longitud),buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato), sizeof(paquete.longitud));
+                memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),strlen(paquete.datos));
                 std::cout<<"Uwu send antes del sockect"<<std::endl;
                 //std::cout<<buffer<<std::endl;
 				std::cout<<std::endl;
