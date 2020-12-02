@@ -1,0 +1,35 @@
+#ifndef AGENTE_VERDE_H
+#define AGENTE_VERDE_H
+#include <sys/types.h>
+#include <sys/socket.h>
+#include <netinet/in.h>
+#include <arpa/inet.h>
+#include <netdb.h>
+#include <stdio.h>
+#include <stdlib.h> //exit function
+#include <string.h> //strlen
+#include <unistd.h> //write/read functions
+#include <string>
+#include <thread>
+#include <vector>
+#include <unistd.h>
+#include <iostream>
+#include "../../common/cola/Cola.h"
+#include <fcntl.h>
+#define LATIDO 1
+#define RED 2
+
+void recibirV(std::vector<datosNodo>*, Cola<struct CapaRed>*);
+
+void enviarV(size_t, std::vector<datosNodo>*,
+std::vector<Cola<struct CapaEnlace>>*);
+
+/*void latido(std::vector<datosNodo>*,
+std::vector<Cola<struct CapaEnlace>>*);*/
+void toCharArrayRed(char * paquete_ent, CapaRed * paquete);
+void toCharArray2(char * paquete_ent, CapaEnlace * paquete);
+void toCharArray(char * paquete_sal, CapaEnlace * paquete);
+void hiloVerde(std::vector<datosNodo>*,
+std::vector<Cola<struct CapaEnlace>>*, Cola<struct CapaRed>*);
+
+#endif //AGENTE_VERDE_H
