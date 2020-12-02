@@ -134,7 +134,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
                 for(int i = 0; i < 444; i ++){
                     std::cout<<buffer[i];
                 }
-                std::cout<<<<std::endl;
+                std::cout<<std::endl;
                 memmove( &(paquete.tipo), buffer,sizeof(paquete.tipo));
                 memmove( &(paquete.idDestinoFinal),buffer+sizeof(paquete.tipo) , sizeof(paquete.idDestinoFinal));
                 memmove(&(paquete.idFuenteInmediato), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal), sizeof(paquete.idFuenteInmediato));
@@ -443,7 +443,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 for(int i = 0; i < 444; i ++){
                     std::cout<<buffer[i];
                 }
-                std::cout<<<<std::endl;
+                std::cout<<std::endl;
                 n = sendto(sock, buffer, strlen(buffer),
                     0, (struct sockaddr*)&server, length);
                 if(n < 0){
