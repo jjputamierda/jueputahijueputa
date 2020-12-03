@@ -60,7 +60,7 @@ void toCharArray2(char * paquete_ent, CapaRed * paquete);
 
 
 //broadcast
-/*
+
 void broadcast(Cola<struct Mensaje>* colaAzul,
 		Cola<struct ArbolGenerador>* colaRosada,
 		std::vector<Cola<struct CapaEnlace>>* colasVerdes,
@@ -69,8 +69,8 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 		Cola<std::string>* despachadorMiembros,
 		Cola<std::string>* colaAlcanzabilidad);
 
-*/
-//void verificarEstructura(Cola<std::string>*,std::vector<int>*);
+
+void verificarEstructura(Cola<std::string>*,std::vector<int>*);
 /*
 void enviarAlcanzabilidad(Cola<std::string>* colaAlcanzabilidad,
 std::vector<datosNodo>* tablaVecinos,Cola<struct capaSuperior>*,

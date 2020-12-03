@@ -93,7 +93,8 @@ std::string mensaje;
 // RED -> Tipos -> utilidades
 struct Mensaje{
    // uint16_t idFuente;
-    char buffer[1013] = {};
+    //char buffer[200] = {};
+    char buffer[200] = {};
     //char buffer[1013] = {};
 };
 
@@ -109,12 +110,12 @@ struct Forwarding{
      //unsigned short idFuenteInicial;
     uint16_t longitud;
     //struct Mensaje payload;
-    char datos [1013];
+    char datos [200];
    
 };
 
 struct ArbolGenerador{
-    char tipo;
+    uint8_t tipo;
     uint16_t SN;
     uint16_t RN;
     //Se puede quitar?
@@ -196,7 +197,7 @@ struct CapaEnlaceD{
 // Agente azul -> Despachador azul
 struct DatosMensaje{
     //char buffer[200] = {};
-    char buffer[1013] = {};
+    char buffer[200] = {};
     uint16_t idDestino;
     uint8_t tipo;               // Forwarding 1 || Broadcast 2
 };
@@ -204,8 +205,8 @@ struct Broadcast{
     uint8_t tipo;              // Mensaje normal 1 || Alcanzabilidad 2
     uint16_t id_origen_inicial;
     uint16_t longitud;
-    struct Mensaje payloadMensaje;
-    struct Alcanzabilidad payloadAlcanzabilidad;
+    char datos[200] = {};
+    
 };
 struct CajaNegraRed{
    
@@ -228,12 +229,12 @@ struct DatosForwarding{
     uint16_t idDestino;
     uint16_t longitud;
     //struct Mensaje payload;
-    char datos [1013];
+    char datos [200];
     // buffer mensaje
 
 };
 struct DatosArbolGenerador{
-    char tipo;
+    uint8_t tipo;
     uint16_t SN;
     uint16_t RN;
     //Se puede quitar?
@@ -252,7 +253,8 @@ struct CapaEnlace{
    // uint8_t latido = 0;
    // struct CapaRed payload;
     //char datos [65535];
-    char datos [1040];
+    char datos [1040];//cambiar
+
     
 };
 

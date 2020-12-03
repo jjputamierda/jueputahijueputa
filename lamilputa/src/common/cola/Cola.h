@@ -94,7 +94,7 @@ std::string mensaje;
 struct Mensaje{
    // uint16_t idFuente;
     //char buffer[200] = {};
-    char buffer[1013] = {};
+    char buffer[200] = {};
     //char buffer[1013] = {};
 };
 
@@ -110,7 +110,7 @@ struct Forwarding{
      //unsigned short idFuenteInicial;
     uint16_t longitud;
     //struct Mensaje payload;
-    char datos [1013];
+    char datos [200];
    
 };
 
@@ -197,7 +197,7 @@ struct CapaEnlaceD{
 // Agente azul -> Despachador azul
 struct DatosMensaje{
     //char buffer[200] = {};
-    char buffer[1013] = {};
+    char buffer[200] = {};
     uint16_t idDestino;
     uint8_t tipo;               // Forwarding 1 || Broadcast 2
 };
@@ -205,7 +205,7 @@ struct Broadcast{
     uint8_t tipo;              // Mensaje normal 1 || Alcanzabilidad 2
     uint16_t id_origen_inicial;
     uint16_t longitud;
-    char datos[1013] = {};
+    char datos[200] = {};
     
 };
 struct CajaNegraRed{
@@ -229,7 +229,7 @@ struct DatosForwarding{
     uint16_t idDestino;
     uint16_t longitud;
     //struct Mensaje payload;
-    char datos [1013];
+    char datos [200];
     // buffer mensaje
 
 };

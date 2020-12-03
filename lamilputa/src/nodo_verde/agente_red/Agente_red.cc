@@ -261,7 +261,7 @@ void despachadorAzul(Cola<struct DatosMensaje>* colaDespachadorAzul,
 		//mensaje.idFuente = idPropio; 
 
 		if(datos.tipo == 0x01){
-			char buffer3 [1013];
+			char buffer3 [200];
 			struct DatosForwarding forwarding;
 			 //forwarding.idFuenteInicial = static_cast<uint16_t>(idPropio);
 			forwarding.idFuenteInicial = static_cast<uint16_t>(idPropio);
@@ -283,7 +283,7 @@ void despachadorAzul(Cola<struct DatosMensaje>* colaDespachadorAzul,
 			colaForwarding->push(forwarding);
 			
 		} else if(datos.tipo == 0x02){
-			char buffer3 [1013];
+			char buffer3 [200];
 			struct Broadcast broadcast;
 			broadcast.tipo = 0x01;
 			//std::string aux=std::to_string(idPropio);
@@ -480,7 +480,7 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 			    std::cout<<fowardingRecibir.idFuenteInicial<<std::endl;
 				std::cout<<fowardingRecibir.longitud<<std::endl;
 				//std::cout<<fowardingRecibir.datos<<std::endl;
-				char buffer3 [1013];
+				char buffer3 [200];
 				memmove( buffer3,&fowardingRecibir.datos ,sizeof(fowardingRecibir.datos));
 				memmove( &mensaje.buffer,buffer3 ,sizeof(mensaje.buffer));
 				std::cout<<mensaje.buffer<<std::endl;
@@ -546,7 +546,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 		//char buffer3[1017];
 
 		char buffer2[1040];
-		char buffer3 [1013];
+		char buffer3 [200];
 		struct DatosForwarding datosForwarding = colaForwarding->pop();
 
 		if(datosForwarding.idDestino == (*nodosIDs)[0]){
@@ -879,6 +879,8 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 		memmove(buffer+sizeof(nuevoBroadcast.tipo), &nuevoBroadcast.id_origen_inicial, sizeof(nuevoBroadcast.id_origen_inicial));
 		memmove(buffer+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial), &nuevoBroadcast.longitud, sizeof(nuevoBroadcast.longitud));
 		memmove(buffer+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial)+sizeof(nuevoBroadcast.longitud), &nuevoBroadcast.datos, sizeof(nuevoBroadcast.datos));
+		
+		
 		memmove( &capaRed.datos,buffer ,sizeof(capaRed.datos));
 		capaRed.longitud=sizeof(capaRed.datos);
 		//capaRed.payload.payloadBroadcast=nuevoBroadcast;
@@ -928,7 +930,7 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 			if(nuevoBroadcast.tipo == 0x01){
 				
 				struct Mensaje nuevoMensaje;
-				char buffer3 [1013];
+				char buffer3 [200];
 				memmove( buffer3,&nuevoBroadcast.datos ,sizeof(nuevoBroadcast.datos));
 				memmove( &nuevoMensaje.buffer,buffer3 ,sizeof(nuevoMensaje.buffer));
 				std::cout<<std::endl;
