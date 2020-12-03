@@ -289,7 +289,7 @@ void despachadorAzul(Cola<struct DatosMensaje>* colaDespachadorAzul,
 			//std::string aux=std::to_string(idPropio);
 			broadcast.id_origen_inicial = static_cast<uint16_t>(idPropio);
 			broadcast.longitud = strlen(datos.buffer);//datos.mensaje.size(); // 2 bytes
-			broadcast.payloadMensaje = mensaje;
+			//broadcast.payloadMensaje = mensaje;
 			std::cout<<std::endl;
 			std::cout<<std::endl;
 			std::cout<<"Dentro de if en despachador azul antes de broadcast"<<std::endl;
