@@ -94,7 +94,8 @@ std::string mensaje;
 struct Mensaje{
    // uint16_t idFuente;
     //char buffer[200] = {};
-    char buffer[1013] = {};
+    //char buffer[1013] = {};
+    char buffer[200] = {};
 };
 
 struct Alcanzabilidad{
@@ -204,8 +205,8 @@ struct Broadcast{
     uint8_t tipo;              // Mensaje normal 1 || Alcanzabilidad 2
     uint16_t id_origen_inicial;
     uint16_t longitud;
-    struct Mensaje payloadMensaje;
-    struct Alcanzabilidad payloadAlcanzabilidad;
+    char buffer[1013] = {};
+    
 };
 struct CajaNegraRed{
    
