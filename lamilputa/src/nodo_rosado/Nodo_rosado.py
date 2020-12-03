@@ -301,7 +301,7 @@ serverQueue,reintentos):
                 print("me llego un ok de papa")
                 salirWhile = 1
                 exito = 1
-                if(viejoPaqueteOp == 2 ):
+                if(viejoPaqueteOp == 3 ):
                     papaAg = potencialPapa
                     #time.sleep(2)
                     enviarBroadcast(1,papaAg,clientQueue)
