@@ -103,4 +103,4 @@ template class Cola<struct Broadcast>;
 template class Cola<struct CapaEnlace>;
 template class Cola<struct ArbolGenerador>;
 template class Cola<struct DatosArbolGenerador>;
-template class Cola<struct Latido>
+template class Cola<struct Latido>;
