@@ -326,7 +326,7 @@ std::vector<datosNodo>* tablaVecinos){
 					std::cout<<ids[indice2].id<<std::endl;
 					std::cout<<"ESTADO"<<std::endl;
 					int indiceTabla = ids[indice2].indice;
-					std::cout<<*(tablaVecinos)[indiceTabla].estado<<std::endl;
+					std::cout<<(*tablaVecinos)[indiceTabla].estado<<std::endl;
 					
 					
 					
