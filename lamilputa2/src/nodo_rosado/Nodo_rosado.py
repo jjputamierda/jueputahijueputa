@@ -648,6 +648,7 @@ def clientTcp(clientQueue):
             pass
         if data != None:
             s2.send(data.encode())
+        time.sleep(2)
 
 
 def arGe(serverQueue,clientQueue):
