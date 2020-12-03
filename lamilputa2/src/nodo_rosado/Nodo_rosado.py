@@ -43,10 +43,10 @@ def respuestaTCP(serverQueue):
     if(mensajeRecibir!= None):
 
         for item in mensajeRecibir.split(","):
-            #print("Esto es item en python")
-            #print("XXXXXXXXXXXXXXXXXXX")
-            #print(item)
-           # print("XXXXXXXXXXXXXXXXXXX")
+            print("Esto es item en python")
+            print("XXXXXXXXXXXXXXXXXXX")
+            print(item)
+            print("XXXXXXXXXXXXXXXXXXX")
             if(item.isnumeric()):
                 paquete.append(int(item))
             #else:
