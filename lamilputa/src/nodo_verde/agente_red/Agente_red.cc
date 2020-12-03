@@ -261,13 +261,14 @@ void despachadorAzul(Cola<struct DatosMensaje>* colaDespachadorAzul,
 		//mensaje.idFuente = idPropio; 
 
 		if(datos.tipo == 0x01){
-			
+			char buffer3 [1013];
 			struct DatosForwarding forwarding;
 			 //forwarding.idFuenteInicial = static_cast<uint16_t>(idPropio);
 			forwarding.idFuenteInicial = static_cast<uint16_t>(idPropio);
 			forwarding.idDestino = datos.idDestino;
 			forwarding.longitud = sizeof(datos.buffer);//datos.mensaje.size(); // 2 bytes
-			memmove( &forwarding.datos,&mensaje.buffer ,sizeof(forwarding.datos));
+			memmove( buffer3,&mensaje.buffer ,sizeof(mensaje.buffer));
+			memmove( &forwarding.datos,buffer3 ,sizeof(forwarding.datos));
 			//forwarding.payload = mensaje;
 			//fowarding.tipo = 
 			std::cout<<std::endl;
@@ -438,6 +439,7 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 				std::cout<<"Adentro de depachador verde"<<std::endl;
 				std::cout<<"Adentro de depachador verde"<<std::endl;
                 std::cout<<capaRed.tipo<<std::endl;
+				std::cout<<capaRed.longitud<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -456,7 +458,6 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 
 				memmove( &fowardingRecibir.idFuenteInicial,capaRed.datos ,sizeof(fowardingRecibir.idFuenteInicial));
      			memmove( &fowardingRecibir.longitud, capaRed.datos+ sizeof(fowardingRecibir.idFuenteInicial),sizeof(fowardingRecibir.longitud));
-
     			memmove( &fowardingRecibir.datos, capaRed.datos + sizeof(fowardingRecibir.idFuenteInicial)+sizeof(fowardingRecibir.longitud) ,sizeof(fowardingRecibir.datos));
 				//toCharArrayForwarding2(capaRed.datos, &fowardingRecibir);
 				std::cout<<"Buernas antes de push a cola azul en despachador verde"<<std::endl;
@@ -466,8 +467,10 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 				std::cout<<std::endl;
 			    std::cout<<fowardingRecibir.idFuenteInicial<<std::endl;
 				std::cout<<fowardingRecibir.longitud<<std::endl;
-				std::cout<<fowardingRecibir.datos<<std::endl;
-				memmove( &mensaje.buffer,&fowardingRecibir.datos ,sizeof(mensaje.buffer));
+				//std::cout<<fowardingRecibir.datos<<std::endl;
+				char buffer3 [1013];
+				memmove( buffer3,&fowardingRecibir.datos ,sizeof(fowardingRecibir.datos));
+				memmove( &mensaje.buffer,buffer3 ,sizeof(mensaje.buffer));
 				std::cout<<mensaje.buffer<<std::endl;
 				std::cout<<"Saludos despues de mmemori forwarding a mensaje"<<std::endl;
 				std::cout<<std::endl;
@@ -525,6 +528,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 		//char buffer3[1017];
 
 		char buffer2[1040];
+		char buffer3 [1013];
 		struct DatosForwarding datosForwarding = colaForwarding->pop();
 
 		if(datosForwarding.idDestino == (*nodosIDs)[0]){
@@ -546,7 +550,8 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 					
 				
 					//forwardingEnviar.payload=datosForwarding.payload;
-					memmove( &forwardingEnviar.datos,&datosForwarding.datos ,sizeof(forwardingEnviar.datos));
+					memmove (buffer3,&datosForwarding.datos,sizeof(datosForwarding.datos) );
+					memmove( &forwardingEnviar.datos,buffer3 ,sizeof(forwardingEnviar.datos));
 
 					
 				std::cout<<std::endl;
@@ -630,12 +635,29 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
+
+
+				struct Forwarding forwardingRecibir;
+
+				memmove( &fowardingRecibir.idFuenteInicial,buffer ,sizeof(fowardingRecibir.idFuenteInicial));
+     			memmove( &fowardingRecibir.longitud, buffer+ sizeof(fowardingRecibir.idFuenteInicial),sizeof(fowardingRecibir.longitud));
+
+    			memmove( &fowardingRecibir.datos, buffer + sizeof(fowardingRecibir.idFuenteInicial)+sizeof(fowardingRecibir.longitud) ,sizeof(fowardingRecibir.datos));
+				std::cout<<"revision fowaring"<<std::endl;
+				std::cout<<fowardingRecibir.idFuenteInicial<<std::endl;
+				std::cout<<fowardingRecibir.longitud<<std::endl;
+				//std::cout<<fowardingRecibir.datos<<std::endl;
+
+
+
+
+
 					struct CapaRed	capaRed;
 					capaRed.tipo=0x01;
 
 					capaRed.longitud=sizeof(buffer);
 					//sprintf (capaRed.datos, "%s", buffer3);
-					memmove( &capaRed.datos,buffer ,strlen(capaRed.datos));
+					memmove( &capaRed.datos,buffer ,sizeof(capaRed.datos));
 					//capaRed.payload=cajaNegra;
 
 					std::cout<<std::endl;
