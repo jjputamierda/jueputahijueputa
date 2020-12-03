@@ -568,7 +568,7 @@ std::vector<datosNodo>* tabla,Cola<struct Latido> * colaLatido){
             for(size_t i = 0; i<tabla[0].size(); i ++){
                 if(tabla[0][i].ID == destino){
                 struct Latido nuevoPaqueteLatido;
-                nueevoPaqueteLatido.tipo_latido = 0X02;
+                nuevoPaqueteLatido.tipo_latido = 0X02;
                 struct CapaEnlace paquete;
                 paquete.tipo = 0x01;
                 paquete.idDestinoFinal = static_cast<uint16_t>(tabla[0][i].ID);//cambiar
@@ -604,7 +604,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes,
 Cola<struct CapaRed>* colaDespachadorVerde){
     Cola<struct Latido> colaLatido;
     
-    int hayMutex = 0;
+   
     std::thread conexiones[tablaVecinos[0].size()-1];
     std::thread recibir = std::thread(recibirV, tablaVecinos,
         colaDespachadorVerde,&colaLatido);
@@ -629,7 +629,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
 
     std::thread hiloLatido = std::thread(latido, tablaVecinos,
     colasDeMensajes);
-    std::thread verficarLatidoHilo = std::thread(verificarLatido,colaDeMensajes,tablaVecinos,&colaLatido);
+    std::thread verificarLatidoHilo = std::thread(verificarLatido,colasDeMensajes,tablaVecinos,&colaLatido);
     for(i=0; i<tablaVecinos[0].size()-1; i++){
         conexiones[i].join();
     }
