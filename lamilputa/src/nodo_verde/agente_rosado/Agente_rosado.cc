@@ -316,9 +316,30 @@ std::vector<datosNodo>* tablaVecinos){
     			std::string papa = "-2,-2,-2,-2,-2";
 
     			size_t indice = 0;
+				size_t indice2 = 0;
     			int bandera = 1;
 				
-    			while(indice <ids.size() && bandera == 1){
+
+				while(indice2 <ids.size() && bandera == 1){
+					std::cout<<"ESTO ES PRUEBA TABLA AGENTE ROSADO"<<std::endl;
+					std::cout<<"ID NODO"<<std::endl;
+					std::cout<<ids[indice2].id<<std::endl;
+					std::cout<<"ESTADO"<<std::endl;
+					int indiceTabla = ids[indice2].indice;
+					std::cout<<*(tablaVecinos)[indiceTabla].estado<<std::endl;
+					
+					
+					
+		
+
+
+    
+      				
+      				indice2++;
+    			}
+
+    			
+				while(indice <ids.size() && bandera == 1){
 
       				int indiceTabla = ids[indice].indice;
       				if((*tablaVecinos)[indiceTabla].estado == 1){
