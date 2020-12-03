@@ -637,7 +637,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 				std::cout<<std::endl;
 
 
-				struct Forwarding forwardingRecibir;
+				struct Forwarding fowardingRecibir;
 
 				memmove( &fowardingRecibir.idFuenteInicial,buffer ,sizeof(fowardingRecibir.idFuenteInicial));
      			memmove( &fowardingRecibir.longitud, buffer+ sizeof(fowardingRecibir.idFuenteInicial),sizeof(fowardingRecibir.longitud));
