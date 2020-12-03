@@ -10,19 +10,19 @@ bool conexion;
  *	el agente y el servidor web, además de generar otro proceso
  *	que corre el programa Servidor.py. Además se generan hilos para
  *	realizar las comunicaciones (Con el servidor y con el agente verde)
- *	@param[in] [1] Vector de enteros: Para conocer los ids de los 
+ *	@param[in] [1] Vector de enteros: Para conocer los ids de los
  *	vecinos y enviar los mensajes a la cola correspondiente
- *	[2] Cola de mensajes: Es un puntero a un arreglo de colas de 
+ *	[2] Cola de mensajes: Es un puntero a un arreglo de colas de
  *	mensajes, da salida y entrada a los mensajes. Una de las colas
  *	es para los mensajes que recibe el usuario, las otras colas son
  *	para los mensajes de salida
  *	[3] String: Ruta para el pipe Agente -> Servidor
  *	[4] String: Ruta para el pipe Servidor -> Agente
- *	@pre Los 4 parámetros deben tener datos, deben estar las 
+ *	@pre Los 4 parámetros deben tener datos, deben estar las
  *	direcciones para los pipes, además de los ids de los vecinos y
  *	de colas que deben estar creadas
  *	@remark Utiliza las colas para enviar codificaciones a lo interno
- *	como un mensaje de finalización para desconectar al cliente del 
+ *	como un mensaje de finalización para desconectar al cliente del
  *	servidor (-1::Salir)
  *	@author Johel Phillips Ugalde B75821
  *	@date 15-09-20
@@ -37,10 +37,10 @@ Cola<struct DatosMensaje>* colaDespachadorAzul){
 	std::string ids;
 	conexion = true;
 
-	if(mkfifo(fifoAgenteServidor, 0666) == -1) 
+	if(mkfifo(fifoAgenteServidor, 0666) == -1)
 		mostrarError("No se pudo crear el fifo Agente -> Servidor");
 
-	if(mkfifo(fifoServidorAgente, 0666) == -1) 
+	if(mkfifo(fifoServidorAgente, 0666) == -1)
 		mostrarError("No se pudo crear el fifo Servidor -> Agente");
 
 	longitud = (*nodosIDs).size();
@@ -70,15 +70,15 @@ Cola<struct DatosMensaje>* colaDespachadorAzul){
  *	@details Esta subrutina se encarga de enviarle mensajes al
  *	servidor web, y por ende al usuario, provenientes de los
  *	vecinos, además del código de finalización.
- *	@param[in] [1] Cola de mensajes: Es un puntero a un arreglo de 
- *	colas de mensajes, en este caso se sacan los mensajes de la 
+ *	@param[in] [1] Cola de mensajes: Es un puntero a un arreglo de
+ *	colas de mensajes, en este caso se sacan los mensajes de la
  *	primer cola para ser enviados al servidor
  *	[2] String: Ruta del pipe para el paso de los mensajes
  *	Agente -> Servidor
- *	@pre Las colas deben existir y la ruta de los pipes debe ser 
- *	correcta 
+ *	@pre Las colas deben existir y la ruta de los pipes debe ser
+ *	correcta
  *	@remark Utiliza las colas para enviar codificaciones a lo interno
- *	como un mensaje de finalización para desconectar al cliente del 
+ *	como un mensaje de finalización para desconectar al cliente del
  *	servidor (-1::Salir)
  *	@author Johel Phillips Ugalde B75821
  *	@date 15-09-20
@@ -106,7 +106,7 @@ void enviar(Cola<struct Mensaje>* colaAzul, char* fifoAgenteServidor){
 		}
 		mtx.unlock();
 		buffer.clear();
-		buffer.append(std::to_string(1));
+		buffer.append(std::to_string(2));
 		buffer.append(":\t");
 		buffer.append(mensaje.buffer);
 		if(buffer.size() > LONGITUD){
@@ -121,18 +121,18 @@ void enviar(Cola<struct Mensaje>* colaAzul, char* fifoAgenteServidor){
  *	@brief Subrutina del hilo receptor
  *	@details Esta subrutina se encarga de recibir mensajes del
  *	servidor web, y enviarlos a la cola de salida correspondiente
- *	@param[in] [1] Cola de mensajes: Es un puntero a un arreglo de 
- *	colas de mensajes, en este caso se envían los mensajes a la 
+ *	@param[in] [1] Cola de mensajes: Es un puntero a un arreglo de
+ *	colas de mensajes, en este caso se envían los mensajes a la
  *	cola correspondiente para ser enviados a un vecino
  *	[2] Vector de enteros: Contiene los ids de los vecinos, sirve
  *	para enviar los mensajes a la cola correspondiente
  *	[3] String: Ruta del pipe para el paso de los mensajes
  *	Agente -> Servidor
- *	@pre Las colas deben existir y la ruta de los pipes debe ser 
+ *	@pre Las colas deben existir y la ruta de los pipes debe ser
  *	correcta, además de contener la información de los ids de los
  *	vecinos
  *	@remark Utiliza las colas para enviar codificaciones a lo interno
- *	como un mensaje de finalización para desconectar al cliente del 
+ *	como un mensaje de finalización para desconectar al cliente del
  *	servidor (-1::Salir)
  *	@author Johel Phillips Ugalde B75821
  *	@date 15-09-20
@@ -159,7 +159,7 @@ char* fifoServidorAgente, Cola<struct Mensaje>* colaAzul){
 		//mensaje.mensaje.assign(msg);
 
 		if(destino == -1 || destino == 0){
-			
+
 			mensaje.tipo = 0x02;
 			std::cout<<std::endl;
 			std::cout<<std::endl;
@@ -177,7 +177,7 @@ char* fifoServidorAgente, Cola<struct Mensaje>* colaAzul){
 			std::cout<<mensaje.buffer<<std::endl;
 			std::cout<<std::endl;
 			std::cout<<std::endl;
-		
+
 		mensaje.idDestino = destino;
 		colaDespachadorAzul->push(mensaje);
 
@@ -189,7 +189,7 @@ char* fifoServidorAgente, Cola<struct Mensaje>* colaAzul){
 			//mensajeSalida.idFuente = 65534;
 			//mensajeSalida.mensaje.assign(msg);
 			strcpy(mensajeSalida.buffer, msg.c_str());
-			
+
 			colaAzul->push(mensajeSalida);
 			salir = true;
 		}
