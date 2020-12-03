@@ -215,8 +215,8 @@ Cola<std::string>* colaTablaForwarding){
       	(char*)NULL);
       	exit(1);
   	}else if(pid > 0){//Agente_rosado
-	  std::vector<indiceNodo> ids;
-	  /*
+
+	  
     	size_t i,j;
     	std::vector<indiceNodo> ids;
     	indiceNodo nodoId, pivote;
@@ -235,7 +235,7 @@ Cola<std::string>* colaTablaForwarding){
         		}
       		}
     	}
-		*/
+		
 
         Cola<std::string> colaInicializacion;
 
@@ -317,7 +317,7 @@ std::vector<datosNodo>* tablaVecinos){
 
     			size_t indice = 0;
     			int bandera = 1;
-				/*
+				
     			while(indice <ids.size() && bandera == 1){
 
       				int indiceTabla = ids[indice].indice;
@@ -328,10 +328,10 @@ std::vector<datosNodo>* tablaVecinos){
       				}
       				indice++;
     			}
-				*/
+				
 				
 				//papaFalso
-				papa="0,1,1,1,1";
+				//papa="0,1,1,1,1";
     			envioAgenteRosa->push(papa);
     			confirmacion = colaInicializacion->pop();
 
