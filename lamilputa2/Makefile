@@ -7,7 +7,7 @@ verde: bin
 	src/common/cola/Cola.cc -pthread -o bin/NodoVerde
 run:
 	bin/./NodoVerde bin/fifoPipeAgenteNaranja bin/fifoPipeNodoNaranja tests/Pandemic_Plan_Remastered.nodo.1.csv \
-	tests/Pandemic_Plan_Remastered.vecinos.1.csv bin/fifoPipeAgenteAzul bin/fifoPipeNodoAzul 8100 7414 7415 127.0.0.1
+	tests/Pandemic_Plan_Remastered.vecinos.1.csv bin/fifoPipeAgenteAzul bin/fifoPipeNodoAzul 8100 7424 7425 127.0.0.1
 server:
 	cd src/nodo_azul/servidor; \
 	python3 httpd.py 8014 127.0.0.1:8100
