@@ -39,16 +39,16 @@ void capaRed(Cola<struct Mensaje>* colaAzul,
 	
 	std::thread hiloForwarding(forwarding, colaAzul,
 		colasVerdes, &colaForwarding, nodosIDs);
-/*
+
 	std::thread hiloBroadcast(broadcast, colaAzul, colaRosada,
 		colasVerdes, &colaBroadcast, nodosIDs,despachadorMiembros,
 		colaAlcanzabilidad);
-		*/
+		
     /*
 	std::thread hiloAlcanzabilidad(enviarAlcanzabilidad,
 	colaAlcanzabilidad,tablaVecinos,colaDespachadorRosado,
 	colaRosada,IP);
-
+	
 	std::thread hiloTablaForwarding(verificarTablaForwarding,
 	colaTablaForwarding, nodosIDs);
 	*/
@@ -56,7 +56,7 @@ void capaRed(Cola<struct Mensaje>* colaAzul,
 	hiloRosado.join();
 	hiloVerde.join();
 	hiloForwarding.join();
-	//hiloBroadcast.join();
+	hiloBroadcast.join();
 }
 
 /*void verificarTablaForwarding(Cola<std::string>* colaTablaForwarding,
@@ -283,13 +283,16 @@ void despachadorAzul(Cola<struct DatosMensaje>* colaDespachadorAzul,
 			colaForwarding->push(forwarding);
 			
 		} else if(datos.tipo == 0x02){
-
+			char buffer3 [1013];
 			struct Broadcast broadcast;
 			broadcast.tipo = 0x01;
 			//std::string aux=std::to_string(idPropio);
 			broadcast.id_origen_inicial = static_cast<uint16_t>(idPropio);
-			broadcast.longitud = strlen(datos.buffer);//datos.mensaje.size(); // 2 bytes
+			memmove( buffer3,&mensaje.buffer ,sizeof(mensaje.buffer));
+			memmove( &broadcast.datos,buffer3 ,sizeof(broadcast.datos));
+			
 			//broadcast.payloadMensaje = mensaje;
+			broadcast.longitud = sizeof(datos.buffer);//datos.mensaje.size(); // 2 bytes
 			std::cout<<std::endl;
 			std::cout<<std::endl;
 			std::cout<<"Dentro de if en despachador azul antes de broadcast"<<std::endl;
@@ -489,7 +492,7 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 			//colaForwarding->push(forwarding);
 		} 
 		else if (capaRed.tipo== 0x02){
-			/*
+			
 			    std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<"Eentre a if a ahverle push a cola broadcast"<<std::endl;
@@ -497,11 +500,14 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 			struct Broadcast nuevoBroadcast;
-			struct  CajaNegraRed payloadRed= capaRed.payload;
-			nuevoBroadcast=payloadRed.payloadBroadcast;
+			memmove( &nuevoBroadcast.tipo,capaRed.datos,sizeof(nuevoBroadcast.tipo));
+			memmove( &nuevoBroadcast.id_origen_inicial,capaRed.datos+sizeof(nuevoBroadcast.tipo), sizeof(nuevoBroadcast.id_origen_inicial));
+			memmove( &nuevoBroadcast.longitud,capaRed.datos+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial),sizeof(nuevoBroadcast.longitud));
+			memmove( &nuevoBroadcast.datos, capaRed.datos+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial)+sizeof(nuevoBroadcast.longitud),sizeof(nuevoBroadcast.datos));
+		
 			//struct Broadcast broadcast= *(payloadRed.payloadBroadcast);
 			colaBroadcast->push(nuevoBroadcast);
-			*/
+			
 		}
 		else if (capaRed.tipo== 0x03){
 			
@@ -823,7 +829,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 	}
 }
 
-/*
+
 void verificarEstructura(Cola<std::string>* despachadorMiembros,
 std::vector<int>* miembrosArbol){
 
@@ -843,9 +849,9 @@ std::vector<int>* miembrosArbol){
 		miembrosArbol->push_back(aux);
 	}
 }
-*/
 
-/*
+
+
 void broadcast(Cola<struct Mensaje>* colaAzul,
 		Cola<struct ArbolGenerador>* colaRosada,
 		std::vector<Cola<struct CapaEnlace>>* colasVerdes,
@@ -861,14 +867,21 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 		bool enviarDenuevo=true;
 
 	while(1){
+		char buffer2[1040];
 		//struct capaRed enrutamiento = colaBroadcast->pop();
 		struct Broadcast nuevoBroadcast=colaBroadcast->pop();
 		struct CapaRed capaRed;
 		struct CapaEnlace paquete;
 		size_t longitud = nodosIDs->size();
-		capaRed.tipo='2';
-		capaRed.longitud=sizeof(nuevoBroadcast);
-		capaRed.payload.payloadBroadcast=nuevoBroadcast;
+		capaRed.tipo=0x02;
+		char buffer [1017];
+		memmove(buffer, &nuevoBroadcast.tipo, sizeof(nuevoBroadcast.tipo));
+		memmove(buffer+sizeof(nuevoBroadcast.tipo), &nuevoBroadcast.id_origen_inicial, sizeof(nuevoBroadcast.id_origen_inicial));
+		memmove(buffer+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial), &nuevoBroadcast.longitud, sizeof(nuevoBroadcast.longitud));
+		memmove(buffer+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial)+sizeof(nuevoBroadcast.longitud), &nuevoBroadcast.datos, sizeof(nuevoBroadcast.datos));
+		memmove( &capaRed.datos,buffer ,sizeof(capaRed.datos));
+		capaRed.longitud=sizeof(capaRed.datos);
+		//capaRed.payload.payloadBroadcast=nuevoBroadcast;
 		//paquete.cabeceraRed = enrutamiento.cabeceraRed;
 		//paquete.idDestino = enrutamiento.idDestino;
 
@@ -877,11 +890,14 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 				for(size_t i = 0; i < miembrosArbol.size(); ++i){
 					for(size_t indice=1;indice<longitud;indice++){
 						if(miembrosArbol[i]==(*nodosIDs)[indice]){
-							paquete.tipo='2';
+							paquete.tipo=0x02;
 							paquete.idFuenteInmediato=nuevoBroadcast.id_origen_inicial;
 							paquete.idDestinoFinal=static_cast<uint16_t>(miembrosArbol[i]);
-							paquete.longitud=sizeof(capaRed);
-							paquete.payload=capaRed;
+							paquete.longitud=sizeof(paquete.datos);
+							memmove(buffer2, &capaRed.tipo, sizeof(capaRed.tipo));
+				            memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
+				            memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, sizeof(capaRed.datos));
+							memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
 							std::cout<<std::endl;
 		                    std::cout<<std::endl;
 		                    std::cout<<std::endl;
@@ -909,9 +925,12 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 			//mensaje.cabeceraAplicacion =
 				//enrutamiento.cabeceraRed.cabeceraAplicacion;
 			//mensaje.idFuente = enrutamiento.idFuente;
-			if(nuevoBroadcast.tipo == '1'){
+			if(nuevoBroadcast.tipo == 0x01){
 				
-				struct Mensaje nuevoMensaje=nuevoBroadcast.payloadMensaje;
+				struct Mensaje nuevoMensaje;
+				char buffer3 [1013];
+				memmove( buffer3,&nuevoBroadcast.datos ,sizeof(nuevoBroadcast.datos));
+				memmove( &nuevoMensaje.buffer,buffer3 ,sizeof(nuevoMensaje.buffer));
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<"aqui dentro de if en broadcast para enviar a azul"<<std::endl;
@@ -934,10 +953,15 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 				for(size_t indice=1;indice<longitud;indice++){
 					if(miembrosArbol[i]==(*nodosIDs)[indice] &&
 					(*nodosIDs)[indice] != nuevoBroadcast.id_origen_inicial ){
-                            paquete.tipo='2';
+							paquete.tipo=0x02;
 							paquete.idFuenteInmediato=nuevoBroadcast.id_origen_inicial;
 							paquete.idDestinoFinal=static_cast<uint16_t>(miembrosArbol[i]);
-							paquete.payload=capaRed;
+							
+							memmove(buffer2, &capaRed.tipo, sizeof(capaRed.tipo));
+				            memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
+				            memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, sizeof(capaRed.datos));
+							memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
+							paquete.longitud=sizeof(paquete.datos);
 						colasVerdes[0][indice].push(paquete);
 					}
 				}
@@ -947,4 +971,3 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 	}
 	controladorTablaRosado.join();
 }
-*/

@@ -205,7 +205,7 @@ struct Broadcast{
     uint8_t tipo;              // Mensaje normal 1 || Alcanzabilidad 2
     uint16_t id_origen_inicial;
     uint16_t longitud;
-    char buffer[1013] = {};
+    char datos[1013] = {};
     
 };
 struct CajaNegraRed{
