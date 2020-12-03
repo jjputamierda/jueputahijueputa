@@ -1,7 +1,8 @@
 #include "Agente_verde.h"
-
+pthread_mutex_t lock;
 bool terminar = false;
 uint16_t nodoSender;
+short destino;
 //uint16_t nodoSenderTWH;
 
 /**
@@ -76,7 +77,7 @@ char * parserBuffer(char * buffer, size_t parseLimit,size_t  initParse,size_t ne
     return newBuffer;
 }
 void recibirV(std::vector<datosNodo>* tabla,
-Cola<struct CapaRed>* colaDespachadorVerde){
+Cola<struct CapaRed>* colaDespachadorVerde,Cola<struct Latido> *colaLatido){
 
     int n;
     char buffer [1047];
@@ -287,12 +288,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
-                
-
-            }
-            
-
-            //if (paquete.idDestinoFinal != (uint16_t)-1){
+                //if (paquete.idDestinoFinal != (uint16_t)-1){
                 
                 idVecino = paquete.idFuenteInmediato;
                 /*
@@ -336,6 +332,20 @@ Cola<struct CapaRed>* colaDespachadorVerde){
            // }
 
        // }
+                
+
+            }
+             else if(paquete.tipo == 0x01){
+                struct Latido paqueteLatido;
+                memmove(&paqueteLatido.tipo_latido, paquete.datos, sizeof(paqueteLatido.tipo_latido));
+                destino =  static_cast<short> (paquete.idFuenteInmediato);
+                colaLatido->push(paqueteLatido);
+                
+
+            }
+            
+
+            
         n = 0;
     }
     printf("Hilo recibir salió del while\n");
@@ -395,7 +405,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
         } else {
 
               
-            if(datos.tipo == 0x02){ // Capa de red
+            if(datos.tipo == 0x01 ||datos.tipo == 0x02 ){
               std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -452,9 +462,8 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 if(n < 0){
                     std::cout << "Error en envío" << std::endl;
                 }
-            } else if(datos.tipo == '1'){
-                std::cout << "Latido!!!\n";
-            } else {
+            }
+            else {
                  std::cout << "Error!!!!\n";
             }
 
@@ -500,23 +509,40 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
     printf("Hilo %ld salió del while\n", identificador);
 }
 
-/*void latido(std::vector<datosNodo>* tabla,
+void latido(std::vector<datosNodo>* tabla,
 std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
 
-    struct capaEnlace mEstado;
+    struct capaEnlace paquete;
+    struct Latido paqueteLatido;
     size_t i;
     while(!terminar){
         for(i=1; i<tabla[0].size(); i++){
             if(tabla[0][i].tiempoExpiracion <= 0){
-                mEstado.estado = -1;
-                colasDeMensajes[0][i].push(mEstado);
+                paqueteLatido.tipo_latido = 0x01;
+                paquete.tipo_enlace = 0x01;
+                paquete.idDestinoFinal = static_cast<uint16_t>(tabla[0][i].ID);
+                paquete.idFuenteInmediato = static_cast<uint16_t>(tabla[0][0].ID);
+                char buffer2 [1040];
+                memmove(buffer2, &paqueteLatido.tipo_latido, sizeof(paqueteLatido.tipo_latido));
+                memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
+                paquete.longitud = sizeof(paquete.datos);
+                colasDeMensajes[0][i].push(paquete);
             } else {
+                pthread_mutex_lock(&lock);
                 tabla[0][i].tiempoExpiracion--;
+                pthread_mutex_unlock(&lock);
+            }
+            if(tabla[0][i].estado == 1){
+                std::cout<<"Estoy vivo"<<std::endl;
+            }
+            else{
+                std::cout<<"Estoy muerto"<<std::endl;
             }
         }
+        
         sleep(tabla[0].size());
     }
-}*/
+}
 
 /**
     @brief Metodo del agente verde
@@ -533,13 +559,66 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
     @date 15-09-20
 */
 
+void verificarLatido(std::vector<Cola<struct CapaEnlace>>* colasDeMensajes,
+std::vector<datosNodo>* tabla,Cola<struct Latido> * colaLatido){
+    
+    while(!terminar){
+        struct Latido paqueteLatido = colaLatido->pop();
+        if(paqueteLatido.tipo_latido == 0X01 ){
+            for(size_t i = 0; i<tabla[0].size(); i ++){
+                if(tabla[0][i].ID == destino){
+                struct Latido nueevoPaqueteLatido;
+                nueevoPaqueteLatido.tipo_latido = 0X02;
+                struct CapaEnlace paquete;
+                paquete.tipo_enlace = 0x01;
+                paquete.idDestinoFinal = static_cast<uint16_t>(tabla[0][i].ID);//cambiar
+                paquete.idFuenteInmediato = static_cast<uint16_t>(tabla[0][0].ID);
+                char buffer2 [1040];
+                memmove(buffer2, &nuevoPaqueteLatido.tipo_latido, sizeof(nuevoPaqueteLatido.tipo_latido));
+                memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
+                paquete.longitud = sizeof(paquete.datos);
+                colasDeMensajes[0][i].push(paquete);
+                }
+            }
+
+
+        }
+        else if(paqueteLatido.tipo_latido == 0X02 ){
+            for(size_t i = 0; i<tabla[0].size(); i ++){
+                if(tabla[0][i].ID == destino){
+                    tabla[0][i].estado = 1;
+                    pthread_mutex_lock(&lock);
+                    table[0][i].tiempoExpiracion = 100;
+                    pthread_mutex_unlock(&lock);
+
+
+                }
+            }
+        }
+    }
+
+}
+
 void hiloVerde(std::vector<datosNodo>* tablaVecinos,
 std::vector<Cola<struct CapaEnlace>>* colasDeMensajes,
 Cola<struct CapaRed>* colaDespachadorVerde){
-
+    Cola<struct Latido> colaLatido;
+    
+    int hayMutex = 0;
     std::thread conexiones[tablaVecinos[0].size()-1];
     std::thread recibir = std::thread(recibirV, tablaVecinos,
-        colaDespachadorVerde);
+        colaDespachadorVerde,&colaLatido);
+    
+
+
+    
+    (pthread_mutex_init(&lock, NULL);
+     
+
+    
+
+
+
 
     size_t i;
 
@@ -548,12 +627,14 @@ Cola<struct CapaRed>* colaDespachadorVerde){
         tablaVecinos, colasDeMensajes);
     }
 
-    /*std::thread hiloLatido = std::thread(latido, tablaVecinos,
-    colasDeMensajes);*/
-
+    std::thread hiloLatido = std::thread(latido, tablaVecinos,
+    colasDeMensajes);
+    std::thread verficarLatidoHilo = std::thread(verficarLatido,colaDeMensajes,tablaVecinos,&colaLatido);
     for(i=0; i<tablaVecinos[0].size()-1; i++){
         conexiones[i].join();
     }
     recibir.join();
-    //hiloLatido.join();
+    verificarLatidoHilo.join();
+    hiloLatido.join();
+    pthread_mutex_destroy(&lock);
 }

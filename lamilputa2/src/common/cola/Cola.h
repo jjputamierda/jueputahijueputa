@@ -193,7 +193,9 @@ struct CapaEnlaceD{
 
 
 // Estructuras especiales
-
+struct Latido{
+    uint8_t tipo_latido; 
+}
 // Agente azul -> Despachador azul
 struct DatosMensaje{
     //char buffer[200] = {};

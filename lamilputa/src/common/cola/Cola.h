@@ -65,7 +65,7 @@ struct datosNodo{
     short ID;
     std::string IP;
     short puerto;
-    uint8_t estado = 1;
+    uint8_t estado = 0;
     uint8_t tiempoExpiracion = 0;
 };
 
@@ -193,7 +193,9 @@ struct CapaEnlaceD{
 
 
 // Estructuras especiales
-
+struct Latido{
+    uint8_t tipo_latido; 
+}
 // Agente azul -> Despachador azul
 struct DatosMensaje{
     //char buffer[200] = {};
