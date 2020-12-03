@@ -10,7 +10,7 @@ run:
 	tests/Pandemic_Plan_Remastered.vecinos.1.csv bin/fifoPipeAgenteAzul bin/fifoPipeNodoAzul 8102 7426 7427 127.0.0.1
 server:
 	cd src/nodo_azul/servidor; \
-	python3 httpd.py 8016 127.0.0.1:8100
+	python3 httpd.py 8016 127.0.0.1:8102
 clean:
 	rm bin/fifoPipeAgenteAzul bin/fifoPipeNodoAzul bin/fifoPipeAgenteNaranja bin/fifoPipeNodoNaranja
 ayuda:
