@@ -534,15 +534,14 @@ def revisarNodosMuertos(numeroNodo,clientQueue,serverQueue,reintentos):
     @date 15-09-20
 '''
 def responderSolicitudesPapa(numeroNodo,clientQueue,serverQueue,
-reintentos,papaAg,miembroAg):
+reintentos):
 
     global salirNodo
     global reinicioPapa
     enivarConfirmacionArbol(clientQueue)
     while(salirNodo== False and reinicioPapa == 0):
         #print("Respondiendo solicitudes")
-        TWHResponderPapa(numeroNodo,clientQueue,serverQueue,
-        reintentos,papaAg,miembroAg)
+        TWHResponderPapa(numeroNodo,clientQueue,serverQueue,reintentos)
 
 '''
     @brief Metodo que genera una matriz con los datos de los nodos
@@ -771,11 +770,9 @@ def arGe(serverQueue,clientQueue):
                 papaAg = vectorRespuestaP[1]
                 miembroAg = vectorRespuestaP[1]
 
-                responderSolicitudesPapa(numeroNodo,clientQueue,
-                serverQueue,reintentos)
+                responderSolicitudesPapa(numeroNodo,clientQueue,serverQueue,reintentos)
         else:
-            responderSolicitudesPapa(numeroNodo,clientQueue,
-            serverQueue,reintentos)
+            responderSolicitudesPapa(numeroNodo,clientQueue,serverQueue,reintentos)
 
 if __name__=='__main__':
 
