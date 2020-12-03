@@ -512,14 +512,14 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
 void latido(std::vector<datosNodo>* tabla,
 std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
 
-    struct capaEnlace paquete;
+    struct CapaEnlace paquete;
     struct Latido paqueteLatido;
     size_t i;
     while(!terminar){
         for(i=1; i<tabla[0].size(); i++){
             if(tabla[0][i].tiempoExpiracion <= 0){
                 paqueteLatido.tipo_latido = 0x01;
-                paquete.tipo_enlace = 0x01;
+                paquete.tipo = 0x01;
                 paquete.idDestinoFinal = static_cast<uint16_t>(tabla[0][i].ID);
                 paquete.idFuenteInmediato = static_cast<uint16_t>(tabla[0][0].ID);
                 char buffer2 [1040];
@@ -567,10 +567,10 @@ std::vector<datosNodo>* tabla,Cola<struct Latido> * colaLatido){
         if(paqueteLatido.tipo_latido == 0X01 ){
             for(size_t i = 0; i<tabla[0].size(); i ++){
                 if(tabla[0][i].ID == destino){
-                struct Latido nueevoPaqueteLatido;
+                struct Latido nuevoPaqueteLatido;
                 nueevoPaqueteLatido.tipo_latido = 0X02;
                 struct CapaEnlace paquete;
-                paquete.tipo_enlace = 0x01;
+                paquete.tipo = 0x01;
                 paquete.idDestinoFinal = static_cast<uint16_t>(tabla[0][i].ID);//cambiar
                 paquete.idFuenteInmediato = static_cast<uint16_t>(tabla[0][0].ID);
                 char buffer2 [1040];
@@ -588,7 +588,7 @@ std::vector<datosNodo>* tabla,Cola<struct Latido> * colaLatido){
                 if(tabla[0][i].ID == destino){
                     tabla[0][i].estado = 1;
                     pthread_mutex_lock(&lock);
-                    table[0][i].tiempoExpiracion = 100;
+                    tabla[0][i].tiempoExpiracion = 100;
                     pthread_mutex_unlock(&lock);
 
 
@@ -612,7 +612,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
 
 
     
-    (pthread_mutex_init(&lock, NULL);
+    pthread_mutex_init(&lock, NULL);
      
 
     
@@ -629,7 +629,7 @@ Cola<struct CapaRed>* colaDespachadorVerde){
 
     std::thread hiloLatido = std::thread(latido, tablaVecinos,
     colasDeMensajes);
-    std::thread verficarLatidoHilo = std::thread(verficarLatido,colaDeMensajes,tablaVecinos,&colaLatido);
+    std::thread verficarLatidoHilo = std::thread(verificarLatido,colaDeMensajes,tablaVecinos,&colaLatido);
     for(i=0; i<tablaVecinos[0].size()-1; i++){
         conexiones[i].join();
     }
