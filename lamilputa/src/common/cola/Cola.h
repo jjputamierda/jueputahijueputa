@@ -94,8 +94,8 @@ std::string mensaje;
 struct Mensaje{
    // uint16_t idFuente;
     //char buffer[200] = {};
-    //char buffer[1013] = {};
     char buffer[1013] = {};
+    //char buffer[1013] = {};
 };
 
 struct Alcanzabilidad{
