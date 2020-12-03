@@ -32,7 +32,7 @@ Cola<std::string>* colaTablaForwarding){
 		if(strcmp(resultado[0].c_str(),"44")==0 ||
 		strcmp(resultado[0].c_str(),"43")==0||
 		strcmp(resultado[0].c_str(),"46")==0 ||
-		strcmp(resultado[0].c_str(),"47")==0||){
+		strcmp(resultado[0].c_str(),"47")==0){
 
   			aux=resultado[0]+","+resultado[3];
   			despachadorMiembros->push(aux);
