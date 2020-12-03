@@ -517,7 +517,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
     size_t i;
     while(!terminar){
         for(i=1; i<tabla[0].size(); i++){
-            if(tabla[0][i].tiempoExpiracion <= 0){
+            if(tabla[0][i].tiempoExpiracion == 0){
                 paqueteLatido.tipo_latido = 0x01;
                 paquete.tipo = 0x01;
                 paquete.idDestinoFinal = static_cast<uint16_t>(tabla[0][i].ID);
@@ -532,15 +532,19 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 tabla[0][i].tiempoExpiracion--;
                 pthread_mutex_unlock(&lock);
             }
-            if(tabla[0][i].estado == 1){
-                std::cout<<"Estoy vivo"<<std::endl;
-            }
-            else{
-                std::cout<<"Estoy muerto"<<std::endl;
-            }
+            
         }
         
         sleep(tabla[0].size());
+        for(i=1; i<tabla[0].size(); i++){
+            if(tabla[0][i].tiempoExpiracion == 0 ){
+                std::cout<<"Estoy muerto"<<tabla[0][i].ID<<std::endl;
+                tabla[0][i].estado = 0;
+            }
+            else{
+                std::cout<<"Estoy vivo"<<tabla[0][i].ID<<std::endl;
+            }
+        }
     }
 }
 
@@ -588,7 +592,7 @@ std::vector<datosNodo>* tabla,Cola<struct Latido> * colaLatido){
                 if(tabla[0][i].ID == destino){
                     tabla[0][i].estado = 1;
                     pthread_mutex_lock(&lock);
-                    tabla[0][i].tiempoExpiracion = 100;
+                    tabla[0][i].tiempoExpiracion = 20;
                     pthread_mutex_unlock(&lock);
 
 
