@@ -50,8 +50,26 @@ Cola<std::string>* colaTablaForwarding){
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
-    			
-				enviar.tipo=resultado[0][0];
+
+				if(resultado[0][0] == '2'){
+					enviar.tipo = 0x02;
+					
+				}
+				else if(resultado[0][0] == '3'){
+					enviar.tipo = 0x03;
+				}
+				else if(resultado[0][0] == '4'){
+					enviar.tipo = 0x04;
+				}
+				else if(resultado[0][0] == '5'){
+					enviar.tipo = 0x05;
+				}
+				else if(resultado[0][0] == '6'){
+					enviar.tipo = 0x06;
+				}
+				else if(resultado[0][0] == '7'){
+					enviar.tipo = 0x07;
+				}
 				std::cout<<"Esto es tipo en enviar enlace en agente rosado"<<std::endl;
 				std::cout<<enviar.tipo<<std::endl;
 				std::cout<<std::endl;
@@ -97,7 +115,7 @@ Cola<std::string>* envioAgenteRosa){
 		std::cout<<std::endl;
 		std::cout<<std::endl;
 
-		int num = (int)recibir.tipo - (int)'0';
+		//int num = (int)recibir.tipo - (int)'0';
 		std::cout<<"Esto es antes del primer to string"<<std::endl;
 		std::cout<<std::endl;
 		std::cout<<std::endl;
@@ -105,7 +123,33 @@ Cola<std::string>* envioAgenteRosa){
 
     	std::string SN=std::to_string(recibir.SN);
 		std::string RN=std::to_string(recibir.RN);
-		std::string tipo=std::to_string(num);
+		std::string tipo;
+		if(recibir.tipo == 0x02){
+			tipo = "2";
+					
+		}
+		else if(recibir.tipo == 0x03){
+			tipo = "3";
+					
+		}
+		else if(recibir.tipo == 0x04){
+			tipo = "4";
+					
+		}
+		else if(recibir.tipo == 0x05){
+			tipo = "5";
+					
+		}
+		else if(recibir.tipo == 0x06){
+			tipo = "6";
+					
+		}
+		else if(recibir.tipo == 0x07){
+			tipo = "7";
+					
+		}
+		
+		
     	std::string enviar= tipo +","+ SN+","+ RN;
 
 		std::cout<<"Esto es enviar en recibir enlace en agente rosado1111"<<std::endl;

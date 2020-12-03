@@ -162,11 +162,11 @@ for(size_t i4=0;i4<tablaVecinos.size();i4++){
         &colaDespachadorRosado, &colaDespachadorVerde,
         &nodosIDS,&despachadorMiembros,&colaAlcanzabilidad,
         &tablaVecinos,argv[10],&colaTablaForwarding);
-/*
+
     std::thread agenteRosado(trabajoAgenteRosado, &tablaVecinos,
     &colaRosada, &colaDespachadorRosado, argv[8], argv[9],
     &despachadorMiembros,&colaAlcanzabilidad,&colaTablaForwarding);
-    */
+    
 
     agenteAzul.join();
     //printf("Agente azul finalizado\n");
@@ -174,7 +174,7 @@ for(size_t i4=0;i4<tablaVecinos.size();i4++){
     printf("Agente verde finalizado\n");
     agenteRed.join();
     printf("Agente red finalizado\n");
-    //agenteRosado.join();
+    agenteRosado.join();
     printf("Agente rosado finalizado\n");
     printf("FINALIZACIÓN DEL PROGRAMA\n");
 

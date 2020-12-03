@@ -28,11 +28,11 @@ void capaRed(Cola<struct Mensaje>* colaAzul,
 	std::thread hiloAzul(despachadorAzul,
 		colaDespachadorAzul, &colaForwarding, &colaBroadcast, 
 		(*nodosIDs)[0]);
-	/*
+	
 	std::thread hiloRosado(despachadorRosado,colaDespachadorRosado,
 		nodosIDs, tablaVecinos,
 		colasVerdes);
-		*/
+		
 
 	std::thread hiloVerde(despachadorVerde,
 	 	colaDespachadorVerde, &colaForwarding, &colaBroadcast,colaRosada,colaAzul);
@@ -53,7 +53,7 @@ void capaRed(Cola<struct Mensaje>* colaAzul,
 	colaTablaForwarding, nodosIDs);
 	*/
 	hiloAzul.join();
-	//hiloRosado.join();
+	hiloRosado.join();
 	hiloVerde.join();
 	hiloForwarding.join();
 	//hiloBroadcast.join();
@@ -303,7 +303,7 @@ void despachadorAzul(Cola<struct DatosMensaje>* colaDespachadorAzul,
 		}
 	}
 }
-/*
+
 void despachadorRosado(Cola<struct DatosArbolGenerador>* colaDespachadorRosado,
 std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola<struct CapaEnlace>>* colasVerdes){
 
@@ -328,6 +328,7 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 				std::cout<<std::endl;
 				std::cout<<std::endl;
                 if(datos.id_destino_final == (*nodosIDs)[i]){
+					char buffer [1017];
 					std::cout<<std::endl;
 					std::cout<<std::endl;
 					std::cout<<std::endl;
@@ -354,9 +355,12 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 					std::cout<<std::endl;
 					std::cout<<std::endl;
 					struct CapaRed capaRed;
-					capaRed.tipo = '3';
+					capaRed.tipo = 0x03;
 
-					capaRed.payload.payloadArbol = paqueteAg;
+				    memmove(buffer, &paqueteAg.tipo, sizeof(paqueteAg.tipo));
+					memmove(buffer+sizeof(paqueteAg.tipo), &paqueteAg.SN, sizeof(paqueteAg.SN));
+					memmove(buffer+sizeof(paqueteAg.tipo)+sizeof(paqueteAg.SN), &paqueteAg.RN, sizeof(paqueteAg.RN));
+					memmove( &capaRed.datos,buffer ,sizeof(capaRed.datos));
 					std::cout<<std::endl;
 					std::cout<<std::endl;
 					std::cout<<std::endl;
@@ -365,7 +369,7 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 					std::cout<<std::endl;
 					std::cout<<std::endl;
 
-					capaRed.longitud =  sizeof(paqueteAg);
+					capaRed.longitud =  sizeof(capaRed.datos);
 					
 					struct CapaEnlace paquete;
 
@@ -388,11 +392,16 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 						std::cout<<std::endl;
 					}
 
-					paquete.tipo ='2';
+					paquete.tipo =0X02;
 					paquete.idDestinoFinal = datos.id_destino_final;
 					paquete.idFuenteInmediato = (*nodosIDs)[0];
-					paquete.longitud = sizeof(capaRed);
-					paquete.payload = capaRed;
+					char buffer2[1040];
+					memmove(buffer2, &capaRed.tipo, sizeof(capaRed.tipo));
+					memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
+					memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, sizeof(capaRed.datos));
+					memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
+					paquete.longitud = sizeof(paquete.datos);
+
 
 					std::cout<<std::endl;
 					std::cout<<std::endl;
@@ -422,7 +431,7 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 
 	}
 }
-*/
+
 void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 	Cola<struct DatosForwarding>* colaForwarding,
 	Cola<struct Broadcast>* colaBroadcast,Cola<struct ArbolGenerador>* colaRosada,Cola<struct Mensaje>* colaAzul ){
@@ -495,22 +504,25 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 			*/
 		}
 		else if (capaRed.tipo== 0x03){
-			/*
-			struct  CajaNegraRed payloadRed= capaRed.payload;
-			struct ArbolGenerador arbol= payloadRed.payloadArbol;
+			
+			
+			struct ArbolGenerador paqueteAg;
+			memmove( &paqueteAg.tipo, capaRed.datos ,sizeof(paqueteAg.tipo));
+			memmove( &paqueteAg.SN, capaRed.datos +sizeof(paqueteAg.tipo),sizeof(paqueteAg.SN));
+			memmove( &paqueteAg.RN, capaRed.datos +sizeof(paqueteAg.tipo)+sizeof(paqueteAg.SN),sizeof(paqueteAg.RN));
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<"Esto antes del pusha la cola rosada en la capa de red"<<std::endl;
-                std::cout<<arbol.SN<<std::endl;
-                std::cout<<arbol.RN<<std::endl;
+                std::cout<<paqueteAg.SN<<std::endl;
+                std::cout<<paqueteAg.RN<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
 			nodoSenderTWH=nodoSender;
 			//nodoSenderTWH = nodoSender;
-			colaRosada->push(arbol);
-			*/
+			colaRosada->push(paqueteAg);
+			
 		}  
 	
 		

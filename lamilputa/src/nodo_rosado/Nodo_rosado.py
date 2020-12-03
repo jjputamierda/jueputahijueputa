@@ -126,7 +126,7 @@ reintentos,papaAg,miembroAg):
     while(nuevoReintento < reintentos and  salirWhile == 0):
 
         paquete = respuestaTCP(serverQueue)
-        if (paquete[0]== 1 ):
+        if (paquete[0]== 2 ):
             print("me llego una solicitud11")
 
             sn = paquete [1]
@@ -140,15 +140,15 @@ reintentos,papaAg,miembroAg):
         exito = 0
         destino = paquete [4]
         potencialHijo=destino
-        paquete = [2,sn,rn,destino,numeroNodo]
+        paquete = [3,sn,rn,destino,numeroNodo]
         while(nuevoReintento < reintentos and  salirWhile != 1):
             solicitudTCP(paquete,clientQueue)
             paqueteR = respuestaTCP(serverQueue)
-            if (paqueteR[0]== 4 and paqueteR[1] == sn
+            if (paqueteR[0]== 5 and paqueteR[1] == sn
             and paqueteR[2] == rn +1 ):
 
                 print("me llego un ok 1")
-                paquete = [5,sn+1,rn+1,destino,numeroNodo]
+                paquete = [6,sn+1,rn+1,destino,numeroNodo]
                 solicitudTCP(paquete,clientQueue)
                 salirWhile = 1
                 exito = 1
@@ -214,8 +214,7 @@ def TWHNoRespondePapa(numeroNodo,clientQueue,serverQueue,reintentos):
     potencialHijo = 0
     while(nuevoReintento < reintentos and  salirWhile == 0):
         paquete = respuestaTCP(serverQueue)
-        if (paquete[0]== 1 and paquete[1] != 1 and paquete[1] != 0
-        and paquete[2] != 1 and paquete[2] != 0):
+        if (paquete[0]== 2):
             print("me llego una solicitud22")
             sn = paquete [1]
             salirWhile = 1
@@ -227,15 +226,15 @@ def TWHNoRespondePapa(numeroNodo,clientQueue,serverQueue,reintentos):
         salirWhile = 0
         exito = 0
         destino = paquete [4]
-        paquete = [3,sn,rn,destino,numeroNodo]
+        paquete = [4,sn,rn,destino,numeroNodo]
         while(nuevoReintento < reintentos and  salirWhile == 0):
 
             solicitudTCP(paquete,clientQueue)
             paqueteR = respuestaTCP(serverQueue)
-            if (paqueteR[0]== 4 and paqueteR[1] == sn
+            if (paqueteR[0]== 5 and paqueteR[1] == sn
             and paqueteR[2] == rn +1 ):
                 print("me llego un ok22")
-                paquete = [5,sn+1,rn+1,destino,numeroNodo]
+                paquete = [6,sn+1,rn+1,destino,numeroNodo]
                 salirWhile = 1
                 exito = 1
 
@@ -258,7 +257,7 @@ serverQueue,reintentos):
 
     seed(1)
     sn = randint(2,999)
-    paquete = [1,sn,0,potencialPapa,numeroNodo]
+    paquete = [2,sn,0,potencialPapa,numeroNodo]
     nuevoReintento = 0
     salirWhile = 0
     exito = 0
@@ -268,13 +267,13 @@ serverQueue,reintentos):
     while(nuevoReintento < reintentos and salirWhile ==0):
         solicitudTCP(paquete,clientQueue)
         paqueteR = respuestaTCP(serverQueue)
-        if (paqueteR[0]== 2 and paqueteR[1] == sn + 1):
+        if (paqueteR[0]== 3 and paqueteR[1] == sn + 1):
             print("Aceptaron ser mi papa")
             salirWhile = 1
             exito = 1
             viejoPaqueteOp = paqueteR[0]
         else:
-            if(paqueteR[0]== 3 and paqueteR[1] == sn + 1):
+            if(paqueteR[0]== 4 and paqueteR[1] == sn + 1):
                 print("Aceptaron ser mi papa no")
                 salirWhile = 1
                 exito = 1
@@ -290,12 +289,12 @@ serverQueue,reintentos):
         nuevoReintento = 0
         salirWhile = 0
         exito = 0
-        paquete = [4,sn,rn,potencialPapa,numeroNodo]
+        paquete = [5,sn,rn,potencialPapa,numeroNodo]
         while(nuevoReintento < reintentos and salirWhile == 0):
             solicitudTCP(paquete,clientQueue)
             paqueteR = respuestaTCP(serverQueue)
 
-            if (paqueteR[0]== 5 and paqueteR[1] == sn + 1):
+            if (paqueteR[0]== 6 and paqueteR[1] == sn + 1):
                 print("me llego un ok de papa")
                 salirWhile = 1
                 exito = 1

@@ -114,7 +114,7 @@ struct Forwarding{
 };
 
 struct ArbolGenerador{
-    char tipo;
+    uint8_t tipo;
     uint16_t SN;
     uint16_t RN;
     //Se puede quitar?
@@ -233,7 +233,7 @@ struct DatosForwarding{
 
 };
 struct DatosArbolGenerador{
-    char tipo;
+    uint8_t tipo;
     uint16_t SN;
     uint16_t RN;
     //Se puede quitar?
@@ -252,7 +252,7 @@ struct CapaEnlace{
    // uint8_t latido = 0;
    // struct CapaRed payload;
     //char datos [65535];
-    char datos [1040];
+    char datos [1040];//cambiar
 
     
 };
