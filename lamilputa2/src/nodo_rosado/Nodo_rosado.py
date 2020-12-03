@@ -10,7 +10,9 @@ from random import randint
 s1 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 s2 = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 hijosAg = []
-vivo = 1
+salirNodo = False
+reinicioPapa = 0
+papaAg = -1
 
 nodos = []  ###Variables de dijkstra
 matriz = []
@@ -104,6 +106,61 @@ def solicitudTCP(paquete,clientQueue):
 '''
 def reinicioPaquete():
     paquete = [0,0,0,0]
+
+def revisarQuienMurio(numeroNodo,clientQueue,candidatoMuerto):
+    global hijosAg
+    global papaAg
+    if (candidatoMuerto == papaAg and numeroNodo != 1):
+        avisarHijosDesconexion(numeroNodo,clientQueue)
+        paquete=[9,9,9,9,9]
+        solicitudTCP(paquete,clientQueue)
+    else:
+        i = 0
+        bandera = 0
+        while (i < len(hijosAg) and bandera == 0):
+            if(hijosAg[i]==candidatoMuerto):
+                hijosAg.remove(i)
+                bandera = 1
+                paquete=[46,46,46,hijosAg[i],46]
+                solicitudTCP(paquete,clientQueue)
+        if(len(hijosAg)== 0):
+            global reinicioPapa
+            reinicioPapa = 1
+            if(numeroNodo != 1):
+                paquete=[9,9,9,9,9]
+                solicitudTCP(paquete,clientQueue)
+        else:
+            if(numeroNodo != 1):
+                paquete=[1,1,1,1,1]
+                solicitudTCP(paquete,clientQueue)
+
+
+        
+        
+       
+        
+
+
+
+
+
+
+    
+
+
+def avisarHijosDesconexion(numeroNodo,clientQueue):
+    global hijosAg
+    for x in hijosAg:
+        paquete = [7,0,0,x,numeroNodo]
+        solicitudTCP(paquete,clientQueue)
+        
+
+    paquete=[47,47,47,47,47]
+    solicitudTCP(paquete,clientQueue)
+    global reinicioPapa
+    reinicioPapa = 1
+
+
 '''
     @brief Metodo que genera un socket para recibir datos del agente rosado
     @details Este metodo se encarga de generar un socket para recibir datos que son enviados desde el agente rosado
@@ -113,12 +170,13 @@ def reinicioPaquete():
     @remark se modifican las colas de datos
     @return N/A
     @exception N/A
-    @author Diego Barquero Quesada B80961
+    @author Juan José Herrera B83878
     @date 15-09-20
 '''
 def TWHResponderPapa(numeroNodo,clientQueue,serverQueue,
-reintentos,papaAg,miembroAg):
-
+reintentos):
+    global reinicioPapa
+    global salirNodo
     seed(1)
     rn = randint(2,999)
     nuevoReintento = 0
@@ -126,7 +184,7 @@ reintentos,papaAg,miembroAg):
     sn = 0
     exito = 0
     potencialHijo = 0
-    while(nuevoReintento < reintentos and  salirWhile == 0):
+    while(nuevoReintento < reintentos and  salirWhile == 0 and salirNodo == False and reinicioPapa == 0):
 
         paquete = respuestaTCP(serverQueue)
         if (paquete[0]== 2 ):
@@ -135,6 +193,12 @@ reintentos,papaAg,miembroAg):
             sn = paquete [1]
             salirWhile = 1
             exito = 1
+        else:
+            if(paquete[0]== 8 and paquete[1]== 8 and paquete[2]== 8 and paquete[3]== 8 ):
+                revisarQuienMurio(numeroNodo,clientQueue,paquete[4])
+            else:
+                if(paquete[0] == 7):
+                    avisarHijosDesconexion(numeroNodo,clientQueue)
         nuevoReintento = nuevoReintento + 1
     sn = sn + 1
     if(exito == 1):
@@ -144,7 +208,7 @@ reintentos,papaAg,miembroAg):
         destino = paquete [4]
         potencialHijo=destino
         paquete = [3,sn,rn,destino,numeroNodo]
-        while(nuevoReintento < reintentos and  salirWhile != 1):
+        while(nuevoReintento < reintentos and  salirWhile != 1 and salirNodo == False and reinicioPapa == 0):
             solicitudTCP(paquete,clientQueue)
             paqueteR = respuestaTCP(serverQueue)
             if (paqueteR[0]== 5 and paqueteR[1] == sn
@@ -158,6 +222,12 @@ reintentos,papaAg,miembroAg):
                 global hijosAg
                 hijosAg.append(potencialHijo)
                 enviarBroadcast(0,potencialHijo,clientQueue)
+            else:
+                if(paquete[0]== 8 and paquete[1]== 8 and paquete[2]== 8 and paquete[3]== 8 ):
+                    revisarQuienMurio(numeroNodo,clientQueue,paquete[4])
+                else:
+                    if(paquete[0] == 7):
+                        avisarHijosDesconexion(numeroNodo,clientQueue)    
             nuevoReintento = nuevoReintento + 1
 '''
     @brief Metodo que genera un socket para recibir datos del agente rosado
@@ -287,6 +357,8 @@ serverQueue,reintentos):
     #sn = paqueteR[1]
     #rn = paqueteR[2] + 1
     if(exito == 1):
+        paquete = [1,1,1,1,1]
+        solicitudTCP(paquete,clientQueue)
         sn = paqueteR[1]
         rn = paqueteR[2] + 1
         nuevoReintento = 0
@@ -306,7 +378,18 @@ serverQueue,reintentos):
                     #time.sleep(2)
                     enviarBroadcast(1,papaAg,clientQueue)
                     miembroAg = 1
+            
             nuevoReintento = nuevoReintento + 1
+        if(salirWhile ==0):
+            paquete = [-1,-1,-1,-1,-1]
+            solicitudTCP(paquete,clientQueue)
+        else:
+            paquete = [1,1,1,1,1]
+            solicitudTCP(paquete,clientQueue)
+
+    else:
+        paquete = [-1,-1,-1,-1,-1]
+        solicitudTCP(paquete,clientQueue)
 
     vectorRespuestaP = [exito,papaAg,miembroAg]
     return vectorRespuestaP
@@ -453,12 +536,11 @@ def revisarNodosMuertos(numeroNodo,clientQueue,serverQueue,reintentos):
 def responderSolicitudesPapa(numeroNodo,clientQueue,serverQueue,
 reintentos,papaAg,miembroAg):
 
-    muertos = 0
-    global vivo
-    while(vivo == 1):
+    global salirNodo
+    global reinicioPapa
+    enivarConfirmacionArbol(clientQueue)
+    while(salirNodo== False and reinicioPapa == 0):
         #print("Respondiendo solicitudes")
-        enivarConfirmacionArbol(clientQueue)
-
         TWHResponderPapa(numeroNodo,clientQueue,serverQueue,
         reintentos,papaAg,miembroAg)
 
@@ -615,8 +697,8 @@ def serverTcp(serverQueue,clientQueue):
         elif (prueba != "90"):
             serverQueue.put(data)
             if(data == "-100,-100,-100,-100,-100"):
-                global vivo
-                vivo = 1
+                global salirNodo
+                salirNodo = True
 
 '''
     @brief Metodo que genera un socket para enviar datos al agente rosado
@@ -632,8 +714,8 @@ def serverTcp(serverQueue,clientQueue):
 '''
 def clientTcp(clientQueue):
 
-    global vivo
-    while vivo == 1:
+    global salirNodo
+    while salirNodo == False:
         data=None
         try:
             data = clientQueue.get(block = True,timeout=30)
@@ -657,18 +739,22 @@ def arGe(serverQueue,clientQueue):
     numeroNodo = int(sys.argv[1])
     miembroAg = 0
     m = str(numeroNodo) + "numero nodo Python"
+    global papaAg
     papaAg = -1
 
     reintentos = -1
     bandera = True
-    global vivo
-    while(bandera == True and vivo == 1):
+
+    while(bandera == True):
         vectorRespuesta = obtenerReintentos(serverQueue,clientQueue)
         exito = vectorRespuesta[0]
         reintentos = vectorRespuesta[1]
         if(exito ==1 ):
             bandera = False
-    while(vivo == 1):
+    global salirNodo
+    while( salirNodo == False):
+        global reinicioPapa
+        reinicioPapa = 0
         #numero de nodo se puede pasar por parametro
         papaAg = -1
         global hijosAg
@@ -686,10 +772,10 @@ def arGe(serverQueue,clientQueue):
                 miembroAg = vectorRespuestaP[1]
 
                 responderSolicitudesPapa(numeroNodo,clientQueue,
-                serverQueue,reintentos,papaAg,miembroAg)
+                serverQueue,reintentos)
         else:
             responderSolicitudesPapa(numeroNodo,clientQueue,
-            serverQueue,reintentos,papaAg,miembroAg)
+            serverQueue,reintentos)
 
 if __name__=='__main__':
 

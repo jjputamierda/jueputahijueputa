@@ -835,6 +835,7 @@ std::vector<int>* miembrosArbol){
 
 	int salir=0;
 	int aux;
+	int opcion;
 	std::string nuevoMiembro;
 	while(salir==0){
 		nuevoMiembro=despachadorMiembros->pop();
@@ -845,8 +846,41 @@ std::vector<int>* miembrosArbol){
 			getline(s_stream, substr, ',');
 			resultado.push_back(substr);
 		}
+		
 		aux=stoi(resultado[1]);
-		miembrosArbol->push_back(aux);
+		opcion = stoi(resultado[0]);
+		if(opcion == 46){
+			int bandera = 0;
+			size_t i = 0;
+			while(i< miembrosArbol->size()&& bandera == 0){
+				if((*miembrosArbol)[i] == aux){
+					miembrosArbol->erase (miembrosArbol->begin()+i);
+					bandera = 1;
+				}
+				i++;
+			}
+		}
+		else{
+			if(opcion == 47){
+				size_t i = 0;
+				while(i< miembrosArbol->size()){
+					
+					miembrosArbol->erase (miembrosArbol->begin()+i);
+					
+				i++;
+				}
+			}
+			else{
+				if(opcion == 43 ||opcion == 44){
+					miembrosArbol->push_back(aux);
+				}
+			}
+		}
+
+
+
+		
+		
 	}
 }
 

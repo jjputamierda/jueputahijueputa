@@ -30,7 +30,9 @@ Cola<std::string>* colaTablaForwarding){
    			resultado.push_back(substr);
 		}
 		if(strcmp(resultado[0].c_str(),"44")==0 ||
-		strcmp(resultado[0].c_str(),"43")==0){
+		strcmp(resultado[0].c_str(),"43")==0||
+		strcmp(resultado[0].c_str(),"46")==0 ||
+		strcmp(resultado[0].c_str(),"47")==0||){
 
   			aux=resultado[0]+","+resultado[3];
   			despachadorMiembros->push(aux);
@@ -303,9 +305,9 @@ std::vector<datosNodo>* tablaVecinos){
   	}
 	std::cout<<"Llegue a antes del while en inicializar nodo rosado"<<std::endl;
   	if(stoi(numeroNodo) != 1){
+		
 
-  		while (strcmp(confirmacion.c_str(),
-  		"-322,-23E234324,-3242343,-3,-2")!= 0){
+  		while (true){
 
     		confirmacion = "-13,-13,-13,-13,-13";
     		confirmacion = colaInicializacion->pop();
@@ -365,7 +367,63 @@ std::vector<datosNodo>* tablaVecinos){
 				std::cout<<"oooooooooooooooooooooooooo"<<std::endl;
 
   			}
- 		}
+	        std::cout<<std::endl;
+		    std::cout<<std::endl;
+		    std::cout<<std::endl;
+		    std::cout<<"Sali del if en inicializar nodo rosado"<<std::endl;
+		    std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			int bandera3 = 0;
+			confirmacion = "-13,-13,-13,-13,-13";
+			confirmacion = colaInicializacion->pop();
+			if(strcmp(confirmacion.c_str(),"1,1,1,1,1")==0){
+      			std::cout<<"BANDERA3"<<std::endl;
+				  bandera3 = 1;
+	           
+			}
+			if(bandera3 == 1){
+				int bandera4 = 0;
+				confirmacion = "-13,-13,-13,-13,-13";
+				confirmacion = colaInicializacion->pop();
+				if(strcmp(confirmacion.c_str(),"1,1,1,1,1")==0){
+      				std::cout<<"BANDERA4"<<std::endl;
+				 	 bandera4 = 1;
+	           
+				}
+				if(bandera4 == 1){
+					confirmacion = "-13,-13,-13,-13,-13";
+					//salirse solo si mi papa
+					int bandera2 = 0;
+					while(bandera2==0){
+						size_t indice = 0;
+						while(indice <ids.size() && bandera2 == 0){
+
+      						int indiceTabla = ids[indice].indice;
+      						if((*tablaVecinos)[indiceTabla].estado == 0){
+        						sleep(2);
+        						bandera2 = 0;
+        						std::string miembroMuerto="8,8,8,8,"+std::to_string(ids[indice].id);
+								envioAgenteRosa->push(miembroMuerto);
+								confirmacion = colaInicializacion->pop();
+								if (strcmp(confirmacion.c_str(),"9,9,9,9,9")==0){
+									bandera2 = 1;
+								}
+      						}
+      						indice++;
+    					}
+					}
+				}
+				
+
+				
+			}
+			//revise si hay alguien muerto
+			//si lo hay, que notifique al rosado
+			//revise constantemente
+ 		
+		 }
+		sleep(5);
 	}			
 				
 
@@ -468,6 +526,8 @@ Cola<std::string>* colaInicializacion,int puerto2){
       		resultado.push_back(substr);
     	}
      	if((strcmp(mensaje.c_str(),"1,1,1,1,1")==0) ||
+		 (strcmp(mensaje.c_str(),"9,9,9,9,9")==0) ||
+		 (strcmp(mensaje.c_str(),"10,10,10,10,10")==0) ||
      	((strcmp(resultado[0].c_str(),"-101")==0)&&
      	(strcmp(resultado[1].c_str(),"-101")==0)&&
      	(strcmp(resultado[2].c_str(),"-101")==0))){
@@ -479,3 +539,4 @@ Cola<std::string>* colaInicializacion,int puerto2){
      	}
 	}
 }
+
