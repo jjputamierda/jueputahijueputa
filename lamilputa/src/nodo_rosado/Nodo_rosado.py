@@ -47,8 +47,11 @@ def respuestaTCP(serverQueue):
             print("XXXXXXXXXXXXXXXXXXX")
             print(item)
             print("XXXXXXXXXXXXXXXXXXX")
-            if(item.isnumeric()):
+            try:
                 paquete.append(int(item))
+            except:
+                paquete.append(111)
+                pass
             #else:
                 #print("Entre a else dato no es numerico")
                 #paquete.append("-14")
