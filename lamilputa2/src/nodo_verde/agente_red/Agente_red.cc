@@ -1091,14 +1091,16 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 					enviarDenuevo=false;
 					//colaRosada->push(mensaje);
 				}
+				char buffer3 [200];
+				memmove( buffer3,&nuevoBroadcast.datos ,sizeof(nuevoBroadcast.datos));
 				uint16_t cantiadaVecinos;
 				std::string mensajeAlcanzabilidad;
-				memmove( &cantiadaVecinos,nuevoBroadcast.datos ,sizeof(cantiadaVecinos));
+				memmove( &cantiadaVecinos,buffer3 ,sizeof(cantiadaVecinos));
 				mensajeAlcanzabilidad = "90,"+std::to_string(nodoSender)+","+std::to_string(cantiadaVecinos)+",";
 				int offset=sizeof(cantiadaVecinos);
 				for(uint16_t indice4=0;indice4<cantiadaVecinos;indice4++){
 					uint16_t idVecino;
-					memmove( &idVecino,nuevoBroadcast.datos+offset ,sizeof(idVecino));
+					memmove( &idVecino,buffer3+offset ,sizeof(idVecino));
 					offset=offset+sizeof(idVecino);
 					std::cout<<std::endl;
 					std::cout<<std::endl;
@@ -1107,7 +1109,7 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 					std::cout<<std::endl;
 					std::cout<<std::endl;
 					uint8_t distancia;
-					memmove( &distancia,nuevoBroadcast.datos+offset ,sizeof(distancia));
+					memmove( &distancia,buffer3+offset ,sizeof(distancia));
 					offset=offset+sizeof(distancia);
 					if(distancia==0x01){
 						std::cout<<std::endl;
@@ -1175,4 +1177,5 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 	}
 	controladorTablaRosado.join();
 }
+
 
