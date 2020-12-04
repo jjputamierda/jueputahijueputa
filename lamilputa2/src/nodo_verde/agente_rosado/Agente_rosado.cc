@@ -401,7 +401,10 @@ std::vector<datosNodo>* tablaVecinos){
 
       						int indiceTabla = ids[indice].indice;
       						if((*tablaVecinos)[indiceTabla].estado == 0){
-        						sleep(2);
+        						std::cout<<"MUERTE"<<std::endl;
+								
+								std::cout<<(*tablaVecinos)[indiceTabla].estado<<std::endl;
+								sleep(2);
         						bandera2 = 0;
         						std::string miembroMuerto="8,8,8,8,"+std::to_string(ids[indice].id);
 								envioAgenteRosa->push(miembroMuerto);
