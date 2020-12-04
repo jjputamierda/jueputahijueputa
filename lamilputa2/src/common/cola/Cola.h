@@ -99,9 +99,16 @@ struct Mensaje{
 };
 
 struct Alcanzabilidad{
-    uint16_t longitud;
+    uint16_t cantidadVecinos;
     uint16_t idVecino;
     uint8_t distancia;
+
+};
+struct Alcanzabilidad2{
+    uint16_t cantidadVecinos;
+    uint16_t idVecino;
+    uint8_t distancia;
+
 };
 
 // RED -> Tipos

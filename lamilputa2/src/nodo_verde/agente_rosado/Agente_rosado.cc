@@ -42,8 +42,8 @@ Cola<std::string>* colaTablaForwarding){
 				//auxTabla=auxTabla.substr(2);
 				//colaTablaForwarding->push(auxTabla);
 			} else if(strcmp(resultado[0].c_str(),"45")==0){
-    			//aux=resultado[0];
-    			//colaAlcanzabilidad->push(aux);
+    			aux=resultado[0];
+    			colaAlcanzabilidad->push(aux);
   			}else{
 				int nuevoIntIdDestino(std::stoi(resultado[3]));
     			enviar.id_destino_final= static_cast<uint16_t>(nuevoIntIdDestino);
@@ -198,12 +198,28 @@ Cola<std::string>* envioAgenteRosa){
 }
 
 
+void enviarAlcanzabilidad2(Cola<std::string> *colaEnviarAlcanzabilidad,Cola<std::string>* envioAgenteRosa){
+
+std::string mensajeAlcanzabilidad;
+	while(1){
+		mensajeAlcanzabilidad=colaEnviarAlcanzabilidad->pop();
+		envioAgenteRosa->push(mensajeAlcanzabilidad);
+
+	}
+
+
+
+std::cout<<"Hola"<<std::endl;
+
+}
+
+
 void trabajoAgenteRosado(std::vector<datosNodo>* tablaVecinos,
 Cola<struct ArbolGenerador>* colaRosada,
 Cola<struct DatosArbolGenerador>* colaDespachadorRosado,char* puerto1,
 char* puerto2,Cola<std::string>* despachadorMiembros,
 Cola<std::string>* colaAlcanzabilidad,
-Cola<std::string>* colaTablaForwarding){
+Cola<std::string>* colaTablaForwarding,Cola<std::string> *colaEnviarAlcanzabilidad){
 
   	Cola<std::string> recibirAgenteRosa;
   	Cola<std::string> envioAgenteRosa;
@@ -258,6 +274,11 @@ Cola<std::string>* colaTablaForwarding){
         std::thread enlace2;
         enlace2=std::thread(recibirEnlace,colaRosada,&envioAgenteRosa);
 
+		//std::thread hiloAlcanzabilidad;
+		//std::thread hiloAlcanzabilidad(enviarAlcanzabilidad,colaEnviarAlcanzabilidad,&envioAgenteRosa);
+		std::thread hiloAlcanzabilidad2(enviarAlcanzabilidad2,colaEnviarAlcanzabilidad,&envioAgenteRosa);
+
+
         inicializarNodoRosado(numeroNodo,ids,&envioAgenteRosa,
         &colaInicializacion,tablaVecinos);
 
@@ -265,6 +286,7 @@ Cola<std::string>* colaTablaForwarding){
         hiloServer.join();
         enlace1.join();
         enlace2.join();
+		//hiloAlcanzabilidad.join();
   	}else{
     	throw std::runtime_error(ERR_CREAR_NR);
   	}

@@ -28,7 +28,7 @@ void capaRed(Cola<struct Mensaje>* colaAzul,
 	std::vector<int>* nodosIDs, Cola<std::string>* despachadorMiembros,
 	Cola<std::string>* colaAlcanzabilidad,
 	std::vector<datosNodo>* tablaVecinos,char* IP,
-	Cola<std::string>* colaTablaForwarding );
+	Cola<std::string>* colaTablaForwarding,Cola<std::string>* colaEnviarAlcanzabilidad );
 
 //despachador agente azul
 void despachadorAzul(Cola<struct DatosMensaje>*,
@@ -67,15 +67,14 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 		Cola<struct Broadcast>* colaBroadcast,
 		std::vector<int>* nodosIDs,
 		Cola<std::string>* despachadorMiembros,
-		Cola<std::string>* colaAlcanzabilidad);
+		Cola<std::string>* colaAlcanzabilidad,Cola<std::string>* colaEnviarAlcanzabilidad);
 
 
 void verificarEstructura(Cola<std::string>*,std::vector<int>*);
-/*
-void enviarAlcanzabilidad(Cola<std::string>* colaAlcanzabilidad,
-std::vector<datosNodo>* tablaVecinos,Cola<struct capaSuperior>*,
-Cola<struct capaAplicacion>*,char*);
 
+void enviarAlcanzabilidad(Cola<std::string>* colaAlcanzabilidad,
+std::vector<datosNodo>* tablaVecinos,char*,Cola<struct Broadcast>*,Cola<std::string>* colaEnviarAlcanzabilidad);
+/*
 void verificarTablaForwarding(Cola<std::string>*,
 std::vector<int>*);
 */

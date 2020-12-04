@@ -18,11 +18,11 @@ void capaRed(Cola<struct Mensaje>* colaAzul,
 	std::vector<int>* nodosIDs, Cola<std::string>* despachadorMiembros,
 	Cola<std::string>* colaAlcanzabilidad,
 	std::vector<datosNodo>* tablaVecinos,char* IP,
-	Cola<std::string>* colaTablaForwarding){
+	Cola<std::string>* colaTablaForwarding,Cola<std::string>* colaEnviarAlcanzabilidad){
 
 	Cola<struct DatosForwarding> colaForwarding;
 	Cola<struct Broadcast> colaBroadcast;
-
+	
 	
 	
 	std::thread hiloAzul(despachadorAzul,
@@ -42,24 +42,25 @@ void capaRed(Cola<struct Mensaje>* colaAzul,
 
 	std::thread hiloBroadcast(broadcast, colaAzul, colaRosada,
 		colasVerdes, &colaBroadcast, nodosIDs,despachadorMiembros,
-		colaAlcanzabilidad);
+		colaAlcanzabilidad,colaEnviarAlcanzabilidad);
 		
-    /*
+    
 	std::thread hiloAlcanzabilidad(enviarAlcanzabilidad,
-	colaAlcanzabilidad,tablaVecinos,colaDespachadorRosado,
-	colaRosada,IP);
+	colaAlcanzabilidad,tablaVecinos,
+	IP,&colaBroadcast,colaEnviarAlcanzabilidad);
 	
-	std::thread hiloTablaForwarding(verificarTablaForwarding,
-	colaTablaForwarding, nodosIDs);
-	*/
+	//std::thread hiloTablaForwarding(verificarTablaForwarding,
+	//colaTablaForwarding, nodosIDs);
+	
 	hiloAzul.join();
 	hiloRosado.join();
 	hiloVerde.join();
 	hiloForwarding.join();
 	hiloBroadcast.join();
+	hiloAlcanzabilidad.join();
 }
-
-/*void verificarTablaForwarding(Cola<std::string>* colaTablaForwarding,
+/*
+void verificarTablaForwarding(Cola<std::string>* colaTablaForwarding,
 std::vector<int>* nodosIDs){
 
 	std::string recibirTabla;
@@ -96,22 +97,21 @@ std::vector<int>* nodosIDs){
 			tablaForwarding.push_back(nuevoDato);
 		}
 	}
-}*/
-
-/*void enviarAlcanzabilidad(Cola<std::string>* colaAlcanzabilidad,
+}
+*/
+void enviarAlcanzabilidad(Cola<std::string>* colaAlcanzabilidad,
 std::vector<datosNodo>* tablaVecinos,
-Cola<struct capaSuperior>* colaDespachadorRosado,
-Cola<struct capaAplicacion>* colaRosada,char* IP){
+char* IP,Cola<struct Broadcast>* colaBroadcast,Cola<std::string>* colaEnviarAlcanzabilidad){
 
-	struct capaSuperior enviar;
-	struct capaAplicacion enviarRosado;
+	//struct capaSuperior enviar;
+	//struct capaAplicacion enviarRosado;
 	std::string aux;
 	std::string mensajeAlcanzabilidad;
 
 	size_t indice;
 	char host[256];
-	struct capaSuperior enrutamiento;
-	struct estructuraRed cabeceraRed;
+	//struct capaSuperior enrutamiento;
+	//struct estructuraRed cabeceraRed;
 
 	while(1){
 		mensajeAlcanzabilidad="";
@@ -133,22 +133,129 @@ Cola<struct capaAplicacion>* colaRosada,char* IP){
 			}
 		}
 		aux = mensajeAlcanzabilidad;
-		strcpy(enviarRosado.cabeceraAplicacion.buffer,aux.c_str());
-		enviarRosado.idFuente=(*tablaVecinos)[0].ID;
-		colaRosada->push(enviarRosado);
+		//trcpy(enviarRosado.cabeceraAplicacion.buffer,aux.c_str());
+		//enviarRosado.idFuente=(*tablaVecinos)[0].ID;
+		colaEnviarAlcanzabilidad->push(aux);
 
 		std::string estadoArbol=colaAlcanzabilidad->pop();
+		uint16_t prueba;
+		uint16_t prueba2;
+		uint8_t prueba3;
 		if(estadoArbol=="45"){
+			char buffer[200];
+			uint16_t aux1=static_cast<uint16_t>(tablaVecinos->size()-1);
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<"Esto es aux1"<<std::endl;
+			std::cout<<aux1<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			memmove( buffer,&aux1 ,sizeof(aux1));
 
+			memmove( &prueba,buffer ,sizeof(prueba));
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<"Esto es Prueba"<<std::endl;
+			std::cout<<prueba<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			int offset = sizeof(aux);
+			for(indice=1;indice<tablaVecinos->size();indice++){
+				uint16_t aux2=static_cast<uint16_t>((*tablaVecinos)[indice].ID);
+				std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<"Esto es aux2"<<std::endl;
+			std::cout<<aux2<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+				memmove( buffer+offset,&aux2 ,sizeof(aux2));
+				memmove( &prueba2,buffer+offset ,sizeof(prueba2));
+				std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<"Esto es Prueba2"<<std::endl;
+			std::cout<<prueba2<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+				offset=offset+sizeof(aux2);
+				uint8_t aux3;
+				if(((*tablaVecinos)[indice].IP).compare(IP)==0){
+				//mensajeAlcanzabilidad+=",1";
+				aux3=0x01;
+				std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<"Esto es aux3 0x01"<<std::endl;
+			if(aux3 == 0x01){
+				std::cout<<"0x01"<<std::endl;
+			}
+		
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+				memmove( buffer+offset,&aux3 ,sizeof(aux3));
+				memmove( &prueba3,buffer+offset ,sizeof(prueba3));
+				if(prueba3 == 0x01){
+				std::cout<<"0x01 recuperado"<<std::endl;
+			}
+				
+				offset=offset+sizeof(aux3);
+				std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			//std::cout<<"Esto es Prueba3"<<std::endl;
+			//std::cout<<prueba3<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+
+				}else{
+				//mensajeAlcanzabilidad+=",2";
+				aux3=0x02;
+				std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<"Esto es aux3 0x02"<<std::endl;
+			if(aux3 == 0x02){
+				std::cout<<"0x02"<<std::endl;
+			}
+			std::cout<<aux3<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+				memmove( buffer+offset,&aux3 ,sizeof(aux3));
+				memmove( &prueba3,buffer+offset ,sizeof(prueba3));
+				if(prueba3 == 0x02){
+				std::cout<<"0x02 recuperado"<<std::endl;
+			    }
+				offset=offset+sizeof(aux3);
+				std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			//std::cout<<"Esto es Prueba3"<<std::endl;
+			//std::cout<<prueba3<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+
+			}
+				
+			}
+			/*
 			enviar.idDestino=0;
 			enviar.destinoRed=0;
 	    	aux=mensajeAlcanzabilidad;
 	    	strcpy(enviar.cabeceraAplicacion.buffer,aux.c_str());
-
-			colaDespachadorRosado->push(enviar);
+			*/
+			struct Broadcast broadcast;
+			broadcast.tipo = 0x02;
+			//std::string aux=std::to_string(idPropio);
+			broadcast.id_origen_inicial = static_cast<uint16_t>((*tablaVecinos)[0].ID);
+			memmove( &broadcast.datos,buffer ,sizeof(broadcast.datos));
+			broadcast.longitud=sizeof(broadcast.datos);
+			colaBroadcast->push(broadcast);
 		}
 	}
-}*/
+}
 
 void toCharArray2(char * paquete_ent, CapaRed * paquete){
     int offset = 0;
@@ -894,7 +1001,7 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 		Cola<struct Broadcast>* colaBroadcast,
 		std::vector<int>* nodosIDs,
 		Cola<std::string>* despachadorMiembros,
-		Cola<std::string>* colaAlcanzabilidad){
+		Cola<std::string>* colaAlcanzabilidad,Cola<std::string>* colaEnviarAlcanzabilidad){
 
 		std::vector<int> miembrosArbol;
 		std::thread controladorTablaRosado(verificarEstructura,
@@ -978,12 +1085,71 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 				std::cout<<std::endl;
 				
 				colaAzul->push(nuevoMensaje);
-			} else {
-				//if(enviarDenuevo==true){
-					//colaAlcanzabilidad->push("45");
-					//enviarDenuevo=false;
+			} else if(nuevoBroadcast.tipo==0x02){
+				if(enviarDenuevo==true){
+					colaAlcanzabilidad->push("45");
+					enviarDenuevo=false;
 					//colaRosada->push(mensaje);
-				//}
+				}
+				uint16_t cantiadaVecinos;
+				std::string mensajeAlcanzabilidad;
+				memmove( &cantiadaVecinos,nuevoBroadcast.datos ,sizeof(cantiadaVecinos));
+				mensajeAlcanzabilidad = "90,"+std::to_string(nodoSender)+","+std::to_string(cantiadaVecinos)+",";
+				int offset=sizeof(cantiadaVecinos);
+				for(uint16_t indice4=0;indice4<cantiadaVecinos;indice4++){
+					uint16_t idVecino;
+					memmove( &idVecino,nuevoBroadcast.datos+offset ,sizeof(idVecino));
+					offset=offset+sizeof(idVecino);
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<"Esto es idVecino"<<std::endl;
+					std::cout<<idVecino<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					uint8_t distancia;
+					memmove( &distancia,nuevoBroadcast.datos+offset ,sizeof(distancia));
+					offset=offset+sizeof(distancia);
+					if(distancia==0x01){
+						std::cout<<std::endl;
+						std::cout<<"Entre a if tipo 0x01"<<std::endl;
+						std::cout<<std::endl;
+					std::cout<<std::endl;
+					char buffer[80];
+   					int buffer_len = sprintf(buffer, "%d", idVecino);
+					   std::string str(buffer, buffer + buffer_len );
+    					
+						mensajeAlcanzabilidad+=str+","+"1";
+					}else if(distancia==0x02){
+						std::cout<<std::endl;
+						std::cout<<"Entre a if tipo 0x02"<<std::endl;
+						std::cout<<std::endl;
+					std::cout<<std::endl;
+					char buffer[80];
+   					int buffer_len = sprintf(buffer, "%d", idVecino);
+					   std::string str(buffer, buffer + buffer_len );
+    					
+						mensajeAlcanzabilidad+=str+","+"2";
+
+					}
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<"Esto es distancia"<<std::endl;
+					std::cout<<distancia<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					
+					std::cout<<"Esto es mensaje alcanzabilidad"<<std::endl;
+					std::cout<<mensajeAlcanzabilidad<<std::endl;
+					std::cout<<std::endl;
+					std::cout<<std::endl;
+					
+
+				}
+				
+				//colaRosada->push(mensaje);
+				colaEnviarAlcanzabilidad->push(mensajeAlcanzabilidad);
 				
 			}
 			

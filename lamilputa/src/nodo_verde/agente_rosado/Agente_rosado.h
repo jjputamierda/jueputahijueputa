@@ -29,7 +29,8 @@ void clienteTCP(Cola<std::string>*,int);
 void serverTCP(Cola<std::string>*,Cola<std::string>*,int);
 void trabajoAgenteRosado(std::vector<datosNodo>*,
 Cola<struct ArbolGenerador>*,Cola<struct DatosArbolGenerador>*, char*,
-char*,Cola<std::string>*,Cola<std::string>*,Cola<std::string>*);
+char*,Cola<std::string>*,Cola<std::string>*,Cola<std::string>*,Cola<std::string>* colaEnviarAlcanzabilidad
+);
 
 void enviarEnlace(Cola<struct DatosArbolGenerador>*,Cola<std::string>*,
 Cola<std::string>*,Cola<std::string>*,Cola<std::string>*);
@@ -37,5 +38,8 @@ Cola<std::string>*,Cola<std::string>*,Cola<std::string>*);
 void recibirEnlace(Cola<struct ArbolGenerador>*,Cola<std::string>*);
 void inicializarNodoRosado(std::string, std::vector<indiceNodo>,
 Cola<std::string>*,Cola<std::string>*, std::vector<datosNodo>*);
+
+//void enviarAlcanzabilidad(Cola<std::string> *colaEnviarAlcanzabilidad,Cola<std::string>* envioAgenteRosa);
+void enviarAlcanzabilidad2(Cola<std::string> *colaEnviarAlcanzabilidad,Cola<std::string>* envioAgenteRosa);
 
 #endif //AGENTE_ROSADO_H
