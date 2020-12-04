@@ -13,26 +13,34 @@ conexiones = []
 class WebSocketServer(WebSocketServerProtocol):
 	
 	'''
-	brief Muestra que se conectó un cliente
-	details Se imprime en salida estandar cada vez que se conecta un
-	nuevo cliente
-	param[in] request: brinda información específica como la ip del 
-	cliente
-	author Jeisson Hidalgo
-	date 28-09-20
+	*  @brief Muestra que se conectó un cliente
+	*  details Se imprime en salida estandar cada vez que se conecta un
+	*  nuevo cliente
+	*  @param[in] request: Brinda información específica como la ip del 
+	*  cliente
+	*  @param[out] N/A
+ 	*  @remark N/A
+ 	*  @return N/A
+ 	*  @exception N/A
+	*  @author Jeisson Hidalgo
+	*  @date 28-09-20
 	'''
 	def onConnect(self, request):
 		print(f"Client connecting: {request.peer}")
 		conexiones.append(self)
 	
 	'''
-	brief Envía la información propia y la de los vecinos
-	details Se imprime en salida estandar un mensaje de confirmación
-	además de enviarle a la página web la información del ID propio y
-	los IDs de los vecinos. Aparte de esto llama otra subrutina que
-	genera mensajes de prueba
-	author Jeisson Hidalgo
-	date 28-09-20
+	*  @brief Envía la información propia y la de los vecinos
+	*  @details Se imprime en salida estandar un mensaje de 
+	*  confirmación además de enviarle a la página web la información
+	*  del ID propio y los IDs de los vecinos
+	*  @param[in] N/A
+	*  @param[out] N/A
+ 	*  @remark N/A
+ 	*  @return N/A
+ 	*  @exception N/A
+	*  @author Jeisson Hidalgo
+	*  @date 28-09-20
 	'''
 	def onOpen(self):
 		print("WebSocket connection open.")
@@ -45,13 +53,18 @@ class WebSocketServer(WebSocketServerProtocol):
 		print("Envié # vecinos")
 
 	'''
-	brief Imprime en salida estandar los mensajes que llegan
-	details Esta subrutina impreme información de los mensajes que
-	llegan
-	param[in] payload: Es el cuerpo del mensaje
-	isBinary: Nos dice si el mensaje es binario o no
-	author Jeisson Hidalgo
-	date 28-09-20
+	*  @brief Imprime en salida estandar los mensajes que llegan
+	*  @details Esta subrutina imprime información de los mensajes que
+	*  llegan desde el web socket con destino al agente azul, para
+	*  luego ser enviados a su respectivo nodo de destino
+	*  @param[in] [1] payload: Es el cuerpo del mensaje
+	*  [2] isBinary: Nos dice si el mensaje es binario o no
+	*  @param[out] N/A
+ 	*  @remark N/A
+ 	*  @return N/A
+ 	*  @exception N/A
+	*  @author Jeisson Hidalgo
+	*  @date 28-09-20
 	'''
 	def onMessage(self, payload, isBinary):
 		if isBinary:
@@ -61,11 +74,14 @@ class WebSocketServer(WebSocketServerProtocol):
 		salidas.put(payload)
 
 	'''
-	brief Imprime en salida estandar cuando se cierra una conexión
-	details Esta subrutina imprime un mensaje cuando un cliente cierra 
-	el navegador.
-	author Jeisson Hidalgo
-	date 28-09-20
+	*  @brief Imprime en salida estandar cuando se cierra una conexión
+	*  details Esta subrutina imprime un mensaje cuando un cliente 
+	*  cierra el navegador.
+ 	*  @remark N/A
+ 	*  @return N/A
+ 	*  @exception N/A
+	*  @author Jeisson Hidalgo
+	*  @date 28-9-20
 	'''
 	def onClose(self, wasClean, code, reason):
 		print(f"WebSocket connection closed: {reason}")
@@ -73,11 +89,17 @@ class WebSocketServer(WebSocketServerProtocol):
 		salidas.put(CODIGO)
 
 	'''
-	brief Envía mensajes a la página web
-	details Esta subrutina envía mensajes a la página web por mwdio del
-	web socket, para que el usuario pueda visualizarlo
-	author Johel Phillips
-	date 05-10-20
+	*  @brief Envía mensajes a la página web
+	*  @details Esta subrutina envía mensajes a la página web por medio
+	*  del web socket, para que el usuario pueda visualizarlo
+	*  @param[in] [1] mensaje: Es el mensaje que se envía a la página
+	*  web, para que el usuario pueda visualizarlo
+	*  @param[out] N/A
+ 	*  @remark N/A
+ 	*  @return N/A
+ 	*  @exception N/A
+	*  author Jeisson Hidalgo
+	*  date 15-11-20
 	'''
 	def enviarMensaje(self, mensaje):
 		mensaje = mensaje.decode('utf8')
@@ -85,20 +107,20 @@ class WebSocketServer(WebSocketServerProtocol):
 
 
 '''
- *	@brief Subrutina para enviar mensajes
+ *	@brief Subrutina para enviar mensajes al agente azul
  *	@details Esta subrutina utiliza uno de los pipes para enviarle
  *  los mensajes al agente azul, el cual se encarga de pasar este
- *  mensaje al nodo verde
- *	@param[in] [1] evento: Este evento es quien se encarga de parar
- *  la subrutina (evento.wait()) para evitar el busy waiting, cuando se
- *  quiere enviar un mensaje el hilo principal hace un evento.set() 
- *	[2] salidas: Es una lista de objetos Mensaje, para que los mensajes
- *  no se pierdan en el caso de que se requiera enviar muchos seguidos
- *	[3] mutex: Este mutex evita que hayan conflictos en la lista de 
- *  mensajes
- *	[4] pipe: Ruta para el pipe Servidor -> Agente
+ *  mensaje al nodo verde, estos mensajes llegan por el web socket
+ *  por parte del usuario
+ *  @param[in] N/A
+ *  @param[out] N/A
+ *  @pre Este método es ejecutado por un hilo, debe permanecer
+ *  corriendo durante toda la ejecucuión
+ *  @remark Debe implementar sleep para que el pipe no falle
+ *  @return N/A
+ *  @exception N/A
  *	@author Johel Phillips Ugalde B75821
- *	@date 29-09-20
+ *	@date 01-12-20
  '''
 def enviar():
 
@@ -116,17 +138,21 @@ def enviar():
 	os.close(fd)
 
 '''
- *	@brief Subrutina para recibir mensajes
+ *	@brief Subrutina para recibir mensajes del agente azul y 
+ *  reenviarlos por el web socket a la página web
  *	@details Esta subrutina utiliza uno de los pipes para recibir
  *  los mensajes provenientes de otro usuario conectado a un nodo
- *  vecino
- *	@param[in] [1] entradas: Es una lista de objetos Mensaje, para que
- *  los mensajes que lleguen no se peirdan hasta que el usuario los lea
- *	[3] mutex: Este mutex evita que hayan conflictos en la lista de 
- *  mensajes
- *	[4] pipe: Ruta para el pipe Agente -> Servidor
+ *  vecino y reenviarlos a la página web, para que el usuario conectado
+ *  a este nodo pueda visualizar sus mensajes
+ *  @param[in] N/A
+ *  @param[out] N/A
+ *  @pre Este método es ejecutado por un hilo, debe permanecer
+ *  corriendo durante toda la ejecucuión
+ *  @remark Debe implementar sleep para que el pipe no falle
+ *  @return N/A
+ *  @exception N/A
  *	@author Johel Phillips Ugalde B75821
- *	@date 29-09-20
+ *	@date 01-12-20
  '''
 def recibir():
 	
@@ -150,10 +176,10 @@ def recibir():
  *	@details Esta subrutina divide las datos que entran como tercer
  *	argumento del programa, para tener acceso a los ids de los nodos
  *	vecinos y el id propio
- *	@param[in] [1] Lista: Esta lista almacenará los datos de los ids
- *	[2] String: Hilera que contiene los ids de los nodos
+ *	@param[in] [1] ids: Esta lista almacenará los datos de los ids
+ *	[2] nodos: Hilera que contiene los ids de los nodos
  *	@author Johel Phillips Ugalde B75821
- *	@date 29-09-20
+ *	@date 20-11-20
  '''
 def almacenarIDs(ids, nodos):
 	len = nodos.count(',')
@@ -161,6 +187,7 @@ def almacenarIDs(ids, nodos):
 		pos = nodos.find(',')
 		ids.append(nodos[:pos])
 		nodos = nodos[pos+1:]
+
 
 if __name__ == '__main__':
 

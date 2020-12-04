@@ -53,7 +53,7 @@ Cola<struct DatosMensaje>* colaDespachadorAzul){
 	if(!pid){
 		if(execlp("python3","python3", "src/nodo_azul/./Web_socket.py",
 				fifoAgenteServidor, fifoServidorAgente, ids.c_str(),
-				"localhost", puertoWebSocket, (char*)0)== -1)
+				"localhost", puertoWebSocket, (char*)0) == -1)
 			mostrarError("No se pudo ejecutar Servidor.py");
 	}
 
@@ -92,14 +92,6 @@ void enviar(Cola<struct Mensaje>* colaAzul, char* fifoAgenteServidor){
 
 	while(!salir){
 		mensaje = colaAzul->pop();
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-	    std::cout<<"Esto es mensaje que llego a azul"<<std::endl;
-		std::cout<<mensaje.buffer<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
 		mtx.lock();
 		if(conexion == false){
 			salir = true;
@@ -156,27 +148,12 @@ char* fifoServidorAgente, Cola<struct Mensaje>* colaAzul){
 		msg = msg.substr(posicion+2);
 		struct DatosMensaje mensaje;
 		strcpy(mensaje.buffer, msg.c_str());
-		//mensaje.mensaje.assign(msg);
 
 		if(destino == -1 || destino == 0){
-
 			mensaje.tipo = 0x02;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<"Entre a if mensaje tipo en azul"<<std::endl;
-			std::cout<<mensaje.tipo<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
 		} else {
 			mensaje.tipo = 0x01;
 		}
-
-			std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<"Aui es el mansaje que vino de la pagina"<<std::endl;
-			std::cout<<mensaje.buffer<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
 
 		mensaje.idDestino = destino;
 		colaDespachadorAzul->push(mensaje);
@@ -186,10 +163,7 @@ char* fifoServidorAgente, Cola<struct Mensaje>* colaAzul){
 			conexion = false;
 			mtx.unlock();
 			struct Mensaje mensajeSalida;
-			//mensajeSalida.idFuente = 65534;
-			//mensajeSalida.mensaje.assign(msg);
 			strcpy(mensajeSalida.buffer, msg.c_str());
-
 			colaAzul->push(mensajeSalida);
 			salir = true;
 		}

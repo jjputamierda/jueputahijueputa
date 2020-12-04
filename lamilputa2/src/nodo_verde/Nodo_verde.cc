@@ -100,40 +100,12 @@ int main(int argc,char *argv[]){
         p = strtok(NULL,",");
         tablaVecinos[i].puerto = atoi(p);
     }
-for(size_t i4=0;i4<tablaVecinos.size();i4++){
-    std::cout<<"Esto es tabla vecinos"<<std::endl;
-    std::cout<<tablaVecinos[i4].IP<<std::endl;
-}
+
     int posicion,datos;
-    for(unsigned long int indice2=0;indice2<datosNodos.size();
-    indice2++){
-       
-        posicion=datosNodos[indice2].find(",");
-
-        datos= std::stoi(datosNodos[indice2].substr(0,posicion));
-                std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<"Esto es antes de datos en nodo verde"<<std::endl;
-                std::cout<<datos<<std::endl;
-                std::cout<<posicion<<std::endl;
-                 std::cout<<datosNodos[indice2]<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-
+    for(unsigned long int i=0; i<datosNodos.size(); i++){
+        posicion = datosNodos[i].find(",");
+        datos = std::stoi(datosNodos[i].substr(0,posicion));
         nodosIDS.push_back(datos);
-    }
-    for(size_t i3=0;i3<nodosIDS.size();i3++){
-              std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<"Esto es nodos ids en nod verde"<<std::endl;
-                std::cout<<nodosIDS[i3]<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-
     }
 
     std::vector<Cola<struct CapaEnlace>> colasDeMensajes;
@@ -153,24 +125,25 @@ for(size_t i4=0;i4<tablaVecinos.size();i4++){
     Cola<std::string>colaEnviarAlcanzabilidad;
 
     std::thread agenteAzul(hiloAzul, &nodosIDS, &colaAzul,
-        argv[5], argv[6], argv[7], &colaDespachadorAzul);
+    argv[5], argv[6], argv[7], &colaDespachadorAzul);
 
     std::thread agenteVerde(hiloVerde, &tablaVecinos,
     &colasDeMensajes, &colaDespachadorVerde);
 
     std::thread agenteRed(capaRed, &colaAzul, &colaRosada,
-        &colasDeMensajes, &colaDespachadorAzul,
-        &colaDespachadorRosado, &colaDespachadorVerde,
-        &nodosIDS,&despachadorMiembros,&colaAlcanzabilidad,
-        &tablaVecinos,argv[10],&colaTablaForwarding,&colaEnviarAlcanzabilidad);
+    &colasDeMensajes, &colaDespachadorAzul, &colaDespachadorRosado,
+    &colaDespachadorVerde, &nodosIDS, &despachadorMiembros,
+    &colaAlcanzabilidad, &tablaVecinos, argv[10], &colaTablaForwarding,
+    &colaEnviarAlcanzabilidad);
 
     std::thread agenteRosado(trabajoAgenteRosado, &tablaVecinos,
     &colaRosada, &colaDespachadorRosado, argv[8], argv[9],
-    &despachadorMiembros,&colaAlcanzabilidad,&colaTablaForwarding,&colaEnviarAlcanzabilidad);
+    &despachadorMiembros,&colaAlcanzabilidad,&colaTablaForwarding,
+    &colaEnviarAlcanzabilidad);
     
 
     agenteAzul.join();
-    //printf("Agente azul finalizado\n");
+    printf("Agente azul finalizado\n");
     agenteVerde.join();
     printf("Agente verde finalizado\n");
     agenteRed.join();

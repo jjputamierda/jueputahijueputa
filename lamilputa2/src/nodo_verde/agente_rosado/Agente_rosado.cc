@@ -1,9 +1,19 @@
 #include "Agente_rosado.h"
 
-//uint16_t nodoSender;
-//uint16_t nodoSenderTWH;
-
 int vivo = 1;
+/**
+    @brief Metodo que recibe datos del rosado y los envia a la capa de red
+    
+    @details Este metodo recibe datos del nodo rosado y se encarga de enviarlos a l capa de red
+    @param[in] 
+    @param[out] Recibe colas de datos para manejar informacion
+    @pre Que las colas esten correctamente inicializadas
+    @remark Se modifica las colas de mensajes
+    @return N/A
+    @exception N/A
+    @author Diego Barquero Quesada B80961 Juan Jose Herrera B83878
+    @date 4-12-2020
+*/
 void enviarEnlace(Cola<struct DatosArbolGenerador >* colaDespachadorRosado,
 Cola<std::string>* recibirAgenteRosa,
 Cola<std::string>* despachadorMiembros,
@@ -16,11 +26,7 @@ Cola<std::string>* colaTablaForwarding){
     	std::vector<std::string> resultado;
     	recibir = recibirAgenteRosa->pop();
 
-		std::cout<<"Esto es recibir en enviar enlace en agente rosado"<<std::endl;
-		std::cout<<recibir<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
+		
 
 		std::string auxTabla=recibir;
   		std::stringstream s_stream(recibir);
@@ -28,7 +34,7 @@ Cola<std::string>* colaTablaForwarding){
    			std::string substr;
    			getline(s_stream, substr, ',');
    			resultado.push_back(substr);
-		}
+		}//Mensajes para Broadcast
 		if(strcmp(resultado[0].c_str(),"44")==0 ||
 		strcmp(resultado[0].c_str(),"43")==0||
 		strcmp(resultado[0].c_str(),"46")==0 ||
@@ -37,10 +43,9 @@ Cola<std::string>* colaTablaForwarding){
   			aux=resultado[0]+","+resultado[3];
   			despachadorMiembros->push(aux);
 
-		}else{
+		}else{//Alcanzabilidad
   			if(strcmp(resultado[0].c_str(),"70")==0){
-				std::cout<<"PUSH PARA TABLA FORWARDING"<<std::endl;
-				std::cout<<auxTabla<<std::endl;
+				
 				auxTabla=auxTabla.substr(3);
 				colaTablaForwarding->push(auxTabla);
 				
@@ -50,12 +55,8 @@ Cola<std::string>* colaTablaForwarding){
   			}else{
 				int nuevoIntIdDestino(std::stoi(resultado[3]));
     			enviar.id_destino_final= static_cast<uint16_t>(nuevoIntIdDestino);
-				std::cout<<"Esto es enviar id destino fianl en enviar enlace en agente rosado"<<std::endl;
-				std::cout<<enviar.id_destino_final<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-
+				
+				//Tipos de AG
 				if(resultado[0][0] == '2'){
 					enviar.tipo = 0x02;
 					
@@ -75,56 +76,43 @@ Cola<std::string>* colaTablaForwarding){
 				else if(resultado[0][0] == '7'){
 					enviar.tipo = 0x07;
 				}
-				std::cout<<"Esto es tipo en enviar enlace en agente rosado"<<std::endl;
-				std::cout<<enviar.tipo<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
+				
 
-    			//std::string str = resultado[0];
-				//enviar.tipo=str[0];
+    			
 				int nuevoSN(std::stoi(resultado[1]));
-				enviar.SN = static_cast<uint16_t>(nuevoSN);
-				std::cout<<"Esto es SN en enviar enlace en agente rosado"<<std::endl;
-				std::cout<<enviar.SN<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
+				
 				int nuevoRN(std::stoi(resultado[2]));
 				enviar.RN = static_cast<uint16_t>(nuevoRN);
-				std::cout<<"Esto es RN en enviar enlace en agente rosado"<<std::endl;
-				std::cout<<enviar.RN<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
+				
     			colaDespachadorRosado->push(enviar);
   			}
   		}
   	}
 }
 
+/**
+    @brief Metodo que recibe datos del rosado y los envia al nodo rosado
+    
+    @details Este metodo recibe datos de la capa de red y los pasa para que sean enviados a nodo rosado
+    @param[in] 
+    @param[out] Recibe colas de datos para manejar informacion
+    @pre Que las colas esten correctamente inicializadas
+    @remark Se modifica las colas de mensajes
+    @return N/A
+    @exception N/A
+    @author Diego Barquero Quesada B80961 Juan Jose Herrera B83878
+    @date 4-12-2020
+*/
 void recibirEnlace(Cola<struct ArbolGenerador>* colaRosada,
 Cola<std::string>* envioAgenteRosa){
 
   	int bandera = 1;
 
   	while(bandera == 1){
-		//Seguir trabajnod en esta parte
+		
     	struct ArbolGenerador recibir;
     	recibir = colaRosada->pop();
-		std::cout<<"Esto es recibir en recibir enlace en agente rosado"<<std::endl;
-		std::cout<<recibir.SN<<std::endl;
-		std::cout<<recibir.RN<<std::endl;
-		std::cout<<recibir.tipo<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-
-		//int num = (int)recibir.tipo - (int)'0';
-		std::cout<<"Esto es antes del primer to string"<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
+		
 
     	std::string SN=std::to_string(recibir.SN);
 		std::string RN=std::to_string(recibir.RN);
@@ -157,11 +145,7 @@ Cola<std::string>* envioAgenteRosa){
 		
     	std::string enviar= tipo +","+ SN+","+ RN;
 
-		std::cout<<"Esto es enviar en recibir enlace en agente rosado1111"<<std::endl;
-			std::cout<<enviar<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
+		
 
 		
 
@@ -172,35 +156,29 @@ Cola<std::string>* envioAgenteRosa){
       		envioAgenteRosa->push(enviar);
     	} else {
 	  		if(strcmp((enviar.substr(0,2)).c_str(),"90")!=0){
-			std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<"Esto es enviar en recibir enlace en agente rosado antes del to string"<<std::endl;
-			std::cout<<enviar<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
+			
 		  		enviar=enviar+",-111,"+std::to_string(nodoSenderTWH);
-			std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<"Esto es enviar en recibir enlace en agente rosado despues del to string"<<std::endl;
-			std::cout<<enviar<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
+			
 	  		}
-			std::cout<<"Esto es enviar en recibir enlace en agente rosado2222"<<std::endl;
-			std::cout<<enviar<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
+			
       		envioAgenteRosa->push(enviar);
     	}
   	}
 }
 
-
+/**
+    @brief Metodo que envia la alcanzabilidad al nodo rosado
+    
+    @details Este metodo recibe la alcanzabilidad para enviarlo alnodo rosado para ejecutar dikjstra
+    @param[in] 
+    @param[out] Recibe colas de datos para manejar informacion
+    @pre Que las colas esten correctamente inicializadas
+    @remark Se modifica las colas de mensajes
+    @return N/A
+    @exception N/A
+    @author Diego Barquero Quesada B80961 Juan Jose Herrera B83878
+    @date 4-12-2020
+*/
 void enviarAlcanzabilidad2(Cola<std::string> *colaEnviarAlcanzabilidad,Cola<std::string>* envioAgenteRosa){
 
 std::string mensajeAlcanzabilidad;
@@ -212,11 +190,22 @@ std::string mensajeAlcanzabilidad;
 
 
 
-std::cout<<"Hola"<<std::endl;
+
 
 }
 
-
+/**
+    @brief Metodo que genera al nodo rosado e hilos para diferentes funciones
+    @details Este metodo se encarga de generar al nodo rosado e hilos para manejar diferentes fuciones
+    @param[in] 
+    @param[out] Recibe colas de datos para manejar informacion
+    @pre Que las colas esten correctamente inicializadas
+    @remark Se modifica las colas de mensajes
+    @return N/A
+    @exception N/A
+    @author Diego Barquero Quesada B80961 Juan Jose Herrera B83878
+    @date 4-12-2020
+*/
 void trabajoAgenteRosado(std::vector<datosNodo>* tablaVecinos,
 Cola<struct ArbolGenerador>* colaRosada,
 Cola<struct DatosArbolGenerador>* colaDespachadorRosado,char* puerto1,
@@ -277,8 +266,7 @@ Cola<std::string>* colaTablaForwarding,Cola<std::string> *colaEnviarAlcanzabilid
         std::thread enlace2;
         enlace2=std::thread(recibirEnlace,colaRosada,&envioAgenteRosa);
 
-		//std::thread hiloAlcanzabilidad;
-		//std::thread hiloAlcanzabilidad(enviarAlcanzabilidad,colaEnviarAlcanzabilidad,&envioAgenteRosa);
+		
 		std::thread hiloAlcanzabilidad2(enviarAlcanzabilidad2,colaEnviarAlcanzabilidad,&envioAgenteRosa);
 
 
@@ -289,13 +277,25 @@ Cola<std::string>* colaTablaForwarding,Cola<std::string> *colaEnviarAlcanzabilid
         hiloServer.join();
         enlace1.join();
         enlace2.join();
-		//hiloAlcanzabilidad.join();
+		hiloAlcanzabilidad2.join();
   	}else{
     	throw std::runtime_error(ERR_CREAR_NR);
   	}
 	waitpid(pid,NULL,0);//Se espera por del nodo naranja
 }
 
+/**
+    @brief Metodo que genera informacion para inicializar el nodo rosado
+    @details Este metodo se encarga de generar informacion para que se pueda inicializar el nodo rosado
+    @param[in] 
+    @param[out] Recibe colas de datos para manejar informacion
+    @pre Que las colas esten correctamente inicializadas
+    @remark Se modifica las colas de mensajes
+    @return N/A
+    @exception N/A
+    @author Diego Barquero Quesada B80961 Juan Jose Herrera B83878
+    @date 4-12-2020
+*/
 void inicializarNodoRosado(std::string numeroNodo,
 std::vector<indiceNodo> ids,
 Cola<std::string>* envioAgenteRosa,
@@ -305,30 +305,23 @@ std::vector<datosNodo>* tablaVecinos){
   	std::string confirmacion= "-13,-13,-13,-13.-13";
 
   	while(strcmp(confirmacion.c_str(),"1,1,1,1,1")!=0){
-		
+		//Se manda cantidad de reintentos al nodo rosado
 		confirmacion = colaInicializacion->pop();
     	std::string reintentos;
     	reintentos = "0,0,0,0,9";
     	envioAgenteRosa->push(reintentos);
-		std::cout<<"Llegue a despues de push"<<std::endl;
-		std::cout<<reintentos<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
+		
     	confirmacion = colaInicializacion->pop();
 
-		std::cout<<"Llegue a despues de pop en inicializar nodo rosado"<<std::endl;
-		std::cout<<confirmacion<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
+		
 
     	if(strcmp(confirmacion.c_str(),"1,1,1,1,1")!=0){
-      		std::cout<<"ERROR"<<std::endl;
+      		//2WH con el nodo rosado
+			std::cout<<"ERROR"<<std::endl;
     	}
 
   	}
-	std::cout<<"Llegue a antes del while en inicializar nodo rosado"<<std::endl;
+	
   	if(stoi(numeroNodo) != 1){
 		
 
@@ -348,10 +341,7 @@ std::vector<datosNodo>* tablaVecinos){
 				
 
 				while(indice2 <ids.size() && bandera == 1){
-					std::cout<<"ESTO ES PRUEBA TABLA AGENTE ROSADO"<<std::endl;
-					std::cout<<"ID NODO"<<std::endl;
-					std::cout<<ids[indice2].id<<std::endl;
-					std::cout<<"ESTADO"<<std::endl;
+					//Se muestra la tabla de los vecinos
 					int indiceTabla = ids[indice2].indice;
 					std::cout<<(*tablaVecinos)[indiceTabla].estado<<std::endl;
 					
@@ -370,7 +360,8 @@ std::vector<datosNodo>* tablaVecinos){
 
       				int indiceTabla = ids[indice].indice;
       				if((*tablaVecinos)[indiceTabla].estado == 1){
-        				sleep(5);
+        				//Se envía un potencial papá
+						sleep(5);
         				bandera = 0;
         				papa="0,1,1,1,"+std::to_string(ids[indice].id);
       				}
@@ -378,33 +369,25 @@ std::vector<datosNodo>* tablaVecinos){
     			}
 				
 				
-				//papaFalso
-				//papa="0,1,1,1,1";
+				
     			envioAgenteRosa->push(papa);
     			confirmacion = colaInicializacion->pop();
 
     			if(strcmp(confirmacion.c_str(),"1,1,1,1,1")!=0){
       				std::cout<<"ERROR1"<<std::endl;
     			}
-				std::cout<<"Esto es confirmacion"<<std::endl;
-				std::cout<<"oooooooooooooooooooooooooo"<<std::endl;
-				std::cout<<confirmacion<<std::endl;
-				std::cout<<"oooooooooooooooooooooooooo"<<std::endl;
+				
 
   			}
-	        std::cout<<std::endl;
-		    std::cout<<std::endl;
-		    std::cout<<std::endl;
-		    std::cout<<"Sali del if en inicializar nodo rosado"<<std::endl;
-		    std::cout<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
+	        
 			int bandera3 = 0;
 			confirmacion = "-13,-13,-13,-13,-13";
 			confirmacion = colaInicializacion->pop();
 			if(strcmp(confirmacion.c_str(),"1,1,1,1,1")==0){
       			std::cout<<"BANDERA3"<<std::endl;
 				  bandera3 = 1;
+				  //registro del nodo rosado para ver si algo salió mal 
+				  //en el 3WH
 	           
 			}
 			if(bandera3 == 1){
@@ -414,29 +397,35 @@ std::vector<datosNodo>* tablaVecinos){
 				if(strcmp(confirmacion.c_str(),"1,1,1,1,1")==0){
       				std::cout<<"BANDERA4"<<std::endl;
 				 	 bandera4 = 1;
+					  //registro del nodo rosado para ver si algo salió mal 
+				  //en el 3WH
 	           
 				}
 				if(bandera4 == 1){
 					confirmacion = "-13,-13,-13,-13,-13";
-					//salirse solo si mi papa
+					
 					int bandera2 = 0;
 					while(bandera2==0){
 						size_t indice = 0;
 						while(indice <ids.size() && bandera2 == 0){
 
       						int indiceTabla = ids[indice].indice;
-      						//if((*tablaVecinos)[indiceTabla].estado == 0){
+      						
 							  
 							if((*tablaVecinos)[indiceTabla].estado == 0){
-        						std::cout<<"MUERTE"<<std::endl;
+        						std::cout<<"MUERTE DE UN VECINO"<<std::endl;
 								
 								std::cout<<(*tablaVecinos)[indiceTabla].estado<<std::endl;
 								sleep(2);
         						bandera2 = 0;
         						std::string miembroMuerto="8,8,8,8,"+std::to_string(ids[indice].id);
+								//Se le manda al nodo rosaso un vecino muestro para que lo verifique
 								envioAgenteRosa->push(miembroMuerto);
 								confirmacion = colaInicializacion->pop();
+
 								if (strcmp(confirmacion.c_str(),"9,9,9,9,9")==0){
+									//Si el muerto fue un papá, vuelva a reiniciar la inicialización
+									//Con el nodo rosado
 									bandera2 = 1;
 								}
       						}
@@ -448,24 +437,28 @@ std::vector<datosNodo>* tablaVecinos){
 
 				
 			}
-			//revise si hay alguien muerto
-			//si lo hay, que notifique al rosado
-			//revise constantemente
+			
  		
 		 }
 		sleep(5);
 	}			
 				
 
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<"Sali del if en inicializar nodo rosado"<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
+				
 }
 
+/**
+    @brief Metodo que envia inormacion l nodo rosado por medio de un socket
+    @details Este metodo se encarga de enviar informacion al nodo rosado por medio de un socket
+    @param[in] Recibe el puerto
+    @param[out] Recibe colas de datos para manejar informacion
+    @pre Que las colas esten correctamente inicializadas
+    @remark Se modifica las colas de mensajes
+    @return N/A
+    @exception N/A
+    @author Diego Barquero Quesada B80961 Juan Jose Herrera B83878
+    @date 4-12-2020
+*/
 void clienteTCP(Cola<std::string>* envioAgenteRosa,int puerto1){
 
   	int serverSock=socket(AF_INET, SOCK_STREAM, 0);
@@ -490,16 +483,7 @@ void clienteTCP(Cola<std::string>* envioAgenteRosa,int puerto1){
   	int bandera = 1;
   	while(bandera == 1){
     	std::string msj = envioAgenteRosa->pop();
-		std::cout<<"Llegue a despues de pop en cliente"<<std::endl;
-		std::cout<<msj<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
 		
-		std::cout<<msj.c_str()<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
 
       	char const * idLocalChar = msj.c_str();
       	send(newserverSock,idLocalChar,strlen(idLocalChar),0);
@@ -510,6 +494,18 @@ void clienteTCP(Cola<std::string>* envioAgenteRosa,int puerto1){
   	}
 }
 
+/**
+    @brief Metodo que recibe informacion que es enviada desde el rosado ppr medio de un socket
+    @details Este metodo se encarga de recibir datos en un socket que fueron enviados desde el agente rosado
+    @param[in] Recibe el puerto
+    @param[out] Recibe colas de datos para manejar informacion
+    @pre Que las colas esten correctamente inicializadas
+    @remark Se modifica las colas de mensajes
+    @return N/A
+    @exception N/A
+    @author Diego Barquero Quesada B80961 Juan Jose Herrera B83878
+    @date 4-12-2020
+*/
 void serverTCP(Cola<std::string>* recibirAgenteRosa,
 Cola<std::string>* colaInicializacion,int puerto2){
 
@@ -540,11 +536,7 @@ Cola<std::string>* colaInicializacion,int puerto2){
     	char buffer [1024];
     	bzero(&buffer, 1024);
     	read(newserverSock,buffer, 1024); //n =
-		std::cout<<"Llegue a despues de read en server TCP agente rosado"<<std::endl;
-		std::cout<<buffer<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
-		std::cout<<std::endl;
+		
 		
     	std::string ret(buffer, 1024);
     	mensaje = ret;
@@ -555,6 +547,7 @@ Cola<std::string>* colaInicializacion,int puerto2){
       		getline(s_stream, substr, ',');
       		resultado.push_back(substr);
     	}
+		//Mensajes para cola de inicialización
      	if((strcmp(mensaje.c_str(),"1,1,1,1,1")==0) ||
 		 (strcmp(mensaje.c_str(),"9,9,9,9,9")==0) ||
 		 (strcmp(mensaje.c_str(),"10,10,10,10,10")==0) ||
@@ -565,6 +558,7 @@ Cola<std::string>* colaInicializacion,int puerto2){
         	colaInicializacion->push(mensaje);
 
      	}else{
+			 //Mensajes para otros nodos
        		recibirAgenteRosa->push(mensaje);
      	}
 	}

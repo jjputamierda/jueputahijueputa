@@ -1,7 +1,6 @@
 #include "Agente_rosado.h"
 
-//uint16_t nodoSender;
-//uint16_t nodoSenderTWH;
+
 
 int vivo = 1;
 void enviarEnlace(Cola<struct DatosArbolGenerador >* colaDespachadorRosado,

@@ -77,25 +77,11 @@ como es el caso de las estructuras "datosNodo" y de las capas.
 
 template class Cola<int>;
 template class Cola<std::string>;
-template class Cola<const char*>;
 template class Cola<struct datosNodo>;
 
-template class Cola<struct capaSuperior>;
-template class Cola<struct capaRed>;
-template class Cola<struct capaEnlace>;
-template class Cola<struct capaAplicacion>;
-template class Cola<struct estructuraAplicacion>;
-template class Cola<struct estructuraRed>;
-template class Cola<struct estructuraEnlace>;
-
-template class Cola<struct CapaAplicacion>;
 template class Cola<struct Mensaje>;
 template class Cola<struct Alcanzabilidad>;
 template class Cola<struct Forwarding>;
-template class Cola<struct BroadcastA>;
-template class Cola<struct BroadcastB>;
-template class Cola<struct CapaRedA>;
-template class Cola<struct CapaEnlaceB>;
 template class Cola<struct DatosMensaje>;
 template class Cola<struct CapaRed>;
 template class Cola<struct DatosForwarding>;
