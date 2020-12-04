@@ -74,9 +74,9 @@ void verificarEstructura(Cola<std::string>*,std::vector<int>*);
 
 void enviarAlcanzabilidad(Cola<std::string>* colaAlcanzabilidad,
 std::vector<datosNodo>* tablaVecinos,char*,Cola<struct Broadcast>*,Cola<std::string>* colaEnviarAlcanzabilidad);
-/*
+
 void verificarTablaForwarding(Cola<std::string>*,
 std::vector<int>*);
-*/
+
 
 #endif //AGENTE_RED_H

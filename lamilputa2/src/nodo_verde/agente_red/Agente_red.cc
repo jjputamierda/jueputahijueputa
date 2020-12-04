@@ -654,7 +654,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 
 		if(datosForwarding.idDestino == (*nodosIDs)[0]){
 			char buffer4 [200];
-			memmove( buffer4,&fowardingRecibir.datos ,sizeof(fowardingRecibir.datos));
+			memmove( buffer4,&datosForwarding.datos ,sizeof(fowardingRecibir.datos));
 			memmove( &mensaje.buffer,buffer4 ,sizeof(mensaje.buffer));
 			colaAzul->push(mensaje);
 			std::cout<<"mensaje va para el azul"<<std::endl;
