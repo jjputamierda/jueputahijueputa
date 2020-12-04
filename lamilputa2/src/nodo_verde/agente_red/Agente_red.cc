@@ -161,7 +161,7 @@ char* IP,Cola<struct Broadcast>* colaBroadcast,Cola<std::string>* colaEnviarAlca
 			std::cout<<prueba<<std::endl;
 			std::cout<<std::endl;
 			std::cout<<std::endl;
-			size_t offset = sizeof(aux);
+			size_t offset = sizeof(aux1);
 			for(indice=1;indice<tablaVecinos->size();indice++){
 				uint16_t aux2=static_cast<uint16_t>((*tablaVecinos)[indice].ID);
 				std::cout<<std::endl;
@@ -169,8 +169,6 @@ char* IP,Cola<struct Broadcast>* colaBroadcast,Cola<std::string>* colaEnviarAlca
 			std::cout<<std::endl;
 			std::cout<<"Esto es aux2"<<std::endl;
 			std::cout<<aux2<<std::endl;
-			std::cout<<std::endl;
-			std::cout<<std::endl;
 				memmove( buffer+offset,&aux2 ,sizeof(aux2));
 				memmove( &prueba2,buffer+offset ,sizeof(prueba2));
 				std::cout<<std::endl;
@@ -180,6 +178,7 @@ char* IP,Cola<struct Broadcast>* colaBroadcast,Cola<std::string>* colaEnviarAlca
 			std::cout<<prueba2<<std::endl;
 			std::cout<<std::endl;
 			std::cout<<std::endl;
+
 				offset=offset+sizeof(aux2);
 				uint8_t aux3;
 				if(((*tablaVecinos)[indice].IP).compare(IP)==0){
