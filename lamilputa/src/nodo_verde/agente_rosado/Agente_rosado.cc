@@ -39,6 +39,8 @@ Cola<std::string>* colaTablaForwarding){
 
 		}else{
   			if(strcmp(resultado[0].c_str(),"70")==0){
+				std::cout<<"PUSH PARA TABLA FORWARDING"<<std::endl;
+				std::cout<<auxTabla<<std::endl;
 				auxTabla=auxTabla.substr(3);
 				colaTablaForwarding->push(auxTabla);
 			} else if(strcmp(resultado[0].c_str(),"45")==0){

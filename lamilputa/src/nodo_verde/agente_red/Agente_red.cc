@@ -68,14 +68,16 @@ std::vector<int>* nodosIDs){
 
 	while(1){
 		recibirTabla=colaTablaForwarding->pop();
-
+		std::cout<<"POP TABLA FOWARDING"<<std::endl;
 		std::stringstream s_stream(recibirTabla);
 		std::vector<std::string> resultado;
 		while(s_stream.good()) {
 		std::string substr;
 		getline(s_stream, substr, ',');
 		resultado.push_back(substr);
+		
 		}
+		
 		for(size_t indice=1;indice<resultado.size();indice++){
 			struct datosForwarding nuevoDato;
 			aux=resultado[indice];
@@ -94,7 +96,12 @@ std::vector<int>* nodosIDs){
 
 			getline(s_stream2, substr2, '-');
 			nuevoDato.idNodo=std::stoi(substr2);
+			std::cout<<"PUSH FORWARDING"<<std::endl;
+			std::cout<<tablaForwarding.size()<<std::endl;
 			tablaForwarding.push_back(nuevoDato);
+			std::cout<<"LUEGO PUSH FORWARDING"<<std::endl;
+			std::cout<<tablaForwarding.size()<<std::endl;
+			
 		}
 	}
 }

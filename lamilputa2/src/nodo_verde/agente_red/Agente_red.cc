@@ -94,7 +94,11 @@ std::vector<int>* nodosIDs){
 
 			getline(s_stream2, substr2, '-');
 			nuevoDato.idNodo=std::stoi(substr2);
+			std::cout<<"PUSH FORWARDING"<<std::endl;
+			std::cout<<tablaForwarding.size()<<std::endl;
 			tablaForwarding.push_back(nuevoDato);
+			std::cout<<"LUEGO PUSH FORWARDING"<<std::endl;
+			std::cout<<tablaForwarding.size()<<std::endl;
 		}
 	}
 }
