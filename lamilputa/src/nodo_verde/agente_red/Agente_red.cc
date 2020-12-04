@@ -844,7 +844,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 			
 			size_t i = 0;
 			std::cout<<"SIZE TABLA FORWARDING"<<std::endl;
-			std::cout<tablaForwarding.size()<<std::endl;
+			std::cout<<tablaForwarding.size()<<std::endl;
 			while(i<tablaForwarding.size() && condicon==false){
 				std::cout<<"\n";
 				std::cout<<"\n";
