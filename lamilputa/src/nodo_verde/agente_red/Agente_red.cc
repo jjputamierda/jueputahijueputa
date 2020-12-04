@@ -77,8 +77,12 @@ std::vector<int>* nodosIDs){
 		resultado.push_back(substr);
 		
 		}
+		std::cout<<"RESULTADO EN FORWARDING"<<std::endl;
 		
-		for(size_t indice=1;indice<resultado.size();indice++){
+		std::cout<<resultado.size()<<std::endl;
+
+	
+		for(size_t indice=0;indice<resultado.size();indice++){
 			struct datosForwarding nuevoDato;
 			aux=resultado[indice];
 			std::stringstream s_stream2(resultado[indice]);
