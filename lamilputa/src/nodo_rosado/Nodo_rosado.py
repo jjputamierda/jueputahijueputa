@@ -185,7 +185,7 @@ reintentos):
     exito = 0
     potencialHijo = 0
     while(nuevoReintento < reintentos and  salirWhile == 0 and salirNodo == False and reinicioPapa == 0):
-
+        print("atendiendo solicitudes")
         paquete = respuestaTCP(serverQueue)
         if (paquete[0]== 2 ):
             print("me llego una solicitud11")
@@ -544,7 +544,7 @@ reintentos):
     global reinicioPapa
     enivarConfirmacionArbol(clientQueue)
     while(salirNodo== False and reinicioPapa == 0):
-        #print("Respondiendo solicitudes")
+        print("Respondiendo solicitudes")
         TWHResponderPapa(numeroNodo,clientQueue,serverQueue,reintentos)
 
 '''
