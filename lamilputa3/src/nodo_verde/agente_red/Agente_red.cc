@@ -872,7 +872,9 @@ std::vector<int>* miembrosArbol){
 			}
 			else{
 				if(opcion == 43 ||opcion == 44){
+					std::cout<<"Entre a pushear a miembros arbol "+ aux<<std::endl;
 					miembrosArbol->push_back(aux);
+
 				}
 			}
 		}

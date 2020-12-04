@@ -9,6 +9,8 @@
 #include <stdlib.h> //exit function
 #include <string.h> //strlen
 #include <unistd.h> //write/read functions
+#include <string.h> //strlen
+#include <unistd.h> //write/read functions
 #include <string>
 #include <thread>
 #include <vector>
