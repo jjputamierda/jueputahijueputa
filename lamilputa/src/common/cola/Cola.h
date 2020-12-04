@@ -13,7 +13,7 @@
 
 extern uint16_t nodoSender;
 extern uint16_t nodoSenderTWH;
-
+extern uint16_t destinoFinal;
 struct estructuraAplicacion{
     char buffer[SIZE] = {};
 };

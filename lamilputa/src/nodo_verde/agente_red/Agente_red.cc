@@ -49,8 +49,8 @@ void capaRed(Cola<struct Mensaje>* colaAzul,
 	colaAlcanzabilidad,tablaVecinos,
 	IP,&colaBroadcast,colaEnviarAlcanzabilidad);
 	
-	//std::thread hiloTablaForwarding(verificarTablaForwarding,
-	//colaTablaForwarding, nodosIDs);
+	std::thread hiloTablaForwarding(verificarTablaForwarding,
+	colaTablaForwarding, nodosIDs);
 	
 	hiloAzul.join();
 	hiloRosado.join();
@@ -59,7 +59,7 @@ void capaRed(Cola<struct Mensaje>* colaAzul,
 	hiloBroadcast.join();
 	hiloAlcanzabilidad.join();
 }
-/*
+
 void verificarTablaForwarding(Cola<std::string>* colaTablaForwarding,
 std::vector<int>* nodosIDs){
 
@@ -98,7 +98,7 @@ std::vector<int>* nodosIDs){
 		}
 	}
 }
-*/
+
 void enviarAlcanzabilidad(Cola<std::string>* colaAlcanzabilidad,
 std::vector<datosNodo>* tablaVecinos,
 char* IP,Cola<struct Broadcast>* colaBroadcast,Cola<std::string>* colaEnviarAlcanzabilidad){
@@ -567,7 +567,7 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 			
 			//struct  CajaNegraRed cajaNegra;
 			//cajaNegra=capaRed.payload;
-			struct Forwarding fowardingRecibir;
+			struct DatosForwarding fowardingRecibir;
 			struct Mensaje mensaje;
 			//fowardingRecibir=cajaNegra.payloadForwarding;
 			std::cout<<std::endl;
@@ -577,6 +577,7 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 				memmove( &fowardingRecibir.idFuenteInicial,capaRed.datos ,sizeof(fowardingRecibir.idFuenteInicial));
      			memmove( &fowardingRecibir.longitud, capaRed.datos+ sizeof(fowardingRecibir.idFuenteInicial),sizeof(fowardingRecibir.longitud));
     			memmove( &fowardingRecibir.datos, capaRed.datos + sizeof(fowardingRecibir.idFuenteInicial)+sizeof(fowardingRecibir.longitud) ,sizeof(fowardingRecibir.datos));
+				fowardingRecibir.idDestino = destinoFinal;
 				//toCharArrayForwarding2(capaRed.datos, &fowardingRecibir);
 				std::cout<<"Buernas antes de push a cola azul en despachador verde"<<std::endl;
 				//std::cout<<fowardingRecibir.payload.buffer<<std::endl;
@@ -586,16 +587,11 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 			    std::cout<<fowardingRecibir.idFuenteInicial<<std::endl;
 				std::cout<<fowardingRecibir.longitud<<std::endl;
 				//std::cout<<fowardingRecibir.datos<<std::endl;
-				char buffer3 [200];
-				memmove( buffer3,&fowardingRecibir.datos ,sizeof(fowardingRecibir.datos));
-				memmove( &mensaje.buffer,buffer3 ,sizeof(mensaje.buffer));
-				std::cout<<mensaje.buffer<<std::endl;
-				std::cout<<"Saludos despues de mmemori forwarding a mensaje"<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-			colaAzul->push(mensaje);
-			//struct Forwarding forwarding= *(payloadRed.payloadForwarding);
-			//colaForwarding->push(forwarding);
+				
+				
+				//colaAzul->push(mensaje);
+				//struct Forwarding forwarding= *(payloadRed.payloadForwarding);
+				colaForwarding->push(fowardingRecibir);
 		} 
 		else if (capaRed.tipo== 0x02){
 			
@@ -650,17 +646,23 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 	while(1){
 		char buffer[1017];
 		//char buffer3[1017];
-
+		struct Mensaje mensaje;
 		char buffer2[1040];
 		char buffer3 [200];
+		
 		struct DatosForwarding datosForwarding = colaForwarding->pop();
 
 		if(datosForwarding.idDestino == (*nodosIDs)[0]){
-			//colaAzul->push(datosForwarding.payload);
+			char buffer4 [200];
+			memmove( buffer4,&fowardingRecibir.datos ,sizeof(fowardingRecibir.datos));
+			memmove( &mensaje.buffer,buffer4 ,sizeof(mensaje.buffer));
+			colaAzul->push(mensaje);
+			std::cout<<"mensaje va para el azul"<<std::endl;
+			std::cout<<mensaje.buffer<<std::endl;
 
 
 		} else {
-
+			/*	
 				size_t longitud = nodosIDs->size();
 			for(size_t i = 0; i < longitud; ++i){
 				if(datosForwarding.idDestino == (*nodosIDs)[i]){
@@ -838,20 +840,20 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 					colasVerdes[0][i].push(paquete);
 				}
 			}
-
-			/*
+			*/
+			
 			size_t i = 0;
 			while(i<tablaForwarding.size() && condicon==false){
 				std::cout<<"\n";
 				std::cout<<"\n";
 				std::cout<<"\n";
 				std::cout<<"Antes de entrara a if"<<std::endl;
-				std::cout<<enrutamiento.idDestino<<std::endl;
+				std::cout<<datosForwarding.idDestino<<std::endl;
 				std::cout<<tablaForwarding[i].idNodo<<std::endl;
 				std::cout<<"\n";
 				std::cout<<"\n";
 				std::cout<<"\n";
-				if(enrutamiento.idDestino==tablaForwarding[i].idNodo){
+				if(datosForwarding.idDestino==tablaForwarding[i].idNodo){
 					std::cout<<"\n";
 				std::cout<<"\n";
 				std::cout<<"\n";
@@ -860,9 +862,22 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 				std::cout<<"\n";
 				std::cout<<"\n";
 				
-					struct capaEnlace paquete;
-					paquete.cabeceraRed = enrutamiento.cabeceraRed;
-					paquete.idDestino = enrutamiento.idDestino;
+					//struct capaEnlace paquete;
+					//paquete.cabeceraRed = enrutamiento.cabeceraRed;
+					//paquete.idDestino = enrutamiento.idDestino;
+
+					//struct Mensaje auxMensaje;
+					struct Forwarding forwardingEnviar;
+					//struct Broadcast auxBroadcast;
+					//auxBroadcast.payloadMensaje=auxMensaje;
+					//struct ArbolGenerador auxArbol;
+					forwardingEnviar.idFuenteInicial=datosForwarding.idFuenteInicial;
+					forwardingEnviar.longitud=sizeof(datosForwarding.datos);
+					
+				
+					//forwardingEnviar.payload=datosForwarding.payload;
+					memmove (buffer3,&datosForwarding.datos,sizeof(datosForwarding.datos) );
+					memmove( &forwardingEnviar.datos,buffer3 ,sizeof(forwardingEnviar.datos));
 					for(size_t j=0; j<(*nodosIDs).size(); j++){
 
 						std::cout<<"Esto es camino"<<std::endl;
@@ -886,6 +901,26 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 							std::cout<<tablaForwarding[i].camino<<std::endl;
 							std::cout<<"XXXXXXXXXXXXX"<<std::endl;
 							std::cout<<"XXXXXXXXXXXXXXXX"<<std::endl;
+						
+							memmove(buffer, &forwardingEnviar.idFuenteInicial, sizeof(forwardingEnviar.idFuenteInicial));
+							memmove(buffer+sizeof(forwardingEnviar.idFuenteInicial), &(forwardingEnviar.longitud), sizeof(forwardingEnviar.longitud));
+							memmove(buffer+sizeof(forwardingEnviar.idFuenteInicial)+sizeof(forwardingEnviar.longitud), &(forwardingEnviar.datos), sizeof(forwardingEnviar.datos));
+							struct CapaRed	capaRed;
+							capaRed.tipo=0x01;
+
+							capaRed.longitud=sizeof(buffer);
+							//sprintf (capaRed.datos, "%s", buffer3);
+							memmove( &capaRed.datos,buffer ,sizeof(capaRed.datos));
+						
+							memmove(buffer2, &capaRed.tipo, sizeof(capaRed.tipo));
+							memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
+							memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, sizeof(capaRed.datos));
+							struct CapaEnlace paquete;
+							paquete.tipo=0x02;
+							paquete.idDestinoFinal=datosForwarding.idDestino;
+							paquete.idFuenteInmediato=datosForwarding.idFuenteInicial;
+							paquete.longitud=sizeof(buffer2);
+							memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
 						colasVerdes[0][j].push(paquete);
 						condicon=true;
 							break;
@@ -896,7 +931,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 				i++;
 			}
 			condicon=false;
-			*/
+			
 
 			/*
 			for(size_t i = 0; i < tablaForwarding.size(); ++i){

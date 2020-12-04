@@ -2,6 +2,7 @@
 pthread_mutex_t lock;
 bool terminar = false;
 uint16_t nodoSender;
+uint16_t destinoFinal;
 short destino;
 //uint16_t nodoSenderTWH;
 
@@ -215,6 +216,7 @@ Cola<struct CapaRed>* colaDespachadorVerde,Cola<struct Latido> *colaLatido){
 				std::cout<<std::endl;
 				std::cout<<std::endl;
                 nodoSender = paquete.idFuenteInmediato;
+                destinoFinal =paquete.idDestinoFinal;
                 std::cout<<std::endl;
                 std::cout<<std::endl;
 				std::cout<<std::endl;

@@ -13,7 +13,7 @@
 
 extern uint16_t nodoSender;
 extern uint16_t nodoSenderTWH;
-
+extern uint16_t destinoFinal;
 struct estructuraAplicacion{
     char buffer[SIZE] = {};
 };
@@ -99,16 +99,9 @@ struct Mensaje{
 };
 
 struct Alcanzabilidad{
-    uint16_t cantidadVecinos;
+    uint16_t longitud;
     uint16_t idVecino;
     uint8_t distancia;
-
-};
-struct Alcanzabilidad2{
-    uint16_t cantidadVecinos;
-    uint16_t idVecino;
-    uint8_t distancia;
-
 };
 
 // RED -> Tipos
