@@ -66,7 +66,7 @@ struct datosNodo{
     std::string IP;
     short puerto;
     uint8_t estado = 0;
-    uint8_t tiempoExpiracion = 0;
+    int16_t tiempoExpiracion = 0;
 };
 
 
