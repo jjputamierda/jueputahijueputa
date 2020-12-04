@@ -651,7 +651,7 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 		char buffer3 [200];
 		
 		struct DatosForwarding datosForwarding = colaForwarding->pop();
-
+		std::cout<<"VOY A ENVIAR MENSAJE"<<std::endl;
 		if(datosForwarding.idDestino == (*nodosIDs)[0]){
 			char buffer4 [200];
 			memmove( buffer4,&datosForwarding.datos ,sizeof(datosForwarding.datos));
@@ -843,6 +843,8 @@ void forwarding(Cola<struct Mensaje>* colaAzul,
 			*/
 			
 			size_t i = 0;
+			std::cout<<"SIZE TABLA FORWARDING"<<std::endl;
+			std::cout<tablaForwarding.size()<<std::endl;
 			while(i<tablaForwarding.size() && condicon==false){
 				std::cout<<"\n";
 				std::cout<<"\n";
