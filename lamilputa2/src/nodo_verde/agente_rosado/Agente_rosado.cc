@@ -400,7 +400,9 @@ std::vector<datosNodo>* tablaVecinos){
 						while(indice <ids.size() && bandera2 == 0){
 
       						int indiceTabla = ids[indice].indice;
-      						if((*tablaVecinos)[indiceTabla].estado == 0){
+      						//if((*tablaVecinos)[indiceTabla].estado == 0){
+							  
+							if((*tablaVecinos)[indiceTabla].estado == 0){
         						std::cout<<"MUERTE"<<std::endl;
 								
 								std::cout<<(*tablaVecinos)[indiceTabla].estado<<std::endl;
