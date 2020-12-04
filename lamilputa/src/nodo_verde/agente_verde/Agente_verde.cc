@@ -179,7 +179,7 @@ Cola<struct CapaRed>* colaDespachadorVerde,Cola<struct Latido> *colaLatido){
                 for(size_t i = 0; i < tabla[0].size(); i++){
                     if(tabla[0][i].ID == static_cast<short>(paquete.idFuenteInmediato)){
                         pthread_mutex_lock(&lock);
-                        tabla[0][i].tiempoExpiracion = 5000000000;
+                        tabla[0][i].tiempoExpiracion = 50000;
                         pthread_mutex_unlock(&lock);
                     }
                 }
