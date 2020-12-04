@@ -195,9 +195,11 @@ reintentos):
             exito = 1
         else:
             if(paquete[0]== 8 and paquete[1]== 8 and paquete[2]== 8 and paquete[3]== 8 ):
+                print("entre a revisar quien murio")
                 revisarQuienMurio(numeroNodo,clientQueue,paquete[4])
             else:
                 if(paquete[0] == 7):
+                    print("entre a matar a todos")
                     avisarHijosDesconexion(numeroNodo,clientQueue)
         nuevoReintento = nuevoReintento + 1
     sn = sn + 1
@@ -224,9 +226,11 @@ reintentos):
                 enviarBroadcast(0,potencialHijo,clientQueue)
             else:
                 if(paquete[0]== 8 and paquete[1]== 8 and paquete[2]== 8 and paquete[3]== 8 ):
+                    print("entre a revisar quien murio")
                     revisarQuienMurio(numeroNodo,clientQueue,paquete[4])
                 else:
                     if(paquete[0] == 7):
+                        print("entre a matar a todos")
                         avisarHijosDesconexion(numeroNodo,clientQueue)    
             nuevoReintento = nuevoReintento + 1
 '''
