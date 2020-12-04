@@ -161,7 +161,7 @@ char* IP,Cola<struct Broadcast>* colaBroadcast,Cola<std::string>* colaEnviarAlca
 			std::cout<<prueba<<std::endl;
 			std::cout<<std::endl;
 			std::cout<<std::endl;
-			int offset = sizeof(aux);
+			size_t offset = sizeof(aux);
 			for(indice=1;indice<tablaVecinos->size();indice++){
 				uint16_t aux2=static_cast<uint16_t>((*tablaVecinos)[indice].ID);
 				std::cout<<std::endl;
@@ -1097,7 +1097,7 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 				std::string mensajeAlcanzabilidad;
 				memmove( &cantiadaVecinos,buffer3 ,sizeof(cantiadaVecinos));
 				mensajeAlcanzabilidad = "90,"+std::to_string(nodoSender)+","+std::to_string(cantiadaVecinos)+",";
-				int offset=sizeof(cantiadaVecinos);
+				size_t offset=sizeof(cantiadaVecinos);
 				for(uint16_t indice4=0;indice4<cantiadaVecinos;indice4++){
 					uint16_t idVecino;
 					memmove( &idVecino,buffer3+offset ,sizeof(idVecino));
@@ -1177,5 +1177,3 @@ void broadcast(Cola<struct Mensaje>* colaAzul,
 	}
 	controladorTablaRosado.join();
 }
-
-
