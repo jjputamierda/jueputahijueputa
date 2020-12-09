@@ -180,7 +180,7 @@ Cola<struct CapaRed>* colaDespachadorVerde,Cola<struct Latido> *colaLatido){
                 for(size_t i = 0; i < tabla[0].size(); i++){
                     if(tabla[0][i].ID == static_cast<short>(paquete.idFuenteInmediato)){
                         pthread_mutex_lock(&lock);
-                        tabla[0][i].tiempoExpiracion = 60;
+                        tabla[0][i].tiempoExpiracion = 3000;
                         pthread_mutex_unlock(&lock);
                     }
                 }
@@ -603,7 +603,7 @@ std::vector<datosNodo>* tabla,Cola<struct Latido> * colaLatido){
                 if(tabla[0][i].ID == destino){
                     tabla[0][i].estado = 1;
                     pthread_mutex_lock(&lock);
-                    tabla[0][i].tiempoExpiracion = 60;
+                    tabla[0][i].tiempoExpiracion = 3000;
                     pthread_mutex_unlock(&lock);
 
 

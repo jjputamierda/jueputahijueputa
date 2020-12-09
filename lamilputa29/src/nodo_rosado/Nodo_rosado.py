@@ -742,7 +742,7 @@ def dijkstra(pesos, caminos, forwarding,clientQueue):
       if not len(indiceI):
         i += 1
 
-    paquete="70"
+    #paquete="70"
     #for i in range(len(matriz)-1):
         #paquete += "," + str(nodos[caminos[i][0]]) + "-" + \
         #str(nodos[caminos[i][1]]) + "-" + str(nodos[i+1])
