@@ -742,6 +742,7 @@ void forwarding(Cola<struct ForwardingAplicacion>* colaAzul,
 		std::cout<<"VOY A ENVIAR MENSAJE"<<std::endl;
 
 		if(datosForwarding.idDestino == (*nodosIDs)[0]){
+			
 			char buffer4 [1013];
 			size_t offset = 0;
 			struct ForwardingAplicacion mensaje;
@@ -973,14 +974,22 @@ void forwarding(Cola<struct ForwardingAplicacion>* colaAzul,
 							offset = offset +sizeof(forwardingEnviar.longitud);
 							memmove(buffer+sizeof(forwardingEnviar.idFuenteInicial)+sizeof(forwardingEnviar.longitud), &(forwardingEnviar.datos), sizeof(forwardingEnviar.datos));
 						    offset = offset + forwardingEnviar.longitud;
+
+							//size_t offset1 = 0 
+							//struct newForwardingEnviar 
+
+
 							
 							
 							struct CapaRed	capaRed;
 							capaRed.tipo=0x01;
 							//capaRed.longitud=sizeof(buffer);
 							capaRed.longitud=offset;
+						
+       
+
 							//sprintf (capaRed.datos, "%s", buffer3);
-							//memmove( &capaRed.datos,buffer ,sizeof(capaRed.datos));
+							memmove( &capaRed.datos,buffer,sizeof(capaRed.datos));
 						
 							//memmove(buffer2, &capaRed.tipo, sizeof(capaRed.tipo));
 							//memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
