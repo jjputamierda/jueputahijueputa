@@ -11,10 +11,10 @@ bool reiniciarEnvio=false;
 bool enviarDenuevo=true;
 std::vector<struct datosForwarding> tablaForwarding;
 
-void capaRed(Cola<struct ForwardingAplicacion>* colaAzul,
+void capaRed(Cola<struct Mensaje>* colaAzul,
 	Cola<struct ArbolGenerador>* colaRosada,
 	std::vector<Cola<struct CapaEnlace>>* colasVerdes,
-	Cola<struct DatosForwardingAplicacion>* colaDespachadorAzul,
+	Cola<struct DatosMensaje>* colaDespachadorAzul,
 	Cola<struct DatosArbolGenerador>* colaDespachadorRosado,
 	Cola<struct CapaRed>* colaDespachadorVerde,
 	std::vector<int>* nodosIDs, Cola<std::string>* despachadorMiembros,
@@ -266,9 +266,8 @@ char* IP,Cola<struct Broadcast>* colaBroadcast,Cola<std::string>* colaEnviarAlca
 			broadcast.tipo = 0x02;
 			//std::string aux=std::to_string(idPropio);
 			broadcast.id_origen_inicial = static_cast<uint16_t>((*tablaVecinos)[0].ID);
-			broadcast.longitud = strlen(buffer);
-			memmove( &broadcast.datos,buffer ,broadcast.longitud);
-
+			memmove( &broadcast.datos,buffer ,sizeof(broadcast.datos));
+			broadcast.longitud=offset;
 			colaBroadcast->push(broadcast);
 		}
 	}
@@ -377,7 +376,7 @@ void despachadorAzul(Cola<struct DatosForwardingAplicacion>* colaDespachadorAzul
 	while(1){
 		struct DatosForwardingAplicacion datos = colaDespachadorAzul->pop();
 		//struct Mensaje mensaje;
-		//strcpy(mensaje.buffer, datos.buffer);
+		//strcpy(mensaje.buffer, datos.bu);
 		//memmove( &paquete->idFuenteInicial,paquete_ent ,sizeof(paquete->idFuenteInicial));
 		
 		 
@@ -390,22 +389,20 @@ void despachadorAzul(Cola<struct DatosForwardingAplicacion>* colaDespachadorAzul
 			 //forwarding.idFuenteInicial = static_cast<uint16_t>(idPropio);
 			forwarding.idFuenteInicial = static_cast<uint16_t>(idPropio);
 			forwarding.idDestino = datos.idDestino;
-			
-			//forwarding.longitud = sizeof(datos.buffer);//datos.mensaje.size(); // 2 bytes
-		
 			size_t offset = 0;
-			memmove(forwarding.datos, &datos.tipoAplicacion,sizeof(datos.tipoAplicacion));
+			memmove( buffer3,&datos.tipoAplicacion ,sizeof(datos.tipoAplicacion));
 			offset = offset + sizeof(datos.tipoAplicacion);
-			memmove(forwarding.datos+ offset, &datos.longitud,sizeof(datos.longitud));
+			memmove( buffer3 + offset ,&datos.longitud ,sizeof(datos.longitud));
 			offset = offset + sizeof(datos.longitud);
-			memmove(forwarding.datos+offset, &datos.datos,datos.longitud);
-			forwarding.longitud = strlen(forwarding.datos);
+			memmove( buffer3+offset,&datos.datos ,sizeof(datos.datos));
+			offset = offset + datos.longitud;
 
-			//memmove( buffer3,&datos.buffer ,sizeof(mensaje.buffer));
-			//memmove( &forwarding.datos,buffer3 ,sizeof(forwarding.datos));
+
+			memmove( &forwarding.datos,buffer3 ,sizeof(forwarding.datos));
+		
 			
 			
-			
+			forwarding.longitud = offset;//datos.mensaje.size(); // 2 bytes
 			//forwarding.payload = mensaje;
 			//fowarding.tipo = 
 			std::cout<<std::endl;
@@ -425,13 +422,11 @@ void despachadorAzul(Cola<struct DatosForwardingAplicacion>* colaDespachadorAzul
 			broadcast.tipo = 0x01;
 			//std::string aux=std::to_string(idPropio);
 			broadcast.id_origen_inicial = static_cast<uint16_t>(idPropio);
-			//memmove( buffer3,&datos.datos ,sizeof(buffer3));
-			//memmove( &broadcast.datos,buffer3 ,sizeof(broadcast.datos));
-			memmove( &broadcast.datos,&datos.datos ,datos.longitud);
-			broadcast.longitud = strlen(broadcast.datos);
+			memmove( buffer3,&datos.datos ,sizeof(buffer3));
+			memmove( &broadcast.datos,buffer3 ,sizeof(broadcast.datos));
 			
 			//broadcast.payloadMensaje = mensaje;
-			//broadcast.longitud = sizeof(datos.buffer);//datos.mensaje.size(); // 2 bytes
+			broadcast.longitud = datos.longitud;//datos.mensaje.size(); // 2 bytes
 			std::cout<<std::endl;
 			std::cout<<std::endl;
 			std::cout<<"Dentro de if en despachador azul antes de broadcast"<<std::endl;
@@ -498,12 +493,14 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 					std::cout<<std::endl;
 					struct CapaRed capaRed;
 					capaRed.tipo = 0x03;
-
+					size_t offset = 0;
 				    memmove(buffer, &paqueteAg.tipo, sizeof(paqueteAg.tipo));
+					offset = offset + sizeof(paqueteAg.tipo);
 					memmove(buffer+sizeof(paqueteAg.tipo), &paqueteAg.SN, sizeof(paqueteAg.SN));
+					offset = offset + sizeof(paqueteAg.SN);
 					memmove(buffer+sizeof(paqueteAg.tipo)+sizeof(paqueteAg.SN), &paqueteAg.RN, sizeof(paqueteAg.RN));
-					capaRed.longitud =  strlen(capaRed.datos);
-					memmove( &capaRed.datos,buffer ,capaRed.longitud);
+					offset = offset + sizeof(paqueteAg.RN);
+					memmove( &capaRed.datos,buffer ,sizeof(capaRed.datos));
 					std::cout<<std::endl;
 					std::cout<<std::endl;
 					std::cout<<std::endl;
@@ -512,7 +509,7 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 					std::cout<<std::endl;
 					std::cout<<std::endl;
 
-					//capaRed.longitud =  sizeof(capaRed.datos);
+					capaRed.longitud =  offset;
 					
 					struct CapaEnlace paquete;
 
@@ -539,12 +536,15 @@ std::vector<int>* nodosIDs,std::vector<datosNodo>* tablaVecinos,std::vector<Cola
 					paquete.idDestinoFinal = datos.id_destino_final;
 					paquete.idFuenteInmediato = (*nodosIDs)[0];
 					char buffer2[1040];
+					offset = 0;
 					memmove(buffer2, &capaRed.tipo, sizeof(capaRed.tipo));
+					offset = offset + sizeof(capaRed.tipo);
 					memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
-					memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, capaRed.longitud);
-					paquete.longitud = strlen(paquete.datos);
-					memmove(&paquete.datos, buffer2, paquete.longitud);
-					
+					offset = offset + sizeof(capaRed.longitud);
+					memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, sizeof(capaRed.datos));
+					offset = offset + capaRed.longitud;
+					memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
+					paquete.longitud = offset;
 
 
 					std::cout<<std::endl;
@@ -603,7 +603,7 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 			//struct  CajaNegraRed cajaNegra;
 			//cajaNegra=capaRed.payload;
 			struct DatosForwarding fowardingRecibir;
-			struct Mensaje mensaje;
+			struct ForwardingAplicacion mensaje;
 			//fowardingRecibir=cajaNegra.payloadForwarding;
 			std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -611,7 +611,7 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 
 				memmove( &fowardingRecibir.idFuenteInicial,capaRed.datos ,sizeof(fowardingRecibir.idFuenteInicial));
      			memmove( &fowardingRecibir.longitud, capaRed.datos+ sizeof(fowardingRecibir.idFuenteInicial),sizeof(fowardingRecibir.longitud));
-    			memmove( &fowardingRecibir.datos, capaRed.datos + sizeof(fowardingRecibir.idFuenteInicial)+sizeof(fowardingRecibir.longitud) ,fowardingRecibir.longitud);
+    			memmove( &fowardingRecibir.datos, capaRed.datos + sizeof(fowardingRecibir.idFuenteInicial)+sizeof(fowardingRecibir.longitud) ,sizeof(fowardingRecibir.datos));
 				fowardingRecibir.idDestino = destinoFinal;
 				//toCharArrayForwarding2(capaRed.datos, &fowardingRecibir);
 				std::cout<<"Buernas antes de push a cola azul en despachador verde"<<std::endl;
@@ -640,7 +640,7 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 			memmove( &nuevoBroadcast.tipo,capaRed.datos,sizeof(nuevoBroadcast.tipo));
 			memmove( &nuevoBroadcast.id_origen_inicial,capaRed.datos+sizeof(nuevoBroadcast.tipo), sizeof(nuevoBroadcast.id_origen_inicial));
 			memmove( &nuevoBroadcast.longitud,capaRed.datos+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial),sizeof(nuevoBroadcast.longitud));
-			memmove( &nuevoBroadcast.datos, capaRed.datos+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial)+sizeof(nuevoBroadcast.longitud),nuevoBroadcast.longitud);
+			memmove( &nuevoBroadcast.datos, capaRed.datos+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial)+sizeof(nuevoBroadcast.longitud),sizeof(nuevoBroadcast.datos));
 		
 			//struct Broadcast broadcast= *(payloadRed.payloadBroadcast);
 			colaBroadcast->push(nuevoBroadcast);
@@ -681,7 +681,7 @@ void forwarding(Cola<struct ForwardingAplicacion>* colaAzul,
 	while(1){
 		char buffer[1017];
 		//char buffer3[1017];
-		struct ForwardingAplicacion mensaje;
+		//struct Mensaje mensaje;
 		char buffer2[1040];
 		char buffer3 [200];
 		
@@ -689,25 +689,28 @@ void forwarding(Cola<struct ForwardingAplicacion>* colaAzul,
 		std::cout<<"VOY A ENVIAR MENSAJE"<<std::endl;
 
 		if(datosForwarding.idDestino == (*nodosIDs)[0]){
-			char buffer4 [200];
-			//memmove( buffer4,&datosForwarding.datos ,sizeof(datosForwarding.datos));
-			//memmove( &mensaje.buffer,buffer4 ,sizeof(mensaje.buffer));
+			char buffer4 [1013];
 			size_t offset = 0;
-			memmove(&mensaje.tipoAplicacion,datosForwarding.datos, sizeof(mensaje.tipoAplicacion));
+			struct ForwardingAplicacion mensaje;
+			memmove( buffer4,&datosForwarding.datos ,sizeof(datosForwarding.datos));
+			
+			memmove( &mensaje.tipoAplicacion,buffer4 ,sizeof(mensaje.tipoAplicacion));
 			offset = offset + sizeof(mensaje.tipoAplicacion);
-			memmove( &mensaje.longitud,datosForwarding.datos+ offset,sizeof(mensaje.longitud));
+			
+			memmove( &mensaje.longitud,buffer4+offset ,sizeof(mensaje.longitud));
 			offset = offset + sizeof(mensaje.longitud);
-			memmove( &mensaje.datos,datosForwarding.datos+offset,mensaje.longitud);
-			//memmove(&mensaje.datos,datosForwarding.datos,datosForwarding.longitud);
-			//mensaje.tipoAplicacion = 0x01;
-			//mensaje.longitud = strlen(mensaje.datos);
+
+			memmove( &mensaje.datos,buffer4+offset ,sizeof(mensaje.datos));
+			//offset = offset + sizeof(mensaje.longitud);
+
+			
+			
 			colaAzul->push(mensaje);
 			std::cout<<"mensaje va para el azul"<<std::endl;
 			std::cout<<mensaje.datos<<std::endl;
 
 
-		} 
-		else {
+		} else {
 			/*	
 				size_t longitud = nodosIDs->size();
 			for(size_t i = 0; i < longitud; ++i){
@@ -896,30 +899,33 @@ void forwarding(Cola<struct ForwardingAplicacion>* colaAzul,
 					//auxBroadcast.payloadMensaje=auxMensaje;
 					//struct ArbolGenerador auxArbol;
 					forwardingEnviar.idFuenteInicial=datosForwarding.idFuenteInicial;
-					forwardingEnviar.longitud=sizeof(datosForwarding.datos);
+					forwardingEnviar.longitud=datosForwarding.longitud;
 					
 				
 					//forwardingEnviar.payload=datosForwarding.payload;
 					//memmove (buffer3,&datosForwarding.datos,sizeof(datosForwarding.datos) );
 					//memmove( &forwardingEnviar.datos,buffer3 ,sizeof(forwardingEnviar.datos));
-					memmove( &forwardingEnviar.datos,&datosForwarding.datos ,datosForwarding.longitud);
-						forwardingEnviar.longitud=strlen(forwardingEnviar.datos);
+					memmove( &forwardingEnviar.datos,&datosForwarding.datos ,sizeof(forwardingEnviar.datos));
+						
 					
 					
 					
 					//memmove(buffer, &forwardingEnviar.idFuenteInicial, sizeof(forwardingEnviar.idFuenteInicial));
 							//memmove(buffer+sizeof(forwardingEnviar.idFuenteInicial), &(forwardingEnviar.longitud), sizeof(forwardingEnviar.longitud));
 							//memmove(buffer+sizeof(forwardingEnviar.idFuenteInicial)+sizeof(forwardingEnviar.longitud), &(forwardingEnviar.datos), sizeof(forwardingEnviar.datos));
+							size_t offset = 0;
 							memmove(buffer, &forwardingEnviar.idFuenteInicial, sizeof(forwardingEnviar.idFuenteInicial));
+							offset = offset +sizeof(forwardingEnviar.idFuenteInicial);
 							memmove(buffer+sizeof(forwardingEnviar.idFuenteInicial), &(forwardingEnviar.longitud), sizeof(forwardingEnviar.longitud));
-							memmove(buffer+sizeof(forwardingEnviar.idFuenteInicial)+sizeof(forwardingEnviar.longitud), &(forwardingEnviar.datos), forwardingEnviar.longitud);
-						
+							offset = offset +sizeof(forwardingEnviar.longitud);
+							memmove(buffer+sizeof(forwardingEnviar.idFuenteInicial)+sizeof(forwardingEnviar.longitud), &(forwardingEnviar.datos), sizeof(forwardingEnviar.datos));
+						    offset = offset + forwardingEnviar.longitud;
 							
 							
 							struct CapaRed	capaRed;
 							capaRed.tipo=0x01;
 							//capaRed.longitud=sizeof(buffer);
-							capaRed.longitud=strlen(buffer);
+							capaRed.longitud=offset;
 							//sprintf (capaRed.datos, "%s", buffer3);
 							//memmove( &capaRed.datos,buffer ,sizeof(capaRed.datos));
 						
@@ -932,14 +938,18 @@ void forwarding(Cola<struct ForwardingAplicacion>* colaAzul,
 							//paquete.idFuenteInmediato=datosForwarding.idFuenteInicial;
 							//paquete.longitud=sizeof(buffer2);
 							//memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
+							offset = 0;
 							memmove(buffer2, &capaRed.tipo, sizeof(capaRed.tipo));
+							offset = offset +sizeof(capaRed.tipo);
 							memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
-							memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, capaRed.longitud);
+							offset = offset +sizeof(capaRed.longitud);
+							memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, sizeof(capaRed.datos));
+							offset = offset +capaRed.longitud;
 							struct CapaEnlace paquete;
 							paquete.tipo=0x02;
 							paquete.idDestinoFinal=datosForwarding.idDestino;
 							paquete.idFuenteInmediato=datosForwarding.idFuenteInicial;
-							paquete.longitud=strlen(buffer2);
+							paquete.longitud=offset;
 							memmove(&paquete.datos, buffer2, paquete.longitud);
 					colasVerdes[0][i].push(paquete);
 				}
@@ -1238,14 +1248,18 @@ void broadcast(Cola<struct ForwardingAplicacion>* colaAzul,
 		size_t longitud = nodosIDs->size();
 		capaRed.tipo=0x02;
 		char buffer [1017];
+		size_t offset = 0;
 		memmove(buffer, &nuevoBroadcast.tipo, sizeof(nuevoBroadcast.tipo));
+		offset = offset+sizeof(nuevoBroadcast.tipo);
 		memmove(buffer+sizeof(nuevoBroadcast.tipo), &nuevoBroadcast.id_origen_inicial, sizeof(nuevoBroadcast.id_origen_inicial));
+		offset = offset + sizeof(nuevoBroadcast.id_origen_inicial);
 		memmove(buffer+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial), &nuevoBroadcast.longitud, sizeof(nuevoBroadcast.longitud));
-		memmove(buffer+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial)+sizeof(nuevoBroadcast.longitud), &nuevoBroadcast.datos, nuevoBroadcast.longitud);
+		offset = offset + sizeof(nuevoBroadcast.longitud);
+		memmove(buffer+sizeof(nuevoBroadcast.tipo)+sizeof(nuevoBroadcast.id_origen_inicial)+sizeof(nuevoBroadcast.longitud), &nuevoBroadcast.datos, sizeof(nuevoBroadcast.datos));
 		
-		capaRed.longitud=strlen(buffer);
-		memmove( &capaRed.datos,buffer ,capaRed.longitud);
-		
+		offset = offset + nuevoBroadcast.longitud;
+		memmove( &capaRed.datos,buffer ,sizeof(capaRed.datos));
+		capaRed.longitud=offset;
 		//capaRed.payload.payloadBroadcast=nuevoBroadcast;
 		//paquete.cabeceraRed = enrutamiento.cabeceraRed;
 		//paquete.idDestino = enrutamiento.idDestino;
@@ -1259,12 +1273,16 @@ void broadcast(Cola<struct ForwardingAplicacion>* colaAzul,
 							int casteo=(*nodosIDs)[0];
 							paquete.idFuenteInmediato=static_cast<uint16_t>(casteo);
 							paquete.idDestinoFinal=static_cast<uint16_t>(miembrosArbol[i]);
-							
+							//paquete.longitud=sizeof(paquete.datos);
+							offset = 0;
 							memmove(buffer2, &capaRed.tipo, sizeof(capaRed.tipo));
-				            memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
-				            memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, capaRed.longitud);
-							paquete.longitud=strlen(buffer2);
-							memmove(&paquete.datos, buffer2, paquete.longitud);
+				            offset = offset + sizeof(capaRed.tipo);
+							memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
+				            offset = offset + sizeof(capaRed.longitud);
+							memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, sizeof(capaRed.datos));
+							offset = offset + capaRed.longitud;
+							capaRed.longitud = offset;
+							memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
 							std::cout<<std::endl;
 		                    std::cout<<std::endl;
 		                    std::cout<<std::endl;
@@ -1294,21 +1312,21 @@ void broadcast(Cola<struct ForwardingAplicacion>* colaAzul,
 				//enrutamiento.cabeceraRed.cabeceraAplicacion;
 			//mensaje.idFuente = enrutamiento.idFuente;
 			if(nuevoBroadcast.tipo == 0x01){
-				
 				struct ForwardingAplicacion nuevoMensaje;
-				char buffer3 [200];
-				//memmove( buffer3,&nuevoBroadcast.datos ,sizeof(nuevoBroadcast.datos));
-				
-				memmove( &nuevoMensaje.datos,&nuevoBroadcast.datos ,nuevoBroadcast.longitud);
-				std::cout<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<"aqui dentro de if en broadcast para enviar a azul"<<std::endl;
-				std::cout<<"aqui dentro de if en broadcast para enviar a azul"<<std::endl;
-				std::cout<<"aqui dentro de if en broadcast para enviar a azul"<<std::endl;
-				std::cout<<std::endl;
-				std::cout<<std::endl;
+				//struct Mensaje nuevoMensaje;
 				nuevoMensaje.tipoAplicacion = 0x01;
-				nuevoMensaje.longitud = strlen(nuevoBroadcast.datos);
+				char buffer3 [200];
+				//char buffer3 [200];
+				memmove( buffer3,&nuevoBroadcast.datos ,sizeof(nuevoBroadcast.datos));
+				memmove( &nuevoMensaje.datos,buffer3 ,sizeof(nuevoMensaje.datos));
+				nuevoMensaje.longitud = nuevoBroadcast.longitud;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<"aqui dentro de if en broadcast para enviar a azul"<<std::endl;
+				std::cout<<"aqui dentro de if en broadcast para enviar a azul"<<std::endl;
+				std::cout<<"aqui dentro de if en broadcast para enviar a azul"<<std::endl;
+				std::cout<<std::endl;
+				std::cout<<std::endl;
 				
 				colaAzul->push(nuevoMensaje);
 			} else if(nuevoBroadcast.tipo==0x02){
@@ -1319,16 +1337,15 @@ void broadcast(Cola<struct ForwardingAplicacion>* colaAzul,
 					//colaRosada->push(mensaje);
 				}
 				char buffer3 [200];
-				//memmove( buffer3,&nuevoBroadcast.datos ,sizeof(nuevoBroadcast.datos));
+				memmove( buffer3,&nuevoBroadcast.datos ,sizeof(nuevoBroadcast.datos));
 				uint16_t cantiadaVecinos;
 				std::string mensajeAlcanzabilidad;
-				//memmove( &cantiadaVecinos,buffer3 ,sizeof(cantiadaVecinos));
-				memmove( &cantiadaVecinos,nuevoBroadcast.datos ,sizeof(cantiadaVecinos));
+				memmove( &cantiadaVecinos,buffer3 ,sizeof(cantiadaVecinos));
 				mensajeAlcanzabilidad = "90,"+std::to_string(nodoSender)+","+std::to_string(cantiadaVecinos);
 				size_t offset=sizeof(cantiadaVecinos);
 				for(uint16_t indice4=0;indice4<cantiadaVecinos;indice4++){
 					uint16_t idVecino;
-					memmove( &idVecino,nuevoBroadcast.datos+offset ,sizeof(idVecino));
+					memmove( &idVecino,buffer3+offset ,sizeof(idVecino));
 					offset=offset+sizeof(idVecino);
 					std::cout<<std::endl;
 					std::cout<<std::endl;
@@ -1337,7 +1354,7 @@ void broadcast(Cola<struct ForwardingAplicacion>* colaAzul,
 					std::cout<<std::endl;
 					std::cout<<std::endl;
 					uint8_t distancia;
-					memmove( &distancia,nuevoBroadcast.datos+offset ,sizeof(distancia));
+					memmove( &distancia,buffer3+offset ,sizeof(distancia));
 					offset=offset+sizeof(distancia);
 					if(distancia==0x01){
 						std::cout<<std::endl;
@@ -1395,12 +1412,15 @@ void broadcast(Cola<struct ForwardingAplicacion>* colaAzul,
 							int casteo2=(*nodosIDs)[0];
 							paquete.idFuenteInmediato=static_cast<uint16_t>(casteo2);
 							paquete.idDestinoFinal=static_cast<uint16_t>(miembrosArbol[i]);
-							
+							size_t offset = 0;
 							memmove(buffer2, &capaRed.tipo, sizeof(capaRed.tipo));
-				            memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
-				            memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, capaRed.longitud);
-							paquete.longitud=strlen(buffer2);
-							memmove(&paquete.datos, buffer2, paquete.longitud);
+				            offset = offset + sizeof(capaRed.tipo);
+							memmove(buffer2+sizeof(capaRed.tipo), &capaRed.longitud, sizeof(capaRed.longitud));
+				            offset = offset + sizeof(capaRed.longitud);
+							memmove(buffer2+sizeof(capaRed.tipo)+sizeof(capaRed.longitud), &capaRed.datos, sizeof(capaRed.datos));
+							offset = offset + longitud;
+							memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
+							paquete.longitud=offset;
 						colasVerdes[0][indice].push(paquete);
 					}
 				}

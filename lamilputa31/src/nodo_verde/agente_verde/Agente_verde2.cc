@@ -4,6 +4,8 @@ bool terminar = false;
 uint16_t nodoSender;
 uint16_t destinoFinal;
 short destino;
+bool reiniciarEnviarLatido=false;
+bool enviarLatido=true;
 //uint16_t nodoSenderTWH;
 
 /**
@@ -141,7 +143,7 @@ Cola<struct CapaRed>* colaDespachadorVerde,Cola<struct Latido> *colaLatido){
                 memmove( &(paquete.idDestinoFinal),buffer+sizeof(paquete.tipo) , sizeof(paquete.idDestinoFinal));
                 memmove(&(paquete.idFuenteInmediato), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal), sizeof(paquete.idFuenteInmediato));
                 memmove( &(paquete.longitud),buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato), sizeof(paquete.longitud));
-                memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),paquete.longitud);
+                memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),sizeof(paquete.datos));
                
                // toCharArray2(buffer, &paquete);
                 //int tipo=atoi(parserBuffer( buffer, 1,0,1));
@@ -180,7 +182,7 @@ Cola<struct CapaRed>* colaDespachadorVerde,Cola<struct Latido> *colaLatido){
                 for(size_t i = 0; i < tabla[0].size(); i++){
                     if(tabla[0][i].ID == static_cast<short>(paquete.idFuenteInmediato)){
                         pthread_mutex_lock(&lock);
-                        tabla[0][i].tiempoExpiracion = 3000;
+                        tabla[0][i].tiempoExpiracion = 35;
                         pthread_mutex_unlock(&lock);
                     }
                 }
@@ -284,7 +286,7 @@ Cola<struct CapaRed>* colaDespachadorVerde,Cola<struct Latido> *colaLatido){
                 //toCharArrayRed(paquete.datos, &capaRed);
                 memmove( &capaRed.tipo,paquete.datos,sizeof(capaRed.tipo));
                 memmove( &capaRed.longitud,paquete.datos+sizeof(paquete.tipo),sizeof(capaRed.longitud));
-                memmove( &capaRed.datos,paquete.datos+sizeof(paquete.tipo)+sizeof(capaRed.longitud),capaRed.longitud);
+                memmove( &capaRed.datos,paquete.datos+sizeof(paquete.tipo)+sizeof(capaRed.longitud),sizeof(capaRed.datos));
                 std::cout<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -346,7 +348,7 @@ Cola<struct CapaRed>* colaDespachadorVerde,Cola<struct Latido> *colaLatido){
             }
              else if(paquete.tipo == 0x01){
                 struct Latido paqueteLatido;
-                memmove(&paqueteLatido.tipo_latido, paquete.datos, paquete.longitud);
+                memmove(&paqueteLatido.tipo_latido, paquete.datos, sizeof(paqueteLatido.tipo_latido));
                 destino =  static_cast<short> (paquete.idFuenteInmediato);
                 colaLatido->push(paqueteLatido);
                 
@@ -444,7 +446,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 memmove(buffer+sizeof(datos.tipo), &(datos.idDestinoFinal), sizeof(datos.idDestinoFinal));
                 memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal), &(datos.idFuenteInmediato), sizeof(datos.idFuenteInmediato));
                 memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato), &(datos.longitud), sizeof(datos.longitud));
-                memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato)+sizeof(datos.longitud), &(datos.datos),datos.longitud);
+                memmove(buffer+sizeof(datos.tipo)+sizeof(datos.idDestinoFinal)+sizeof(datos.idFuenteInmediato)+sizeof(datos.longitud), &(datos.datos), sizeof(datos.datos));
 
                 std::cout<<std::endl;
 				std::cout<<std::endl;
@@ -453,11 +455,10 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 memmove( &(paquete.idDestinoFinal),buffer+sizeof(paquete.tipo) , sizeof(paquete.idDestinoFinal));
                 memmove(&(paquete.idFuenteInmediato), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal), sizeof(paquete.idFuenteInmediato));
                 memmove( &(paquete.longitud),buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato), sizeof(paquete.longitud));
-                memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),paquete.longitud);
+                memmove( &(paquete.datos), buffer+sizeof(paquete.tipo)+sizeof(paquete.idDestinoFinal)+sizeof(paquete.idFuenteInmediato)+sizeof(paquete.longitud),sizeof(paquete.datos));
                 std::cout<<paquete.tipo<<std::endl;
                 std::cout<<paquete.idDestinoFinal<<std::endl;
                 std::cout<<paquete.idFuenteInmediato<<std::endl;
-                std::cout<<paquete.longitud<<std::endl;
                 std::cout<<"Uwu send antes del sockect"<<std::endl;
                 //std::cout<<buffer<<std::endl;
 				std::cout<<std::endl;
@@ -519,6 +520,17 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
     printf("Hilo %ld salió del while\n", identificador);
 }
 
+void timeoutLatido(){
+    while(true){
+        if(reiniciarEnviarLatido==true){
+            sleep(5);
+            enviarLatido=true;
+            reiniciarEnviarLatido=false;
+
+        }
+    }
+}
+
 void latido(std::vector<datosNodo>* tabla,
 std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
 
@@ -527,36 +539,44 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
     size_t i;
     while(!terminar){
         for(i=1; i<tabla[0].size(); i++){
-            if(tabla[0][i].tiempoExpiracion <= 0){
+            //if(tabla[0][i].tiempoExpiracion <= 0){
+            if(enviarLatido==true){
                 paqueteLatido.tipo_latido = 0x01;
                 paquete.tipo = 0x01;
                 paquete.idDestinoFinal = static_cast<uint16_t>(tabla[0][i].ID);
                 paquete.idFuenteInmediato = static_cast<uint16_t>(tabla[0][0].ID);
                 char buffer2 [1040];
-                //memmove(buffer2, &paqueteLatido.tipo_latido, sizeof(paqueteLatido.tipo_latido));
-                //memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
-                memmove(&paquete.datos, &paqueteLatido.tipo_latido, sizeof(paqueteLatido.tipo_latido));
-                paquete.longitud = strlen(paquete.datos);
+                memmove(buffer2, &paqueteLatido.tipo_latido, sizeof(paqueteLatido.tipo_latido));
+                memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
+                paquete.longitud = sizeof(paquete.datos);
                 colasDeMensajes[0][i].push(paquete);
+                
             } else {
                 pthread_mutex_lock(&lock);
                 tabla[0][i].tiempoExpiracion--;
                 pthread_mutex_unlock(&lock);
             }
             
-        }
-        
-        sleep(tabla[0].size());
+        }       
+                if(enviarLatido==true){
+                enviarLatido=false;
+                reiniciarEnviarLatido=true;
+                }
+                
+
+      //sleep(tabla[0].size);
+       //sleep(tabla[0].size());
+       sleep(3);
         for(i=1; i<tabla[0].size(); i++){
             if(tabla[0][i].tiempoExpiracion <= 0 ){
                 std::cout<<"Estoy muerto"<<tabla[0][i].ID<<std::endl;
-                std::cout<<tabla[0][i].tiempoExpiracion <<std::endl;
                 tabla[0][i].estado = 0;
+                std::cout<<"Tiempo"<<tabla[0][i].tiempoExpiracion<<std::endl;
+
             }
             else{
                 std::cout<<"Estoy vivo"<<tabla[0][i].ID<<std::endl;
-                std::cout<<"Timepo"<<tabla[0][i].tiempoExpiracion<<std::endl;
-           
+                std::cout<<"Tiempo"<<tabla[0][i].tiempoExpiracion<<std::endl;
             }
         }
     }
@@ -592,9 +612,9 @@ std::vector<datosNodo>* tabla,Cola<struct Latido> * colaLatido){
                 paquete.idDestinoFinal = static_cast<uint16_t>(tabla[0][i].ID);//cambiar
                 paquete.idFuenteInmediato = static_cast<uint16_t>(tabla[0][0].ID);
                 char buffer2 [1040];
-                paquete.longitud = strlen(paquete.datos);
-                memmove(&paquete.datos, &paqueteLatido.tipo_latido, sizeof(paqueteLatido.tipo_latido));
-                
+                memmove(buffer2, &nuevoPaqueteLatido.tipo_latido, sizeof(nuevoPaqueteLatido.tipo_latido));
+                memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
+                paquete.longitud = sizeof(paquete.datos);
                 colasDeMensajes[0][i].push(paquete);
                 }
             }
@@ -606,7 +626,7 @@ std::vector<datosNodo>* tabla,Cola<struct Latido> * colaLatido){
                 if(tabla[0][i].ID == destino){
                     tabla[0][i].estado = 1;
                     pthread_mutex_lock(&lock);
-                    tabla[0][i].tiempoExpiracion = 3000;
+                    tabla[0][i].tiempoExpiracion = 35;
                     pthread_mutex_unlock(&lock);
 
 
@@ -626,7 +646,8 @@ Cola<struct CapaRed>* colaDespachadorVerde){
     std::thread conexiones[tablaVecinos[0].size()-1];
     std::thread recibir = std::thread(recibirV, tablaVecinos,
         colaDespachadorVerde,&colaLatido);
-    
+
+    std::thread hilotimeout=std::thread(timeoutLatido);
 
 
     
@@ -654,5 +675,6 @@ Cola<struct CapaRed>* colaDespachadorVerde){
     recibir.join();
     verificarLatidoHilo.join();
     hiloLatido.join();
+    hilotimeout.join();
     pthread_mutex_destroy(&lock);
 }

@@ -535,6 +535,7 @@ std::vector<Cola<struct CapaEnlace>>* colasDeMensajes){
                 char buffer2 [1040];
                 //memmove(buffer2, &paqueteLatido.tipo_latido, sizeof(paqueteLatido.tipo_latido));
                 //memmove(&paquete.datos, buffer2, sizeof(paquete.datos));
+                std::cout<<"Entre a latido"<<std::endl;
                 memmove(&paquete.datos, &paqueteLatido.tipo_latido, sizeof(paqueteLatido.tipo_latido));
                 paquete.longitud = strlen(paquete.datos);
                 colasDeMensajes[0][i].push(paquete);
