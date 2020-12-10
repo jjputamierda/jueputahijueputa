@@ -159,6 +159,9 @@ char* fifoServidorAgente, Cola<struct ForwardingAplicacion>* colaAzul){
 		//mensaje.mensaje.assign(msg);
 		mensaje.tipoAplicacion = 0x01;
 		mensaje.longitud = strlen(mensaje.datos);
+
+		std::cout<<"Longitud del mensaje"<<std::endl;
+		std::cout<<mensaje.longitud<<std::endl;
 		if(destino == -1 || destino == 0){
 
 			mensaje.tipo = 0x02;

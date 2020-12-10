@@ -411,6 +411,7 @@ void despachadorAzul(Cola<struct DatosForwardingAplicacion>* colaDespachadorAzul
 			std::cout<<"Prueba Azul"<<std::endl;
 			std::cout<<datos.longitud<<std::endl;
 			std::cout<<datosNew.longitud<<std::endl;
+			std::cout<<datosNew.datos<<std::endl;
 			std::cout<<std::endl;
 			std::cout<<std::endl;
 
@@ -709,6 +710,35 @@ void forwarding(Cola<struct ForwardingAplicacion>* colaAzul,
 		char buffer3 [200];
 		
 		struct DatosForwarding datosForwarding = colaForwarding->pop();
+		std::cout<<"Descodificado Datos Forwarding"<<std::endl;
+		struct ForwardingAplicacion mensaje1;
+		size_t offset3 = 0;
+		char buffer5 [1013];
+		memmove( buffer5,&datosForwarding.datos ,sizeof(datosForwarding.datos));
+			
+		memmove( &mensaje1.tipoAplicacion,buffer5,sizeof(mensaje1.tipoAplicacion));
+		offset3 = offset3 + sizeof(mensaje1.tipoAplicacion);
+			
+		memmove( &mensaje1.longitud,buffer5+offset3 ,sizeof(mensaje1.longitud));
+		offset3 = offset3 + sizeof(mensaje1.longitud);
+
+		memmove( &mensaje1.datos,buffer5+offset3 ,sizeof(mensaje1.datos));
+
+		std::cout<<"Descodificado Datos Forwarding fin"<<std::endl;
+		std::cout<<"Descodificado Datos Forwarding fin"<<std::endl;
+		std::cout<<"Descodificado Datos Forwarding fin"<<std::endl;
+		std::cout<<"Descodificado Datos Forwarding fin"<<std::endl;
+		std::cout<<"Descodificado Datos Forwarding fin"<<std::endl;
+		std::cout<<"Descodificado Datos Forwarding fin"<<std::endl;
+		std::cout<<mensaje1.longitud<<std::endl;
+		std::cout<<mensaje1.datos<<std::endl;
+
+
+
+
+		//offset = offset + sizeof(mensaje.longitud);
+		
+		
 		std::cout<<"VOY A ENVIAR MENSAJE"<<std::endl;
 
 		if(datosForwarding.idDestino == (*nodosIDs)[0]){
