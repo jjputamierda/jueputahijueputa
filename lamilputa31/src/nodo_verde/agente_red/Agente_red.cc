@@ -11,10 +11,10 @@ bool reiniciarEnvio=false;
 bool enviarDenuevo=true;
 std::vector<struct datosForwarding> tablaForwarding;
 
-void capaRed(Cola<struct Mensaje>* colaAzul,
+void capaRed(Cola<struct ForwardingAplicacion>* colaAzul,
 	Cola<struct ArbolGenerador>* colaRosada,
 	std::vector<Cola<struct CapaEnlace>>* colasVerdes,
-	Cola<struct DatosMensaje>* colaDespachadorAzul,
+	Cola<struct DatosForwardingAplicacion>* colaDespachadorAzul,
 	Cola<struct DatosArbolGenerador>* colaDespachadorRosado,
 	Cola<struct CapaRed>* colaDespachadorVerde,
 	std::vector<int>* nodosIDs, Cola<std::string>* despachadorMiembros,
