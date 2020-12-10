@@ -396,6 +396,26 @@ void despachadorAzul(Cola<struct DatosForwardingAplicacion>* colaDespachadorAzul
 			offset = offset + sizeof(datos.longitud);
 			memmove( buffer3+offset,&datos.datos ,sizeof(datos.datos));
 			offset = offset + datos.longitud;
+			
+			struct DatosForwardingAplicacion datosNew;
+			size_t offset1 = 0;
+			memmove( &datosNew.tipoAplicacion,buffer3 ,sizeof(datosNew.tipoAplicacion));
+			offset1 = offset1 + sizeof(datosNew.tipoAplicacion);
+			
+			memmove( &datosNew.longitud,buffer3+offset1 ,sizeof(datosNew.longitud));
+			offset1 = offset1 + sizeof(datosNew.longitud);
+
+			memmove( &datosNew.datos,buffer3+offset1 ,sizeof(datosNew.datos));
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<"Prueba Azul"<<std::endl;
+			std::cout<<datos.longitud<<std::endl;
+			std::cout<<datosNew.longitud<<std::endl;
+			std::cout<<std::endl;
+			std::cout<<std::endl;
+
+
+
 
 
 			memmove( &forwarding.datos,buffer3 ,sizeof(forwarding.datos));
@@ -615,6 +635,9 @@ void despachadorVerde(Cola<struct CapaRed>* colaDespachadorVerde,
 				fowardingRecibir.idDestino = destinoFinal;
 				//toCharArrayForwarding2(capaRed.datos, &fowardingRecibir);
 				std::cout<<"Buernas antes de push a cola azul en despachador verde"<<std::endl;
+				
+
+				
 				//std::cout<<fowardingRecibir.payload.buffer<<std::endl;
 				std::cout<<std::endl;
 				std::cout<<std::endl;
