@@ -1318,7 +1318,7 @@ void broadcast(Cola<struct ForwardingAplicacion>* colaAzul,
 				char buffer3 [200];
 				//char buffer3 [200];
 				memmove( buffer3,&nuevoBroadcast.datos ,sizeof(nuevoBroadcast.datos));
-				memmove( &nuevoMensaje.datos,buffer3 ,sizeof(nuevoMensaje.datos));
+				memmove( &nuevoMensaje.datos,buffer3 ,sizeof(buffer3));
 				nuevoMensaje.longitud = nuevoBroadcast.longitud;
 				std::cout<<std::endl;
 				std::cout<<std::endl;

@@ -17,7 +17,7 @@
 
 	// Funciones
 	void hiloAzul(std::vector<int>*, Cola<struct ForwardingAplicacion>*,
-		char*,char*,char*, Cola<struct DatosMensaje>*);
+		char*,char*,char*, Cola<struct DatosForwardingAplicacion>*);
 
 	void enviar(Cola<struct ForwardingAplicacion>*, char*);
 	
